@@ -1,0 +1,58 @@
+{
+  "private": true,
+  "name": "inter-market-demo",
+  "productName": "InterMarketDemo",
+  "description": "My first-class Vue project",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint src",
+    "dev": "poi",
+    "build": "poi build",
+    "report": "poi build --bundle-report",
+    "serve": "serve dist --single",
+    "test": "tyu"
+  },
+  "author": {
+    "name": "konstantinov",
+    "email": "konstantnov@rosenergo.com"
+  },
+  "dependencies": {
+    "ajv": "^6.4.0",
+    "d3-geo": "^1.10.0",
+    "date-fns": "^1.29.0",
+    "lodash": "^4.17.10",
+    "normalize.css": "^7.0.0",
+    "object-assign": "^4.1.1",
+    "offline-plugin": "^4.8.0",
+    "promise-polyfill": "^6.0.2",
+    "topojson-client": "^3.0.0",
+    "vue": "^2.5.16",
+    "vue-ace-editor": "^1.0.3",
+    "vue-cookie": "^1.1.4",
+    "vue-multiselect": "^2.1.0",
+    "vue-native-websocket": "^2.0.6",
+    "vue-router": "^3.0.1",
+    "vue-socket.io": "^2.1.1-b",
+    "vue-websocket": "^0.2.2",
+    "vue2-ace-editor": "0.0.9",
+    "vuejs-datepicker": "^1.0.1",
+    "vuex": "^3.0.1",
+    "vuex-router-sync": "^5.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-vue": "^2.0.2",
+    "eslint-plugin-import": "^2.10.0",
+    "eslint-plugin-vue": "^4.4.0",
+    "poi": "^9.0.0",
+    "poi-preset-bundle-report": "^2.0.0",
+    "poi-preset-offline": "^9.0.0",
+    "poi-preset-resolve-alias": "^1.0.1",
+    "serve": "^6.1.0",
+    "stylus": "^0.54.5",
+    "stylus-loader": "^3.0.2",
+    "tyu": "^1.0.4"
+  }
+}

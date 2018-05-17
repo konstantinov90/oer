@@ -1,0 +1,22 @@
+<template>
+  <bid-editor
+    :editable-user="username"
+    msg-type="queryBid"/>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import BidEditor from '../common/BidEditor.vue';
+
+export default {
+  name: 'BidsAcceptedPhaseView',
+  components: {
+    BidEditor,
+  },
+  computed: mapState('common', ['username']),
+};
+</script>
+
+<style>
+
+</style>

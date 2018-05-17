@@ -1,0 +1,10 @@
+{
+    "extends": [
+        "plugin:vue/recommended",
+        "airbnb-base"
+    ],
+    "rules": {
+        "linebreak-style": "off",
+        "no-underscore-dangle": "off"
+    }
+}
