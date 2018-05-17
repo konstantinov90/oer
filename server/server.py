@@ -46,9 +46,6 @@ async def test_auth(request):
     user = await auth.get_auth(request)
     print(user, 'logged in')
     return aiohttp.web.Response(text=user)
-    
-async def testhandle(request):
-    return aiohttp.web.Response(text='Test handle')
 
 
 # @auth.auth_required
@@ -293,6 +290,16 @@ async def prepare_ws_clients(app):
     await clients.init()
     app['ws_clients'] = clients
 
+@aiohttp.web.middleware
+async def index(request, handler):
+    print(request.match_info)
+    try:
+        return await handler(request)
+    except aiohttp.web.HTTPException as err:
+        if err.status == 404:
+            return aiohttp.web.FileResponse('../client/dist/index.html')
+        raise
+
 def main():
     loop = asyncio.get_event_loop()
 
@@ -300,7 +307,7 @@ def main():
                                           include_ip=True)
 
     app = aiohttp.web.Application(loop=loop,
-                                middlewares=[auth.auth_middleware(policy)])
+                                middlewares=[auth.auth_middleware(policy), index])
     
     # print(loop.run_until_complete(db.users.find({}, {'_id': 1})))
     # app['ws_clients'] = {r['_id']: None for r in loop.run_until_complete(db.users.find({}, {'_id': 1}))}
@@ -308,20 +315,28 @@ def main():
     app.on_startup.append(prepare_ws_clients)
     app.on_shutdown.append(shutdown_websockets)
 
-    cors = aiohttp_cors.setup(app, defaults={
-        '*': aiohttp_cors.ResourceOptions(
-                expose_headers='*',
-                allow_headers='*',
-                allow_credentials=True),
-    })
+    # app.router.add_route('GET', '/', testhandle)
 
-    app.router.add_route('GET', '/', testhandle)
+    r1 = app.router.add_route('GET', '/test_auth/', test_auth)
 
-    cors.add(app.router.add_route('GET', '/test_auth/', test_auth))
+    r2 = app.router.add_route('POST', '/login/', login)
 
-    cors.add(app.router.add_route('POST', '/login/', login))
+    r3 = app.router.add_route('GET', '/ws', websocket_handler)
+    
+    if os.environ['NODE_ENV'] == 'production':
+        app.router.add_static('/', '../client/dist')
+    else:
+        cors = aiohttp_cors.setup(app, defaults={
+            '*': aiohttp_cors.ResourceOptions(
+                    expose_headers='*',
+                    allow_headers='*',
+                    allow_credentials=True),
+        })
 
-    cors.add(app.router.add_route('GET', '/ws', websocket_handler))
+        cors.add(r1)
+        cors.add(r2)
+        cors.add(r3)
+
     aiohttp.web.run_app(app, host=HOST, port=PORT)
 
 

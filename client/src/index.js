@@ -36,7 +36,9 @@ import store from './store';
 import router from './router';
 // import Api from './socket';
 
-Vue.use(VueNativeSock, 'ws://ats-konstantin1:8080/ws', {
+const WS_URL = IS_PROD ? `ws://${window.location.host}/ws` : 'ws://ats-konstantin1:8080/ws';
+
+Vue.use(VueNativeSock, WS_URL, {
   store,
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)

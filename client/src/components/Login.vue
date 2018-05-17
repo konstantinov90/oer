@@ -4,7 +4,7 @@
     class="login">
     <img
       class="login__logo"
-      src="static/logo.svg"
+      src="/logo.svg"
       alt="logo">
     <form
       class="login__form">
@@ -30,6 +30,8 @@
 import { setTimeout } from 'timers';
 import { mapMutations, mapState } from 'vuex';
 
+const API_URL = IS_PROD ? '/' : 'http://ats-konstantin1:8080/';
+
 export default {
   name: 'Login',
   data() {
@@ -49,7 +51,7 @@ export default {
   },
   created() {
     // проверим, может уже есть авторизационная кука
-    fetch('http://ats-konstantin1:8080/test_auth/', { credentials: 'include' })
+    fetch(`${API_URL}test_auth/`, { credentials: 'include' })
       .then(this.processAuth)
       .catch(err => console.error(err));
   },
@@ -85,7 +87,7 @@ export default {
       }
     },
     login() {
-      const url = 'http://ats-konstantin1:8080/login/';
+      const url = `${API_URL}login/`;
       const opts = {
         method: 'POST',
         body: JSON.stringify(this.credentials),

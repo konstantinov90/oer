@@ -5,14 +5,14 @@
         <router-link
           :to="{ name: adminSession ? 'sessionsAdmin' : 'sessions' }">
           <img
-            src="/static/logo.svg"
+            src="/logo.svg"
             alt="logo">
         </router-link>
       </div>
       <slot name="user-info"/>
       <img
         class="app-layout__header__btn"
-        src="/static/exit.svg"
+        src="/exit.svg"
         @click="logoff">
     </div>
     <slot/>
@@ -38,6 +38,7 @@ export default {
 <style lang="stylus">
 .app-layout
   margin 10px
+  padding-bottom: 40px;
 
   &__header
     display flex

@@ -28,7 +28,10 @@ module.exports = {
     //   vue$: 'E:/git/InterMarketDemo/client/node_module/vue/index.js'
     // }),
   ],
-  transformModules: ['uri-js'],
+  define: {
+    IS_PROD: process.env.NODE_ENV === 'production',
+  },
+  transformModules: ['uri-js', 'vuejs-datepicker'],
   /* eslint-enable */
   // resolve: {
   //   alias: {
