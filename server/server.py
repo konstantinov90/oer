@@ -292,7 +292,6 @@ async def prepare_ws_clients(app):
 
 @aiohttp.web.middleware
 async def index(request, handler):
-    print(request.match_info)
     try:
         return await handler(request)
     except aiohttp.web.HTTPException as err:
@@ -306,8 +305,10 @@ def main():
     policy = auth.CookieTktAuthentication(os.urandom(32), 60000,
                                           include_ip=True)
 
-    app = aiohttp.web.Application(loop=loop,
-                                middlewares=[auth.auth_middleware(policy), index])
+    middlewares = [auth.auth_middleware(policy)]
+    if os.environ['NODE_ENV'] == 'production':
+        middlewares.append(index)
+    app = aiohttp.web.Application(loop=loop, middlewares=middlewares)
     
     # print(loop.run_until_complete(db.users.find({}, {'_id': 1})))
     # app['ws_clients'] = {r['_id']: None for r in loop.run_until_complete(db.users.find({}, {'_id': 1}))}

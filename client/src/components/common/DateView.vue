@@ -19,7 +19,7 @@ export default {
   },
   data() {
     return {
-      dateFmt: 'DD-MM-YYYY',
+      dateFmt: 'DD.MM.YYYY',
     };
   },
   computed: {

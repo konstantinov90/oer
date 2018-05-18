@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      dateFmt: 'YYYY-MM-DD',
+      dateFmt: 'YYYY.MM.DD',
     };
   },
   computed: {
@@ -52,7 +52,7 @@ export default {
       }
     },
     openDate() {
-      return format(this.session.openDate, 'YYYY-MM-DD HH:mm:ss');
+      return format(this.session.openDate, 'YYYY.MM.DD HH:mm:ss');
     },
     targetDate() {
       if (this.session.type === 'spot') {

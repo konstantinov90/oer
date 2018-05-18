@@ -60,6 +60,11 @@ export default {
     collapsed: Boolean,
     onClick: Function,
   },
+  data() {
+    return {
+      dateFmt: 'DD.MM.YYYY',
+    };
+  },
   computed: {
     status() {
       const { status } = this.sdd;
@@ -70,7 +75,7 @@ export default {
       return 'Ошибка!';
     },
     contractPeriod() {
-      return `${format(new Date(this.sdd.dateStart), 'DD-MM-YYYY')} - ${format(new Date(this.sdd.dateEnd), 'DD-MM-YYYY')}`;
+      return `${format(new Date(this.sdd.dateStart), this.dateFmt)} - ${format(new Date(this.sdd.dateEnd), this.dateFmt)}`;
     },
     summary() {
       const sumVol = this.sdd.values.reduce((s, { volume }) => s + volume, 0);

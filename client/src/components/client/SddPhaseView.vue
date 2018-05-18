@@ -11,9 +11,15 @@
       +
     </button>
     <sdd-list-view />
-    <sdd-editor
-      v-if="editorVisible"
-      :close-fn="toggleEditorVisible"/>
+    <div v-if="editorVisible">
+      <div
+        :style="`height: ${backgroundHeight}`"
+        class="modal-background"/>
+      <div class="modal-foreground">
+        <sdd-editor
+          :close-fn="toggleEditorVisible"/>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -33,12 +39,22 @@ export default {
   data() {
     return {
       editorVisible: false,
+      backgroundHeight: '100%',
     };
   },
   computed: {
     ...mapGetters('common', ['selectedSession']),
   },
+  created() {
+    window.addEventListener('scroll', this.updateBackgroundHeight);
+  },
+  destroyed() {
+    window.removeEventListener('scroll', this.updateBackgroundHeight);
+  },
   methods: {
+    updateBackgroundHeight() {
+      this.backgroundHeight = `${window.innerHeight + window.pageYOffset}px`;
+    },
     toggleEditorVisible() {
       this.editorVisible = !this.editorVisible;
     },
@@ -56,5 +72,26 @@ export default {
   color: white;
   box-shadow: 3px 3px gray;
   margin: 0 50%;
+}
+
+.modal-background {
+  position: absolute;
+  top: 0;
+  /* bottom: 0; */
+  left: 0;
+  right: 0;
+  background: black;
+  opacity: 0.4;
+}
+
+.modal-foreground {
+  position: absolute;
+  top: 0;
+  /* bottom: 0; */
+  left: 0;
+  right: 0;
+  background: white;
+  margin: 40px;
+  padding: 20px;
 }
 </style>

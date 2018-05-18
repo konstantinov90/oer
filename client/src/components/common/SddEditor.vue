@@ -320,7 +320,7 @@ export default {
     },
     title() {
       if (!this.sdd) {
-        return '❌';
+        return '';
       }
       if (!this.isChanged) {
         return '✅';
@@ -342,7 +342,7 @@ export default {
   },
   methods: {
     getDate(idx) {
-      return format(addDays(this.selectedDateStart, idx), 'DD-MM-YYYY');
+      return format(addDays(this.selectedDateStart, idx), 'DD.MM.YYYY');
     },
     changeValue(valueType, hour, { target }) {
       const value = parseFloat(target.value.replace(',', '.'), 10);
@@ -410,10 +410,15 @@ export default {
     },
     offer() {
       this.$socket.sendObj({ type: 'sdd', msg: this.prepareSdd(NEGOTIATION) });
-      this.closeFn();
+      if (!this.sdd) {
+        this.closeFn();
+      }
     },
     save() {
       this.change();
+      if (!this.sdd) {
+        this.closeFn();
+      }
     },
     confirm() {
       this.$socket.sendObj({ type: 'sdd', msg: this.prepareSdd(REGISTERED) });
@@ -461,6 +466,7 @@ export default {
 
 .graph-grid {
   display: grid;
+  max-width: 1000px;
 }
 
 .graph-grid > * {
