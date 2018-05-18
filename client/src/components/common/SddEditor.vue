@@ -339,8 +339,17 @@ export default {
       this.selectedContragent = this.possibleContragents
         .find(({ _id }) => _id === contrId);
     }
+    window.addEventListener('keydown', this.processKeyDown);
+  },
+  destroyed() {
+    window.removeEventListener('keydown', this.processKeyDown);
   },
   methods: {
+    processKeyDown({ key }) {
+      if (key === 'Escape') {
+        this.closeFn();
+      }
+    },
     getDate(idx) {
       return format(addDays(this.selectedDateStart, idx), 'DD.MM.YYYY');
     },
