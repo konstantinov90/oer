@@ -299,7 +299,7 @@ async def index_middleware(request, handler):
         return await handler(request)
     except aiohttp.web.HTTPException as err:
         if err.status == 404:
-            return index(request)
+            return await index(request)
         raise
 
 def main():

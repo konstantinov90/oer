@@ -19,10 +19,10 @@ module.exports = {
   /* eslint-disable*/
   presets: [
     require('poi-preset-bundle-report')(),
-    require('poi-preset-offline')({
-      pwa: './src/pwa.js', // Path to pwa runtime entry
-      pluginOptions: {}, // Additional options for offline-plugin
-    }),
+    // require('poi-preset-offline')({
+    //   pwa: './src/pwa.js', // Path to pwa runtime entry
+    //   pluginOptions: {}, // Additional options for offline-plugin
+    // }),
     // require('poi-preset-resolve-alias')({
     // //   vue: path.join(__dirname, '.\\node_modules\\vue\\dist\\vue.js'),
     //   vue$: 'E:/git/InterMarketDemo/client/node_module/vue/index.js'
