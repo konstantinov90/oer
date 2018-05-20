@@ -71,7 +71,7 @@ export default {
   background: coral;
   color: white;
   box-shadow: 3px 3px gray;
-  margin: 0 50%;
+  margin: 0 48%;
 }
 
 .modal-background {

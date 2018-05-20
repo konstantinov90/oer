@@ -290,13 +290,16 @@ async def prepare_ws_clients(app):
     await clients.init()
     app['ws_clients'] = clients
 
+async def index(request):
+    return aiohttp.web.FileResponse('../client/dist/index.html')
+
 @aiohttp.web.middleware
-async def index(request, handler):
+async def index_middleware(request, handler):
     try:
         return await handler(request)
     except aiohttp.web.HTTPException as err:
         if err.status == 404:
-            return aiohttp.web.FileResponse('../client/dist/index.html')
+            return index(request)
         raise
 
 def main():
@@ -307,7 +310,7 @@ def main():
 
     middlewares = [auth.auth_middleware(policy)]
     if os.environ['NODE_ENV'] == 'production':
-        middlewares.append(index)
+        middlewares.append(index_middleware)
     app = aiohttp.web.Application(loop=loop, middlewares=middlewares)
     
     # print(loop.run_until_complete(db.users.find({}, {'_id': 1})))
@@ -316,8 +319,6 @@ def main():
     app.on_startup.append(prepare_ws_clients)
     app.on_shutdown.append(shutdown_websockets)
 
-    # app.router.add_route('GET', '/', testhandle)
-
     r1 = app.router.add_route('GET', '/test_auth/', test_auth)
 
     r2 = app.router.add_route('POST', '/login/', login)
@@ -325,6 +326,7 @@ def main():
     r3 = app.router.add_route('GET', '/ws', websocket_handler)
     
     if os.environ['NODE_ENV'] == 'production':
+        app.router.add_route('GET', '/', index)
         app.router.add_static('/', '../client/dist')
     else:
         cors = aiohttp_cors.setup(app, defaults={
