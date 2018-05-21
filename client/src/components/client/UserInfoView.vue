@@ -42,6 +42,11 @@ export default {
     /* align-items: center; */
     /* margin: 40px 0; */
     font-style: italic;
+    margin: 0 20px;
+  }
+
+  .app__participant-info * {
+    margin: 0 10px;
   }
 
   /* .app__participant-info__prop,

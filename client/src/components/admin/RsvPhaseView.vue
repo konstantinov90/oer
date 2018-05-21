@@ -1,13 +1,18 @@
 <template>
   <div>
+    <button
+      v-if="selectedSession.status === 'open'"
+      @click="calculate">
+      Провести расчет
+    </button>
     <bid-editor
-      v-if="!queringBid && bid"
+      v-if="!queringBid && rioEntry && bid"
       :bid="bid"/>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import BidEditor from '../common/BidEditor.vue';
 
 export default {
@@ -16,7 +21,13 @@ export default {
     BidEditor,
   },
   computed: {
-    ...mapState('common', ['bid', 'queringBid']),
+    ...mapGetters('common', ['selectedSession']),
+    ...mapState('common', ['bid', 'queringBid', 'rioEntry', 'spotResults']),
+  },
+  methods: {
+    calculate() {
+      this.$socket.sendObj({ type: 'calculate', msg: this.selectedSession._id});
+    },
   },
 };
 </script>

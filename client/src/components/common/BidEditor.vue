@@ -1,6 +1,6 @@
 <template>
   <div>
-    <template v-if="!adminSession">
+    <template v-if="!adminSession && !hasResults">
       <button
         :disabled="!bidReady()"
         @click="saveBid">
@@ -14,37 +14,69 @@
     <div
       :style="getStyle"
       class="bid-editor">
+      <span
+        v-if="hasResults"
+        style="grid-row: span 2;">
+        Тип
+      </span>
       <span style="grid-row: span 2;">Час</span>
       <span style="grid-row: span 2;">
         <span style="font-size: 25px;">&Sigma;</span> дог
       </span>
       <span style="grid-row: span 2;">Объем</span>
       <span :style="`grid-column: span ${sections.length};`">Цены</span>
-      <span style="grid-row: span 2;"/>
+      <span
+        v-if="!hasResults"
+        style="grid-row: span 2;"/>
       <span
         v-for="section in sections"
         :key="section">
         {{ section }}
       </span>
       <template v-for="hour in hours">
+        <span
+          v-if="hasResults"
+          :key="`type_${hour}`">
+          Заявка
+        </span>
         <span :key="`hr_${hour}`">{{ hour }}</span>
         <span/>
         <input
           :key="`vol_${hour}`"
           :class="isVolumeValid(hour)"
           :value="getVolume(hour)"
+          :disabled="hasResults"
           @input="setVolume(hour, $event)">
         <input
           v-for="section in sections"
           :key="`${section}_${hour}`"
           :class="isPriceValid(hour, section)"
           :value="getPrice(hour, section)"
-          :disabled="isInputDisabled(section)"
+          :disabled="isInputDisabled(section) || hasResults"
           @input="setPrice(hour, section, $event)">
         <button
+          v-if="!hasResults"
           :key="`btn_${hour}`"
           style="cursor: pointer;"
           @click="multiplyHour(hour)">>></button>
+        <template v-if="hasResults">
+          <span
+            :key="`type_res_${hour}`">
+            Результат
+          </span>
+          <span
+            :key="`res_void_${hour}`"
+            style="grid-column: span 2;"/>
+          <span
+            :key="`res_sum_vol_${hour}`">
+            {{ getSumResVolume(hour) }}
+          </span>
+          <span
+            v-for="section in sections"
+            :key="`res_${section}_${hour}`">
+          {{ getSectionRes(hour, section) }}
+          </span>
+        </template>
       </template>
     </div>
   </div>
@@ -79,8 +111,8 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['username', 'rioEntry', 'adminSession']),
-    ...mapGetters('common', ['selectedSession']),
+    ...mapState('common', ['username', 'rioEntry', 'adminSession', 'spotResults']),
+    ...mapGetters('common', ['selectedSession', 'getNodePrice']),
     title() {
       if (!this.bid) {
         return '❌';
@@ -101,6 +133,7 @@ export default {
         hours: this.volumes.map((volume, hour) => ({
           hour,
           intervals: [{
+            interval_num: 0,
             volume,
             prices: this.prices[hour],
           }],
@@ -110,15 +143,19 @@ export default {
     sections() {
       const { dir, country_code: countryCode, section_codes: sectionCodes } = this.rioEntry;
       if (dir === 'buy') {
-        return ['RUS-ARM', 'RUS-BEL', 'RUS-KAZ', 'KAZ-KGZ']
+        return ['RUS-ARM', 'RUS-BLR', 'RUS-KAZ', 'KAZ-KGZ']
           .sort((a, b) => !a.includes(countryCode) && b.includes(countryCode));
       }
       return sectionCodes;
     },
     getStyle() {
+      // const dif = this.hasResults ? 1 : 0;
       return {
         'grid-template-columns': `repeat(3, 4fr) repeat(${this.sections.length}, 12fr) 1fr`,
       };
+    },
+    hasResults() {
+      return !!this.spotResults;
     },
   },
   methods: {
@@ -164,6 +201,10 @@ export default {
         }
       }
     },
+    getSumResVolume(hour) {
+      return this.bid.hours[hour].intervals[0].prices
+        .reduce((prev, { filled_volume: fv }) => prev + fv, 0);
+    },
     getVolume(hour) {
       return this.volumes[hour];
     },
@@ -199,6 +240,15 @@ export default {
           this.validateVolume(this.volumes[hour], hour);
         }
       }
+    },
+    getSectionPrice(hour, sectionCode) {
+      const { country_code: countryCode, dir } = this.rioEntry;
+      return this.spotResults && this.getNodePrice(hour, countryCode, sectionCode, dir);
+    },
+    getSectionRes(hour, sectionCode) {
+      const pr = this.prices[hour] && this.prices[hour]
+        .find(({ section_code: sc }) => sc === sectionCode);
+      return pr ? `${pr.filled_volume} x ${this.getSectionPrice(hour, sectionCode)}` : null;
     },
     getPrice(hour, sectionCode) {
       const pr = this.prices[hour] && this.prices[hour]

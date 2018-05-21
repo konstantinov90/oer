@@ -193,7 +193,7 @@
           inkscape:transform-center-y="-4.3988399" />
         <path
           id="arrow_RUS_BLR"
-          :style="{ opacity: RusBlrFlow >= 0 ? 1 : 0 }"
+          :style="{ opacity: RusBlrFlow > 0 ? 1 : 0 }"
           style="fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient4872);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
           d="m 46.202182,29.357376 4.74116,8.446882 0.79882,-4.10359 10.07768,2.90479 1.01255,-5.201462 -10.07768,-2.90479 0.79883,-4.103597 z"
           inkscape:label="#rect85"
@@ -202,7 +202,7 @@
           inkscape:transform-center-y="4.3988411" />
         <path
           id="arrow_RUS_ARM"
-          :style="{ opacity: RusArmFlow >= 0 ? 1 : 0 }"
+          :style="{ opacity: RusArmFlow > 0 ? 1 : 0 }"
           style="fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient4872);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
           d="m 59.62622,83.2725 0.80399,-8.848986 2.59193,2.71499 8.397953,-7.35624 3.28536,3.44136 -8.397963,7.35624 2.59191,2.714976 z"
           inkscape:label="#rect85"
@@ -455,7 +455,7 @@
             style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.04693152;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
         </g>
         <g
-          id="flag_KYR"
+          id="flag_KGZ"
           style="fill-rule:evenodd"
           clip-path="url(#a)"
           transform="matrix(0.01940354,0,0,0.0216819,179.3534,83.858039)"
@@ -501,8 +501,8 @@
           inkscape:transform-center-x="47.992337"
           inkscape:transform-center-y="56.661143" />
         <path
-          id="arrow_KAZ_KYR"
-          :style="{ opacity: KazKyrFlow >= 0 ? 1 : 0 }"
+          id="arrow_KAZ_KGZ"
+          :style="{ opacity: KazKgzFlow > 0 ? 1 : 0 }"
           style="fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient4872);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
           d="m 185.22995,81.501985 6.18986,-6.01332 -3.83276,-0.112325 -0.11966,-10.328701 -4.85818,-0.142378 0.11966,10.328703 -3.83277,-0.112324 z"
           inkscape:label="#rect85"
@@ -666,7 +666,7 @@
           d="m 168.64153,106.71551 h 0.7216 v 1.61683 h 1.38623 v -2.57778 h 0.94948 l -2.95261,-2.12018 -2.9526,2.12018 h 0.94947 v 2.57778 h 1.38624 v -1.61683 h 0.7216"
           style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.26887411;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <text
-          id="Gen_KYR"
+          id="Gen_KGZ"
           xml:space="preserve"
           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458344"
           x="167.60158"
@@ -683,7 +683,7 @@
           </tspan>
         </text>
         <text
-          id="Cons_KYR"
+          id="Cons_KGZ"
           xml:space="preserve"
           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458344"
           x="167.28357"
@@ -815,7 +815,7 @@
           </tspan>
         </text>
         <text
-          id="Max_Flow_KYR-KAZ"
+          id="Max_Flow_KGZ-KAZ"
           xml:space="preserve"
           style="font-style:italic;font-weight:normal;font-size:4.23333333px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#fb950e;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332;-inkscape-font-specification:'sans-serif, Italic';font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;"
           x="196.18021"
@@ -831,7 +831,7 @@
           </tspan>
         </text>
         <text
-          id="Max_Flow_KAZ-KYR"
+          id="Max_Flow_KAZ-KGZ"
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332;"
           x="159.48514"
@@ -975,8 +975,8 @@
           </tspan>
         </text>
         <path
-          id="arrow_KYR_KAZ"
-          :style="{ opacity: KazKyrFlow < 0 ? 1 : 0 }"
+          id="arrow_KGZ_KAZ"
+          :style="{ opacity: KazKgzFlow < 0 ? 1 : 0 }"
           style="fill:#3cdda8;fill-opacity:1;stroke:none;stroke-width:0.36133996;stroke-opacity:0.1;paint-order:fill markers stroke"
           d="m 185.22995,64.905263 6.18986,6.01332 -3.83276,0.112325 -0.11966,10.328705 -4.85818,0.14237 0.11966,-10.328699 -3.83277,0.112324 z"
           inkscape:label="#rect85"
@@ -984,7 +984,7 @@
           inkscape:transform-center-x="2.4428928"
           inkscape:transform-center-y="-2.0047486" />
         <text
-          id="Flow_KAZ_KYR"
+          id="Flow_KAZ_KGZ"
           xml:space="preserve"
           style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
           x="176.84636"
@@ -996,12 +996,12 @@
             x="176.84636"
             y="74.888268"
             style="font-size:6.3499999px;stroke-width:0.26458332">
-            {{ Math.abs(KazKyrFlow) }}
+            {{ Math.abs(KazKgzFlow) }}
           </tspan>
         </text>
         <path
           id="arrow_RUS_KAZ"
-          :style="{ opacity: RusKazFlow >= 0 ? 1 : 0 }"
+          :style="{ opacity: RusKazFlow > 0 ? 1 : 0 }"
           style="fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient4872);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
           d="m 163.12913,45.392874 -6.41476,5.66192 v -3.46566 h -10.69196 v -4.39286 h 10.69196 v -3.46567 z"
           inkscape:label="#rect85"
@@ -1035,24 +1035,24 @@ export default {
   name: 'MapView',
   props: {
     RusArm: Number,
-    RusBel: Number,
+    RusBlr: Number,
     RusKaz: Number,
-    KazKyr: Number,
+    KazKgz: Number,
   },
   computed: {
     RusArmFlow() {
       return this.RusArm;
     },
     RusBlrFlow() {
-      return this.RusBel;
+      return this.RusBlr;
     },
     RusKazFlow() {
       return this.RusKaz;
     },
-    KazKyrFlow() {
-      return this.KazKyr;
+    KazKgzFlow() {
+      return this.KazKgz;
     },
-  }
+  },
 };
 </script>
 

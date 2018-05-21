@@ -6,17 +6,17 @@
     <label>РФ->АРМ</label>
     <input v-model.number="RusArm">
     <label>РФ->БЛР</label>
-    <input v-model.number="RusBel">
+    <input v-model.number="RusBlr">
     <label>РФ->КАЗ</label>
     <input v-model.number="RusKaz">
-    <label>КАЗ->КИР</label>
-    <input v-model.number="KazKyr">
+    <label>КАЗ->КГЗ</label>
+    <input v-model.number="KazKgz">
     <div>
       <map-view
         :rus-arm="RusArm"
-        :rus-bel="RusBel"
+        :rus-blr="RusBlr"
         :rus-kaz="RusKaz"
-        :kaz-kyr="KazKyr"/>
+        :kaz-kgz="KazKgz"/>
     </div>
   </div>
 </template>
@@ -32,9 +32,9 @@ export default {
   data() {
     return {
       RusArm: 0,
-      RusBel: 0,
+      RusBlr: 0,
       RusKaz: 0,
-      KazKyr: 0,
+      KazKgz: 0,
     };
   },
 };

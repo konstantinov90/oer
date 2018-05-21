@@ -1,0 +1,439 @@
+{
+  "country_code": "KAZ",
+  "dir": "sell",
+  "target_date": "2019-01-01",
+  "hours": [
+    {
+      "hour": 0,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 1,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 2,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 3,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 4,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 5,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 6,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 7,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 8,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 9,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 10,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 11,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 12,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 13,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 14,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 15,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 16,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 17,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 18,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 19,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 20,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 21,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 22,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "hour": 23,
+      "intervals": [
+        {
+          "volume": 150,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 800
+            },
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 800
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

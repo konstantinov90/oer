@@ -1,0 +1,45 @@
+{
+  "country_code": "RUS",
+  "dir": "buy",
+  "target_date": "2019-01-01",
+  "hours": [
+    {
+      "hour": 0,
+      "intervals": [
+        {
+          "volume": 140,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 9000
+            },
+            {
+              "section_code": "RUS-BLR",
+              "price": 9000
+            },
+            {
+              "section_code": "RUS-ARM",
+              "price": 9000
+            }
+          ]
+        },
+        {
+          "volume": 20,
+          "prices": [
+            {
+              "section_code": "RUS-KAZ",
+              "price": 500
+            },
+            {
+              "section_code": "RUS-BLR",
+              "price": 600
+            },
+            {
+              "section_code": "RUS-ARM",
+              "price": 700
+            }
+          ]
+        }
+      ]
+    } ]
+}

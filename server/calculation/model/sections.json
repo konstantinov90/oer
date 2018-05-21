@@ -1,0 +1,77 @@
+[
+  {
+    "node_from": "RUS1",
+    "node_to": "BLR1",
+    "cut_countries": [{"country_code": "BLR"}],
+    "distr_rule": [
+      {"country_code": "BLR", "node_mgp": [
+        {"node_code": "RUS1", "mpg_list": []},
+        {"node_code": "ARM1", "mpg_list": ["ARM-BLR"]},
+        {"node_code": "KAZ1", "mpg_list": ["KAZ-BLR"]},
+        {"node_code": "KGZ1", "mpg_list": ["KAZ-BLR", "KGZ-RUS"]}
+      ]
+      },
+      {"country_code": "RUS", "node_mgp": [
+        {"node_code": "BLR1", "mpg_list": []}
+      ]
+      }
+    ]
+  },
+  {
+    "node_from": "RUS2",
+    "node_to": "ARM1",
+    "cut_countries": [{"country_code": "ARM"}],
+    "distr_rule": [
+      {"country_code": "ARM", "node_mgp": [
+        {"node_code": "RUS2", "mpg_list": []},
+        {"node_code": "BLR1", "mpg_list": ["BLR-ARM"]},
+        {"node_code": "KAZ1", "mpg_list": ["KAZ-ARM"]},
+        {"node_code": "KGZ1", "mpg_list": ["KAZ-ARM", "KGZ-RUS"]}
+      ]
+      },
+      {"country_code": "RUS", "node_mgp": [
+        {"node_code": "ARM1", "mpg_list": []}
+      ]
+      }
+    ]
+  },
+  {
+    "node_from": "RUS3",
+    "node_to": "KAZ1",
+    "cut_countries": [
+        {"country_code": "KAZ"},
+        {"country_code": "KGZ"}
+     ],
+    "distr_rule": [
+      {"country_code": "RUS", "node_mgp": [
+        {"node_code": "KAZ1", "mpg_list": []},
+        {"node_code": "KGZ1", "mpg_list": ["KGZ-RUS"]}
+      ]
+      },
+      {"country_code": "KAZ", "node_mgp": [
+        {"node_code": "RUS3", "mpg_list": []},
+        {"node_code": "BLR1", "mpg_list": ["BLR-KAZ"]},
+        {"node_code": "ARM1", "mpg_list": ["ARM-KAZ"]}
+      ]
+      }
+    ]
+  },
+  {
+    "node_from": "KAZ2",
+    "node_to": "KGZ1",
+    "cut_countries": [{"country_code": "KGZ"}],
+    "distr_rule": [
+      {"country_code": "KGZ", "node_mgp": [
+        {"node_code": "KAZ2", "mpg_list": []},
+        {"node_code": "RUS3", "mpg_list": ["RUS-KGZ"]},
+        {"node_code": "BLR1", "mpg_list": ["RUS-KGZ", "BLR-KAZ"]},
+        {"node_code": "ARM1", "mpg_list": ["RUS-KGZ", "ARM-KAZ"]}
+      ]
+      },
+      {"country_code": "KAZ", "node_mgp": [
+        {"node_code": "KGZ1", "mpg_list": []}
+      ]
+      }
+    ]
+  }
+]

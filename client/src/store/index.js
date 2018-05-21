@@ -39,7 +39,11 @@ export default new Vuex.Store({
     },
 
     hasNewSessions() {
-      this.$socket.sendObj({ type: 'querySessions' });
+      this.dispatch('common/querySessions');
+    },
+
+    hasNewResults() {
+      this.dispatch('common/queryResults');
     },
 
     hasNewSdd() {

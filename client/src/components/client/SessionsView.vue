@@ -32,7 +32,7 @@ export default {
   methods: {
     getLink(session) {
       const name = links[session.type];
-      return { name, params: { id: session._id } }; // eslint-disable-line
+      return { name, params: { id: session._id } };
     },
   },
 };

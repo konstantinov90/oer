@@ -1,0 +1,1773 @@
+[
+{
+    "_id" : "5afdbeed46cfa248f424e4a3",
+    "trader_code" : "ARM2",
+    "country_code" : "ARM",
+    "dir" : "sell",
+    "session_id" : 1,
+    "target_date" : "2018-06-18",
+    "hours" : [ 
+        {
+            "hour" : 0,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 1,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 2,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 3,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 4,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 5,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 6,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 7,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 8,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 9,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 10,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 11,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 12,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 13,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 14,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 15,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 16,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 17,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 18,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 19,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 20,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 21,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 22,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 23,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 123,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 123432
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+,
+{
+    "_id" : "5afdd6a846cfa275147b41e7",
+    "trader_code" : "KAZ1",
+    "country_code" : "KAZ",
+    "dir" : "buy",
+    "session_id" : 1,
+    "target_date" : "2018-06-18",
+    "hours" : [ 
+        {
+            "hour" : 0,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 1,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 2,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 3,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 4,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 5,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 6,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 7,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 8,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 9,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 10,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 11,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 12,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 13,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 14,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 15,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 16,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 17,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 18,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 19,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 20,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 21,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 22,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 23,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 1313,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 123
+                        }, 
+                        {
+                            "section_code" : "KAZ-KGZ",
+                            "price" : 123
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+,
+{
+    "_id" : "5afe878046cfa23a31a69932",
+    "trader_code" : "BLR1",
+    "country_code" : "BLR",
+    "dir" : "buy",
+    "session_id" : 1,
+    "target_date" : "2018-06-18",
+    "hours" : [ 
+        {
+            "hour" : 0,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 1,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 2,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 3,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 4,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 5,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 6,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 7,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 8,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 9,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 10,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 11,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 12,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 13,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 14,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 15,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 16,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 17,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 18,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 19,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 20,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 21,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 22,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 23,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 455,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 343
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+,
+{
+    "_id" : "5afec99746cfa27d5009c395",
+    "trader_code" : "RUS1",
+    "country_code" : "RUS",
+    "dir" : "buy",
+    "session_id" : 1,
+    "target_date" : "2018-06-18",
+    "hours" : [ 
+        {
+            "hour" : 0,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 1,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 2,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 3,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 4,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 5,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 6,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 7,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 8,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 9,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 10,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 11,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 12,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 13,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 14,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 15,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 16,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 17,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 18,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 19,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 20,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 21,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 22,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }, 
+        {
+            "hour" : 23,
+            "intervals" : [ 
+                {
+                    "interval_num": 0,
+                    "volume" : 100,
+                    "prices" : [ 
+                        {
+                            "section_code" : "RUS-ARM",
+                            "price" : 1750
+                        }, 
+                        {
+                            "section_code" : "RUS-BLR",
+                            "price" : 1200
+                        }, 
+                        {
+                            "section_code" : "RUS-KAZ",
+                            "price" : 800
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+]

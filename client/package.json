@@ -34,6 +34,7 @@
     "vue": "^2.5.16",
     "vue-ace-editor": "^1.0.3",
     "vue-cookie": "^1.1.4",
+    "vue-multiple-tabs": "^1.0.0",
     "vue-multiselect": "^2.1.0",
     "vue-native-websocket": "^2.0.6",
     "vue-router": "^3.0.1",

@@ -33,7 +33,7 @@ export default {
   ]),
   methods: {
     ...mapMutations('admin', ['selectUser']),
-    ...mapActions('common', ['queryBid']),
+    ...mapActions('common', ['queryBid', 'queryResults']),
     getClass(user) {
       return {
         'user-list__item_selected': user === this.selectedUser,
@@ -42,6 +42,7 @@ export default {
     queryUserBid(username) {
       this.selectUser(username);
       this.queryBid(username);
+      this.queryResults();
     },
   },
 };

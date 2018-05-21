@@ -1,0 +1,117 @@
+[
+{
+    "_id" : "KAZ1",
+    "country_code" : "KAZ",
+    "dir" : "buy",
+    "name" : "Казахстан Потр",
+    "section_codes" : [ 
+        "RUS-KAZ", 
+        "KAZ-KGZ"
+    ]
+}
+,
+{
+    "_id" : "KAZ2",
+    "country_code" : "KAZ",
+    "dir" : "sell",
+    "name" : "Казахстан Ген",
+    "section_codes" : [ 
+        "RUS-KAZ", 
+        "KAZ-KGZ"
+    ]
+}
+,
+{
+    "_id" : "KGZ1",
+    "country_code" : "KGZ",
+    "dir" : "buy",
+    "name" : "Киргизия Потр",
+    "section_codes" : [ 
+        "KAZ-KGZ"
+    ]
+}
+,
+{
+    "_id" : "KGZ2",
+    "country_code" : "KGZ",
+    "dir" : "sell",
+    "name" : "Киргизия Ген",
+    "section_codes" : [ 
+        "KAZ-KGZ"
+    ]
+}
+,
+{
+    "_id" : "BLR1",
+    "country_code" : "BLR",
+    "dir" : "buy",
+    "name" : "Беларусь Потр",
+    "section_codes" : [ 
+        "RUS-BLR"
+    ]
+}
+,
+{
+    "_id" : "BLR2",
+    "country_code" : "BLR",
+    "dir" : "sell",
+    "name" : "Беларусь Ген",
+    "section_codes" : [ 
+        "RUS-BLR"
+    ]
+}
+,
+{
+    "_id" : "RUS1",
+    "country_code" : "RUS",
+    "dir" : "buy",
+    "name" : "Россия Потр",
+    "section_codes" : [ 
+        "RUS-BLR", 
+        "RUS-ARM", 
+        "RUS-KAZ"
+    ]
+}
+,
+{
+    "_id" : "RUS2",
+    "country_code" : "RUS",
+    "dir" : "sell",
+    "name" : "Россия Ген",
+    "section_codes" : [ 
+        "RUS-BLR", 
+        "RUS-ARM", 
+        "RUS-KAZ"
+    ]
+}
+,
+{
+    "_id" : "ARM1",
+    "country_code" : "ARM",
+    "dir" : "buy",
+    "name" : "Армения Потр",
+    "section_codes" : [ 
+        "RUS-ARM"
+    ]
+}
+,
+{
+    "_id" : "ARM2",
+    "country_code" : "ARM",
+    "dir" : "sell",
+    "name" : "Армения Ген",
+    "section_codes" : [ 
+        "RUS-ARM"
+    ]
+}
+,
+{
+    "_id" : "BLR_GEN",
+    "country_code" : "BLR",
+    "dir" : "sell",
+    "name" : "Беларусь Ген2",
+    "section_codes" : [ 
+        "RUS-BLR"
+    ]
+}
+]

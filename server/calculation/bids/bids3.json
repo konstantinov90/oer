@@ -1,0 +1,20 @@
+{
+  "country_code": "KGZ",
+  "dir": "buy",
+  "target_date": "2019-01-01",
+  "hours": [
+    {
+      "hour": 0,
+      "intervals": [
+        {
+          "volume": 10,
+          "prices": [
+            {
+              "section_code": "KAZ-KGZ",
+              "price": 100
+            }
+          ]
+        }
+      ]
+    } ]
+}

@@ -8,6 +8,7 @@ import aiohttp.web
 import aiohttp_cors
 from pymongo import ReturnDocument
 
+from calculation.spot import SpotModelAug
 from db_api.api import db
 
 HOST = os.getenv('HOST', '0.0.0.0')
@@ -120,6 +121,24 @@ async def websocket_handler(request):
                     await ws.send_json({'type': 'common/rioEntry', 'msg': await db.rio.find_one({'_id': payload['msg']['username']})})
                 await ws.send_json({'type': 'common/bid', 'msg': bid })
 
+            elif payload['type'] == 'queryAllBids':
+                bids = await db.bids.find({'session_id': payload['msg']}).to_list(None)
+                await ws.send_json({'type': 'common/allBids', 'msg': bids})
+
+            elif payload['type'] == 'querySpotResults':
+                session = await db.sessions.find_one({'_id': payload['msg']})
+                results = await db.spot_results.find_one({'session_id': session['_id']})
+                await ws.send_json({'type': 'common/spotResults', 'msg': results})
+
+            elif payload['type'] == 'calculate':
+                session = await db.sessions.find_one({'_id': payload['msg']})
+                if session['type'] == 'spot':
+                    SpotModelAug.spot_runner(session['_id'])
+                    await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
+                    await ws_clients.broadcast({'type': 'hasNewBid'})
+                await ws_clients.broadcast({'type': 'hasNewSessions'})
+
+
             # elif payload['type'] == 'queryBidAdmin':
             #     username = payload['msg']
             #     request.app['admin_subscribed_bid'] = username
@@ -218,6 +237,7 @@ async def websocket_handler(request):
             elif payload['type'] == 'querySessions':
                 sessions = await db.sessions.find().sort([('openDate', -1)]).to_list(None)
                 await ws.send_json({'type': 'common/sessions', 'msg': sessions})
+                await ws_clients.broadcast({'type': 'hasNewResults'})
 
             
             

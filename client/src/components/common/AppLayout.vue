@@ -45,9 +45,6 @@ export default {
     justify-content end
     align-items center
 
-    & *
-      margin 0 10px
-
     &__logo
       flex 1
 

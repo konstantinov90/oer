@@ -1,0 +1,42 @@
+[
+  {
+    "node_code": "ARM1",
+    "country_code": "ARM",
+    "node_name": "Армения на границе с Росиией"
+  },
+  {
+    "node_code": "BLR1",
+    "country_code": "BLR",
+    "node_name": "Беларусь на границе с Росиией"
+  },
+  {
+    "node_code": "RUS1",
+    "country_code": "RUS",
+    "node_name": "Россия на границе с Беларусью"
+  },
+  {
+    "node_code": "RUS2",
+    "country_code": "RUS",
+    "node_name": "Россия на границе с Арменией"
+  },
+  {
+    "node_code": "RUS3",
+    "country_code": "RUS",
+    "node_name": "Россия на границе с Казахстаном"
+  },
+  {
+    "node_code": "KAZ1",
+    "country_code": "KAZ",
+    "node_name": "Казахстан на границе с Россией"
+  },
+  {
+    "node_code": "KAZ2",
+    "country_code": "KAZ",
+    "node_name": "Казахстан на границе с Киргизией"
+  },
+  {
+    "node_code": "KGZ1",
+    "country_code": "KGZ",
+    "node_name": "Киргизия на границе с Казахстаном"
+  }
+]

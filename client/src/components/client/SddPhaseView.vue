@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Свободные договоры (СД)</h2>
+    <h2>{{ `Свободные договоры (СД) (сессия #${selectedSession._id})` }}</h2>
     <date-view
       v-if="selectedSession"
       :dates="[selectedSession.startDate, selectedSession.finishDate]"/>

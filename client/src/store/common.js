@@ -15,6 +15,7 @@ export default {
     phase: 'start',
     username: '',
     bid: null,
+    allBids: null,
     queringBid: false,
     queringSdd: false,
     // clients: [],
@@ -26,13 +27,71 @@ export default {
     date: null,
     sdd: [],
     sessions: [],
+    spotResults: null,
+    countrySectionNodeMap: {
+      sell: {
+        RUS: {
+          'RUS-BLR': 'RUS1',
+          'RUS-ARM': 'RUS2',
+          'RUS-KAZ': 'RUS3',
+        },
+        KAZ: {
+          'RUS-KAZ': 'KAZ1',
+          'KAZ-KGZ': 'KAZ2',
+        },
+        ARM: { 'RUS-ARM': 'ARM1' },
+        BLR: { 'RUS-BLR': 'BLR1' },
+        KGZ: { 'KAZ-KGZ': 'KGZ1' },
+      },
+      buy: {
+        RUS: {
+          'RUS-BLR': 'BLR1',
+          'RUS-ARM': 'ARM1',
+          'RUS-KAZ': 'KAZ1',
+        },
+        KAZ: {
+          'RUS-KAZ': 'RUS3',
+          'KAZ-KGZ': 'KGZ1',
+        },
+        ARM: { 'RUS-ARM': 'RUS2' },
+        BLR: { 'RUS-BLR': 'RUS1' },
+        KGZ: { 'KAZ-KGZ': 'KAZ2' },
+      },
+    },
   },
   getters: {
     selectedSession(state, _, { route }) {
       if (route.params) {
-        return state.sessions.find(s => s._id === route.params.id); // eslint-disable-line
+        const session = state.sessions.find(s => s._id === route.params.id);
+        return session;
       }
       return null;
+    },
+    getNodePrice({ countrySectionNodeMap, spotResults }) {
+      return (hour, countryCode, sectionCode, direction) => {
+        const node = countrySectionNodeMap[direction][countryCode][sectionCode];
+        return spotResults.hours
+          .find(({ hour: h }) => h === hour)
+          .nodes.find(({ code }) => code === node).price;
+      };
+    },
+    getCountryResults(state, { getNodePrice }) {
+      return (hour, countryCode, direction, traderCode = null) => {
+        const [amount, volume] = state.allBids
+          .filter(({ trader_code, country_code, dir }) => {
+            if (traderCode) {
+              return trader_code === traderCode;
+            }
+            return dir === direction && country_code === countryCode;
+          })
+          .map(({ hours }) => hours.find(({ hour: h }) => h === hour).intervals[0].prices)
+          .reduce((ar, bs) => ([...ar, ...bs]), [])
+          .reduce(([am, vol], { section_code : sc, filled_volume : fv}) => {
+            return [am + getNodePrice(hour, countryCode, sc, direction) * fv, vol + fv];
+          }, [0, 0]);
+
+        return [volume, amount/volume];
+      };
     },
     // phaseName(state) {
     //   switch (state.phase) {
@@ -111,6 +170,9 @@ export default {
       state.bid = msg;
       state.queringBid = false;
     },
+    allBids(state, { msg }) {
+      state.allBids = msg;
+    },
     // date(state, { msg }) {
     //   state.date = new Date(msg);
     // },
@@ -130,17 +192,29 @@ export default {
     //   state.clients = msg;
     // },
     queringBid(state, val) {
-      state.queringBid = val;
+      state.queringBid = { ...val };
     },
     queringSdd(state, val) {
       state.queringSdd = val;
     },
+    spotResults(state, { msg }) {
+      state.spotResults = msg;
+    },
   },
   actions: {
+    querySessions() {
+      this.$socket.sendObj({ type: 'querySessions' });
+    },
     querySdd({ commit, getters: { selectedSession } }) {
       if (selectedSession) {
         commit('queringSdd', true);
-        this.$socket.sendObj({ type: 'querySdd', msg: selectedSession._id }); // eslint-disable-line
+        this.$socket.sendObj({ type: 'querySdd', msg: selectedSession._id });
+      }
+    },
+    queryResults({ commit, getters: { selectedSession } }) {
+      commit('spotResults', { msg: null });
+      if (selectedSession.type === 'spot' && selectedSession.status === 'closed') {
+        this.$socket.sendObj({ type: 'querySpotResults', msg: selectedSession._id });
       }
     },
     queryBid({ state: { username }, commit, getters: { selectedSession } }, payload) {
@@ -149,10 +223,13 @@ export default {
         this.$socket.sendObj({
           type: 'queryBid',
           msg: {
-            session_id: selectedSession._id, // eslint-disable-line
+            session_id: selectedSession._id,
             username: payload || username,
           },
         });
+        if (selectedSession.status === 'closed') {
+          this.$socket.sendObj({ type: 'queryAllBids', msg: selectedSession._id })
+        }
       }
     },
   },
