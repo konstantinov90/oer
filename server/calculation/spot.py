@@ -1,14 +1,15 @@
 from pyomo.environ import *
 from itertools import chain, product
 import os
+import os.path
 import json
 from datetime import datetime
 
 from .model import CommonModel, DIR, SOLVER, SOLVER_PATH, MODEL_PATH
 
 
-BIDS_PATH = 'bids'
-RESULTS_PATH = 'results_spot'
+BIDS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bids')
+RESULTS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results_spot')
 
 def is_price_form(bid):
     total_filled_volume = sum(nb.filled_volume for nb in bid.node_bids.values())
@@ -97,7 +98,7 @@ class SpotModel(CommonModel):
         participant = self.participants[bid_data['trader_code']]
         country = participant.country
         bid_dir = bid_data['dir']
-        if target_date != bid_data['target_date'].date():
+        if target_date != bid_data['target_date']:
             return []
         try:
             hour_data = next(obj for obj in bid_data['hours'] if obj['hour'] == hour)
@@ -304,7 +305,7 @@ class SpotModel(CommonModel):
             hour_res = dict()
             hour_res['hour'] = h
             hour_res['tdate'] = d
-            m = cls(d.date(), h, model_config_path, '', '', bids_data)
+            m = cls(d, h, model_config_path, '', '', bids_data=bids_data)
             m.calc()
             m.print_result()
 
@@ -358,6 +359,9 @@ class SpotModelAug(SpotModel):
 
     @classmethod
     def spot_runner(cls, session_id, model_config_path=MODEL_PATH):
+        from .model_db_loader import ModelDbLoader
+        CommonModel.set_loader(ModelDbLoader)
+
         bids_data = cls.load_bid(session_id)
 
         bids_data, results = cls.spot_runner_core(model_config_path, bids_data)

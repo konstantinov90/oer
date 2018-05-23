@@ -5,6 +5,7 @@ import xlrd
 import os
 import os.path
 
+from .model_file_loader import ModelFileLoader
 
 SOLVER = 'cplex'
 SOLVER_PATH = r'C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1261\CPLEX_Studio\cplex\bin\x64_win64\cplex.exe'
@@ -97,6 +98,12 @@ class Participant:
 
 
 class CommonModel:
+    LOADER = ModelFileLoader
+
+    @classmethod
+    def set_loader(cls, loader):
+        cls.LOADER = loader
+
     def __init__(self, target_date, hour, model_config_path=MODEL_PATH, results_path=RESULTS_PATH):
         """
         Проведение расчета
@@ -108,31 +115,25 @@ class CommonModel:
         self.hour = hour
         self.results_path = results_path
 
-        self.countries = self.load_countries(os.path.join(model_config_path, 'countries.json'))
-        self.nodes = self.load_nodes(os.path.join(model_config_path, 'nodes.json'))
-        self.sections = self.load_sections(os.path.join(model_config_path, 'sections.json'))
-        self.load_section_limits(os.path.join(model_config_path, 'section_limits.xlsx'))
-        self.mgp_price = self.load_mgp_prices(os.path.join(model_config_path, 'mgp_prices.xlsx'))  # страна из - страна в -> цена
+        self.countries = self.load_countries()
+        self.nodes = self.load_nodes()
+        self.sections = self.load_sections()
+        self.load_section_limits()
+        self.mgp_price = self.load_mgp_prices()  # страна из - страна в -> цена
         # self.currencies = self.load_currencies(os.path.join(model_config_path, 'currencies.json'))
-        self.participants = self.load_participants(os.path.join(model_config_path, 'participants.json'))
+        self.participants = self.load_participants()
         self.currencies = self.stub_currencies()
 
-    def load_countries(self, file_name):
-        with open(file_name, 'r', encoding='utf8') as fp:
-            input_data = json.load(fp)
-        return {country['code']: Country(country['code'], country['name']) for country in input_data}
+    def load_countries(self):
+        return {country['code']: Country(country['code'], country['name']) for country in self.LOADER.load_countries()}
 
-    def load_nodes(self, file_name):
-        with open(file_name, 'r', encoding='utf8') as fp:
-            input_data = json.load(fp)
+    def load_nodes(self):
         return {
             node['node_code']: Node(node['node_code'], node['node_name'], self.countries[node['country_code']])
-            for node in input_data
+            for node in self.LOADER.load_nodes()
         }
 
-    def load_sections(self, file_name):
-        with open(file_name, 'r', encoding='utf8') as fp:
-            input_data = json.load(fp)
+    def load_sections(self):
 
         def cut_countries(data):
             return {self.countries[c['country_code']] for c in data}
@@ -152,51 +153,35 @@ class CommonModel:
                 cut_countries(sec['cut_countries']),
                 distr_rule(sec['distr_rule'])
             )
-            for sec in input_data
+            for sec in self.LOADER.load_sections()
         ]
         return {section.code: section for section in sections}
 
-    def load_section_limits(self, file_name):
-        target_date, hour, sections = self.target_date, self.hour, self.sections
-        wb = xlrd.open_workbook(file_name)
-        data = wb.sheet_by_index(0)._cell_values
-        for row in data[1:]:
-            d = xlrd.xldate.xldate_as_datetime(row[COL_DATE], 0)
-            if d.date() == target_date and row[COL_HOUR] == hour:
-                s = self.sections[row[COL_SECTION]]  # type: Section
-                s.pmax_fw = float(row[COL_PMAX])
-                s.pmax_bw = float(row[COL_PMIN])
+    def load_section_limits(self):
+        for row in self.LOADER.load_section_limits(self.target_date, self.hour):
+            s = self.sections[row['section_code']]
+            s.pmax_fw = row['pmax_fw']
+            s.pmax_bw = row['pmax_bw']
 
         assert all(
             s.pmax_bw is not None and s.pmax_fw is not None
-            for s in sections.values()
+            for s in self.sections.values()
         ), "Нет данных по ограничениям на переток у {}".format(','.join(
             s_code
-            for s_code, s in sections.items()
+            for s_code, s in self.sections.items()
             if s.pmax_bw is not None and s.pmax_fw is not None
         ))
 
-    def load_mgp_prices(self, file_name):
-        target_date, hour = self.target_date, self.hour
-        wb = xlrd.open_workbook(file_name)
-        data = wb.sheet_by_index(0)._cell_values
+    def load_mgp_prices(self,):
+        return {
+            row['section_code']: row['mgp_price']
+            for row in self.LOADER.load_mgp_prices(self.target_date, self.hour)
+        }
 
-        mgp_prices = dict()
-        for row in data[1:]:
-            d = xlrd.xldate.xldate_as_datetime(row[COL_DATE], 0)
-            if d.date() == target_date and row[COL_HOUR] == hour:
-                assert row[COL_COUNTRY_FROM] in self.countries and row[COL_COUNTRY_TO] in self.countries
-                mgp_prices['{}-{}'.format(row[COL_COUNTRY_FROM], row[COL_COUNTRY_TO])] = float(row[COL_MGP_PRICE])
-
-        return mgp_prices
-
-    def load_participants(self, file_name):
-        with open(file_name, 'r', encoding='utf8') as fp:
-            input_data = json.load(fp)
-
+    def load_participants(self):
         return {
             p['_id']: Participant(p['_id'], p['name'], self.countries[p['country_code']], p['dir'])
-            for p in input_data
+            for p in self.LOADER.load_participants()
         }
 
 

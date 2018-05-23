@@ -71,7 +71,7 @@ export default {
         .find(({ code }) => code === sectionCode).flow;
     },
     testFn() {
-      console.log(this.getCountryResults(0, 'KAZ', 'buy', 'KAZ2'))
+      console.log(this.getCountryResults(3, 'KAZ', 'buy'))
     },
   },
 };

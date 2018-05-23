@@ -1,5 +1,6 @@
 [
   {
+    "_id": "RUS-BLR",
     "node_from": "RUS1",
     "node_to": "BLR1",
     "cut_countries": [{"country_code": "BLR"}],
@@ -18,6 +19,7 @@
     ]
   },
   {
+    "_id": "RUS-ARM",
     "node_from": "RUS2",
     "node_to": "ARM1",
     "cut_countries": [{"country_code": "ARM"}],
@@ -36,6 +38,7 @@
     ]
   },
   {
+    "_id": "RUS-KAZ",
     "node_from": "RUS3",
     "node_to": "KAZ1",
     "cut_countries": [
@@ -57,6 +60,7 @@
     ]
   },
   {
+    "_id": "KAZ-KGZ",
     "node_from": "KAZ2",
     "node_to": "KGZ1",
     "cut_countries": [{"country_code": "KGZ"}],

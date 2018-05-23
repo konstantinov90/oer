@@ -12,6 +12,7 @@ if __name__ == '__main__':
         # m = SdModel(target_date=date(2018, 6, 18), hour=0)
         # m.reduce_graph()
         # m.save_results_to_file()
-        sd_runner()
+        # sd_runner()
         # SpotModelAug.spot_runner(datetime(2018, 6, 18))
+        SpotModel.spot_runner(datetime(2018, 6, 18))
         print(time() - t)

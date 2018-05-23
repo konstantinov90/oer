@@ -87,6 +87,7 @@ export default {
           .map(({ hours }) => hours.find(({ hour: h }) => h === hour).intervals[0].prices)
           .reduce((ar, bs) => ([...ar, ...bs]), [])
           .reduce(([am, vol], { section_code : sc, filled_volume : fv}) => {
+            console.log(sc, fv)
             return [am + getNodePrice(hour, countryCode, sc, direction) * fv, vol + fv];
           }, [0, 0]);
 
