@@ -70,7 +70,7 @@
     <div class="picker-wrapper">
       <label>{{ !adminSession ? contragentType : 'Продавец' }}:</label>
       <select
-        :disabled="inputDisabled"
+        :disabled="inputDisabled || (sdd && sdd.author !== username)"
         @input="onSelectContragent">
         <option
           :disabled="adminSession"
@@ -129,12 +129,13 @@
     <div
       v-if="hours.length"
       :style="{
-        'grid-template-columns': `repeat(2, 4fr) repeat(2, 12fr)${inputDisabled ? '' : ' 1fr'}`
+        'grid-template-columns': `repeat(2, 4fr) repeat(${hasResults ? '3' : '2'}, 12fr)${inputDisabled ? '' : ' 1fr'}`
       }"
       class="graph-grid">
       <p>Дата</p>
       <p>Час</p>
       <p>Объем</p>
+      <p v-if="hasResults">Принятый объем</p>
       <p>Цена</p>
       <span
         v-if="!inputDisabled"
@@ -149,12 +150,18 @@
           :disabled="inputDisabled"
           :value="sddProjValues[hour]['volume']"
           @input="changeValue('volume', hour, $event)">
+        <span
+          v-if="hasResults"
+          :key="`acc_${hour}`">
+          {{ sdd.values[hour].accepted_volume }}
+        </span>
         <input
           :key="`pr_${hour}`"
           :disabled="inputDisabled"
           :value="sddProjValues[hour]['price']"
           @input="changeValue('price', hour, $event)" >
         <span
+          v-tooltip.left="'продлить значения до конца'"
           v-if="!inputDisabled"
           :key="hour"
           style="cursor: pointer;"
@@ -251,6 +258,9 @@ export default {
     ...mapState('common', ['rioEntry', 'username', 'adminSession']),
     ...mapState('client', ['possibleContragents']),
     ...mapGetters('common', ['selectedSession']),
+    hasResults() {
+      return this.selectedSession.status === 'closed' && this.sdd.values[0].accepted_volume !== undefined;
+    },
     openDate() {
       return this.selectedSession.startDate;
     },
@@ -323,9 +333,9 @@ export default {
         return '';
       }
       if (!this.isChanged) {
-        return '✅';
+        return '✅ договор сохранен';
       }
-      return '⚠️';
+      return '⚠️ договор отличается от сохраненного';
     },
   },
   created() {

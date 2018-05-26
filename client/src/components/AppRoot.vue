@@ -48,6 +48,8 @@ export default {
 <!-- CSS libraries -->
 <style src="normalize.css/normalize.css"></style>
 
+<style src="../tooltip.css"></style>
+
 <!-- Global CSS -->
 <style>
   * {

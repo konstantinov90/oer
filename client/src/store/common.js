@@ -28,6 +28,7 @@ export default {
     sdd: [],
     sessions: [],
     spotResults: null,
+    sectionLimits: null,
     countrySectionNodeMap: {
       sell: {
         RUS: {
@@ -48,14 +49,32 @@ export default {
           'RUS-BLR': 'BLR1',
           'RUS-ARM': 'ARM1',
           'RUS-KAZ': 'KAZ1',
+          'KAZ-KGZ': 'KGZ1',
         },
         KAZ: {
           'RUS-KAZ': 'RUS3',
           'KAZ-KGZ': 'KGZ1',
+          'RUS-ARM': 'ARM1',
+          'RUS-BLR': 'BLR1',
         },
-        ARM: { 'RUS-ARM': 'RUS2' },
-        BLR: { 'RUS-BLR': 'RUS1' },
-        KGZ: { 'KAZ-KGZ': 'KAZ2' },
+        ARM: {
+          'RUS-ARM': 'RUS2',
+          'RUS-BLR': 'BLR1',
+          'RUS-KAZ': 'KAZ1',
+          'KAZ-KGZ': 'KGZ1',
+        },
+        BLR: {
+          'RUS-BLR': 'RUS1',
+          'RUS-ARM': 'ARM1',
+          'RUS-KAZ': 'KAZ1',
+          'KAZ-KGZ': 'KGZ1',
+        },
+        KGZ: {
+          'KAZ-KGZ': 'KAZ2',
+          'RUS-BLR': 'BLR1',
+          'RUS-ARM': 'ARM1',
+          'RUS-KAZ': 'RUS3',
+        },
       },
     },
   },
@@ -75,23 +94,41 @@ export default {
           .nodes.find(({ code }) => code === node).price;
       };
     },
-    getCountryResults(state, { getNodePrice }) {
+    getCountryResults({ allBids }, { getNodePrice }) {
       return (hour, countryCode, direction, traderCode = null) => {
-        const [amount, volume] = state.allBids
+        hour = Number.parseInt(hour, 10);
+        if (!allBids) return [0,0];
+        const [amount, volume] = allBids
           .filter(({ trader_code, country_code, dir }) => {
             if (traderCode) {
-              return trader_code === traderCode;
+              if (trader_code === traderCode) {
+                countryCode = country_code;
+                direction = dir;
+                return true;
+              }
+              return false;
             }
             return dir === direction && country_code === countryCode;
           })
-          .map(({ hours }) => hours.find(({ hour: h }) => h === hour).intervals[0].prices)
+          .map(({ hours }) => {
+            return hours.find(({ hour: h }) => h === hour).intervals[0].prices;
+          })
           .reduce((ar, bs) => ([...ar, ...bs]), [])
           .reduce(([am, vol], { section_code : sc, filled_volume : fv}) => {
-            console.log(sc, fv)
             return [am + getNodePrice(hour, countryCode, sc, direction) * fv, vol + fv];
           }, [0, 0]);
 
         return [volume, amount/volume];
+      };
+    },
+    getSectionLimits({ sectionLimits }) {
+      return (hour, sectionCode) => {
+        hour = Number.parseInt(hour, 10)
+        if (!sectionLimits) return [0, 0];
+        const { pmax_fw, pmax_bw } =  sectionLimits.hours
+          .find(({ hour: h }) => h === hour)
+          .sections.find(({ section_code: sc}) => sc === sectionCode);
+        return [pmax_fw, pmax_bw];
       };
     },
     // phaseName(state) {
@@ -201,6 +238,9 @@ export default {
     spotResults(state, { msg }) {
       state.spotResults = msg;
     },
+    sectionLimits(state, { msg }) {
+      state.sectionLimits = msg;
+    },
   },
   actions: {
     querySessions() {
@@ -231,6 +271,27 @@ export default {
         if (selectedSession.status === 'closed') {
           this.$socket.sendObj({ type: 'queryAllBids', msg: selectedSession._id })
         }
+      }
+    },
+    querySectionLimits({ getters: { selectedSession } }) {
+      if (selectedSession) {
+        let limitType;
+        switch (selectedSession.type) {
+          case 'spot':
+            limitType = 'SECTION_FLOW_LIMIT_DAM';
+            break;
+          case 'free':
+            limitType = 'SECTION_FLOW_LIMIT_FC';
+            break;
+          case 'futures':
+            limitType = 'SECTION_FLOW_LIMIT_EX';
+            break;
+        }
+        this.$socket.sendObj({
+          type: 'querySectionLimits',
+          targetDate: selectedSession.startDate,
+          limitType,
+        });
       }
     },
   },

@@ -565,7 +565,7 @@
             sodipodi:role="line"
             x="88.536728"
             y="32.620899">
-            1000 @ 1220
+            {{ round(RusGen[0], 2) }} @ {{ round(RusGen[1], 3) }}
           </tspan>
         </text>
         <text
@@ -581,7 +581,7 @@
             sodipodi:role="line"
             x="88.218719"
             y="40.413822">
-            500 @ 2220
+            {{ round(RusCons[0], 3) }} @ {{ round(RusCons[1], 2) }}
           </tspan>
         </text>
         <g
@@ -621,7 +621,7 @@
             sodipodi:role="line"
             x="168.31807"
             y="48.335754">
-            1000@1220
+            {{ round(KazGen[0], 3) }} @ {{ round(KazGen[1], 2) }}
           </tspan>
         </text>
         <text
@@ -638,7 +638,7 @@
             y="56.487839"
             x="168.00006"
             sodipodi:role="line">
-            500 @ 2220
+            {{ round(KazCons[0], 3)}} @ {{ round(KazCons[1], 2) }}
           </tspan>
         </text>
         <g
@@ -679,7 +679,7 @@
             sodipodi:role="line"
             x="167.60158"
             y="102.84569">
-            1000@1220
+            {{ round(KgzGen[0], 3) }} @ {{ round(KgzGen[1], 2) }}
           </tspan>
         </text>
         <text
@@ -695,7 +695,7 @@
             y="110.99778"
             x="167.28357"
             sodipodi:role="line">
-            500 @ 2220
+            {{ round(KgzCons[0], 3)}} @ {{ round(KgzCons[1], 2) }}
           </tspan>
         </text>
         <g
@@ -736,7 +736,7 @@
             sodipodi:role="line"
             x="10.648436"
             y="24.947378">
-            1000 @ 1220
+            {{ round(BlrGen[0], 3) }} @ {{ round(BlrGen[1], 2) }}
           </tspan>
         </text>
         <text
@@ -753,7 +753,7 @@
             sodipodi:role="line"
             x="10.330427"
             y="32.740299">
-            500 @ 2220
+            {{ round(BlrCons[0], 3)}} @ {{ round(BlrCons[1], 2) }}
           </tspan>
         </text>
         <g
@@ -794,7 +794,7 @@
             sodipodi:role="line"
             x="34.96151"
             y="103.42374">
-            1000@1220
+            {{ round(ArmGen[0], 3) }} @ {{ round(ArmGen[1], 2) }}
           </tspan>
         </text>
         <text
@@ -811,7 +811,7 @@
             y="111.57583"
             x="34.643501"
             sodipodi:role="line">
-            500 @ 2220
+            {{ round(ArmCons[0], 3)}} @ {{ round(ArmCons[1], 2) }}
           </tspan>
         </text>
         <text
@@ -827,7 +827,7 @@
             x="196.18021"
             y="75.355949"
             style="font-size:4.23333333px;stroke-width:0.26458332;-inkscape-font-specification:'sans-serif, Italic';font-family:sans-serif;font-weight:normal;font-style:italic;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;fill:#fb950e;fill-opacity:0.94117647;">
-            1234
+            {{ KazKgzSectionLimits[1] }}
           </tspan>
         </text>
         <text
@@ -843,7 +843,7 @@
             x="159.48514"
             y="74.209023"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332;">
-            4321
+            {{ KazKgzSectionLimits[0] }}
           </tspan>
         </text>
         <path
@@ -869,7 +869,7 @@
             x="147.95686"
             y="61.320034"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
-            1000
+            {{ RusKazSectionLimits[0] }}
           </tspan>
         </text>
         <text
@@ -885,7 +885,7 @@
             x="150.60269"
             y="32.669441"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
-            1000
+            {{ RusKazSectionLimits[1] }}
           </tspan>
         </text>
         <path
@@ -912,7 +912,7 @@
             x="53.59161"
             y="31.080162"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
-            1000
+            {{ RusBlrSectionLimits[1] }}
           </tspan>
         </text>
         <text
@@ -929,7 +929,7 @@
             x="56.623386"
             y="3.1850538"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
-            1000
+            {{ RusBlrSectionLimits[0] }}
           </tspan>
         </text>
         <path
@@ -955,7 +955,7 @@
             x="46.081543"
             y="70.289719"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
-            1000
+            {{ RusArmSectionLimits[0] }}
           </tspan>
         </text>
         <text
@@ -971,7 +971,7 @@
             x="74.406746"
             y="87.133064"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
-            1000
+            {{ RusArmSectionLimits[1] }}
           </tspan>
         </text>
         <path
@@ -1038,6 +1038,20 @@ export default {
     RusBlr: Number,
     RusKaz: Number,
     KazKgz: Number,
+    RusGen: Array,
+    RusCons: Array,
+    BlrGen: Array,
+    BlrCons: Array,
+    ArmGen: Array,
+    ArmCons: Array,
+    KazGen: Array,
+    KazCons: Array,
+    KgzGen: Array,
+    KgzCons: Array,
+    RusBlrSectionLimits: Array,
+    RusArmSectionLimits: Array,
+    RusKazSectionLimits: Array,
+    KazKgzSectionLimits: Array,
   },
   computed: {
     RusArmFlow() {
@@ -1051,6 +1065,12 @@ export default {
     },
     KazKgzFlow() {
       return this.KazKgz;
+    },
+  },
+  methods: {
+    round(val, dim) {
+      if (Number.isNaN(val)) return 0;
+      return Math.round(val * 10 ** dim) / 10 ** dim
     },
   },
 };

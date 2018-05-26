@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- <span>{{ hasResults }}</span> -->
     <template v-if="!adminSession && !hasResults">
       <button
         :disabled="!bidReady()"
@@ -55,6 +56,7 @@
           :disabled="isInputDisabled(section) || hasResults"
           @input="setPrice(hour, section, $event)">
         <button
+          v-tooltip.left="'продлить значения до конца'"
           v-if="!hasResults"
           :key="`btn_${hour}`"
           style="cursor: pointer;"
@@ -115,13 +117,13 @@ export default {
     ...mapGetters('common', ['selectedSession', 'getNodePrice']),
     title() {
       if (!this.bid) {
-        return '❌';
+        return '❌ заявка не сохранена';
       }
       if (isEqual(this.bid, { _id: this.bid._id, ...this.newBid })
         && isEqual(this.bid.hours.map(({ intervals }) => intervals[0].volume), this.volumes)) {
-        return '✅';
+        return '✅ заявка сохранена';
       }
-      return '⚠️';
+      return '⚠️ заявка отличается от сохраненной';
     },
     newBid() {
       return {

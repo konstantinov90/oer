@@ -31,6 +31,7 @@ import VueNativeSock from 'vue-native-websocket';
 import VueRouter from 'vue-router';
 import VueCookie from 'vue-cookie';
 import { sync } from 'vuex-router-sync';
+import VTooltip from 'v-tooltip';
 
 import store from './store';
 import router from './router';
@@ -53,6 +54,8 @@ Vue.use(VueNativeSock, WS_URL, {
 Vue.use(VueCookie);
 
 Vue.use(VueRouter);
+
+Vue.use(VTooltip);
 
 Vue.config.productionTip = false;
 

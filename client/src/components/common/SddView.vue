@@ -33,10 +33,21 @@
         <br>
         <span class="sdd-item__info">#{{ sdd.sessionId }}</span>
       </div>
-      <div style="width: 250px">
+      <div
+        style="
+          width: 250px;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        ">
         <span class="sdd-item__info">
           {{ status }}
         </span>
+        <img
+          v-if="sdd.status === 'created' && sdd.author === username"
+          class="sdd-item__delete-img"
+          src="/static/delete.svg"
+          @click.stop="deleteSdd(sdd._id)">
       </div>
     </div>
 
@@ -47,6 +58,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { format } from 'date-fns';
 import SddEditor from './SddEditor.vue';
 
@@ -66,6 +78,7 @@ export default {
     };
   },
   computed: {
+    ...mapState('common', ['username']),
     status() {
       const { status } = this.sdd;
       if (status === 'created') return 'Проект';
@@ -80,6 +93,11 @@ export default {
     summary() {
       const sumVol = this.sdd.values.reduce((s, { volume }) => s + volume, 0);
       return `покупатель ${this.sdd.buyer} - ${this.sdd.seller} продавец ${sumVol} МВт ${this.sdd.project ? ' (проект)' : ''}`;
+    },
+  },
+  methods: {
+    deleteSdd(sddId) {
+      this.$socket.sendObj({ type: 'deleteSdd', msg: sddId });
     },
   },
 };
@@ -99,5 +117,15 @@ export default {
 
   .sdd-item__info {
     color: gray;
+  }
+
+  .sdd-item__delete-img {
+    height: 28px;
+  }
+
+  .sdd-item__delete-img:hover {
+    background: #ccc;
+    box-sizing: border-box;
+    border-radius: 4px;
   }
 </style>

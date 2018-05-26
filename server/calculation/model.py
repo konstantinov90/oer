@@ -5,10 +5,15 @@ import xlrd
 import os
 import os.path
 
-from .model_file_loader import ModelFileLoader
+
+try:
+    from model_file_loader import ModelFileLoader
+    SOLVER_PATH = r'C:\Program Files\IBM\ILOG\CPLEX_Studio1263\cplex\bin\x64_win64\cplex.exe'
+except ModuleNotFoundError:
+    from .model_file_loader import ModelFileLoader
+    SOLVER_PATH = r'C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1261\CPLEX_Studio\cplex\bin\x64_win64\cplex.exe'
 
 SOLVER = 'cplex'
-SOLVER_PATH = r'C:\Program Files\IBM\ILOG\CPLEX_Enterprise_Server1261\CPLEX_Studio\cplex\bin\x64_win64\cplex.exe'
 # SOLVER = 'glpk'
 # SOLVER_PATH = r'C:\Program Files\winglpk\w64\glpsol.exe'
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model')
@@ -157,8 +162,13 @@ class CommonModel:
         ]
         return {section.code: section for section in sections}
 
+    @classmethod
+    def load_section_limits_for_subclass(cls, target_date, hour):
+        raise Exception('метод должен быть переопределен в подклассе')
+
     def load_section_limits(self):
-        for row in self.LOADER.load_section_limits(self.target_date, self.hour):
+        # for row in self.LOADER.load_section_limits(self.target_date, self.hour):
+        for row in self.load_section_limits_for_subclass(self.target_date, self.hour):
             s = self.sections[row['section_code']]
             s.pmax_fw = row['pmax_fw']
             s.pmax_bw = row['pmax_bw']

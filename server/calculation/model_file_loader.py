@@ -31,7 +31,7 @@ class ModelFileLoader():
 
     SECTION_LIMITS_DATA = None
     @classmethod
-    def parse_section_limits(cls, filename):
+    def parse_section_limits(cls, filename, limit_type='SECTION_FLOW_LIMIT_FC'):
         if cls.SECTION_LIMITS_DATA:
             return cls.SECTION_LIMITS_DATA
 
@@ -49,7 +49,7 @@ class ModelFileLoader():
 
             section = hour['sections'].setdefault(row[COL_SECTION], {'section_code': row[COL_SECTION]})
             
-            section_code = f'{row[COL_FROM_CODE]}-{row[COL_TO_CODE]}'
+            section_code = '{}-{}'.format(row[COL_FROM_CODE], row[COL_TO_CODE])
 
             if section_code == row[COL_SECTION]:
                 section['pmax_fw'] = float(row[COL_PMAX])
@@ -58,6 +58,7 @@ class ModelFileLoader():
 
         for day in res.values():
             day['hours'] = list(day['hours'].values())
+            day['limit_type'] = limit_type
             for hour in day['hours']:
                 hour['sections'] = list(hour['sections'].values())
         
@@ -65,8 +66,8 @@ class ModelFileLoader():
         return cls.SECTION_LIMITS_DATA
 
     @classmethod
-    def load_section_limits(cls, target_date, hour):
-        data = cls.parse_section_limits(model_path_resolver('МДП.xlsx'))
+    def load_section_limits(cls, target_date, hour, limit_type='SECTION_FLOW_LIMIT_FC', session_id='Не используется'):
+        data = cls.parse_section_limits(model_path_resolver('МДП.xlsx'), limit_type)
         [day] = [row for row in data if row['target_date'] == target_date]
         [hour] = [row for row in day['hours'] if row['hour'] == hour]
         return hour['sections']
@@ -95,7 +96,8 @@ class ModelFileLoader():
                 'graph_type': graph_type,
                 'sections': [],
             })
-            unit['sections'].append({'section_code': f'{row[COL_FROM_CODE]}-{row[COL_TO_CODE]}', 'mgp_price': float(row[COL_PRICE])})
+            unit['sections'].append({'section_code': '{}-{}'.format(row[COL_FROM_CODE], row[COL_TO_CODE]),
+                                     'mgp_price': float(row[COL_PRICE])})
 
         cls.MGP_DATA = list(res.values())
         return cls.MGP_DATA

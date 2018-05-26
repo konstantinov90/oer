@@ -9,18 +9,39 @@
         :on-select="onSelectFinish"/>
     </template>
     <div v-if="finishDate">
-      <button
-        v-if="datesEqual"
-        @click="openSession('spot')">
-        Открыть сессию РСВ
-      </button>
-      <button @click="openSession('futures')">Открыт биржевую сессию</button>
-      <button @click="openSession('free')">Открыть сессию СДД</button>
+      <div v-if="datesEqual">
+        <button
+          @click="startSelectingSdSession">
+          Открыть сессию РСВ
+        </button>
+        <select
+          v-if="selectingSdSession"
+          v-model.number="selectedSdSessionId">
+          <option disabled selected value="">сессия СДД</option>
+          <option
+            v-for="sdSession in sdSessions"
+            :key="sdSession._id">
+          {{ sdSession._id }}
+          </option>
+        </select>
+        <button
+          v-if="selectedSdSessionId"
+          @click="openSession('spot')">
+          открыть
+        </button>
+      </div>
+      <div>
+        <button @click="openSession('futures')">Открыт биржевую сессию</button>
+      </div>
+      <div>
+        <button @click="openSession('free')">Открыть сессию СДД</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { compareAsc } from 'date-fns';
 import DateSelector from '../common/DateSelector.vue';
 
@@ -34,10 +55,21 @@ export default {
       startDate: null,
       finishDate: null,
       sessionType: null,
+      selectedSdSessionId: '',
+      selectingSdSession: false,
     };
   },
   computed: {
+    ...mapState('common', ['sessions']),
+    sdSessions() {
+      return this.sessions.filter(({ type }) => type === 'free');
+    },
     session() {
+      const aux = {};
+      if (this.sessionType === 'spot') {
+        aux.sd_session_id = this.selectedSdSessionId;
+      }
+
       return {
         type: this.sessionType,
         openDate: new Date(),
@@ -45,6 +77,7 @@ export default {
         status: 'open',
         startDate: this.startDate,
         finishDate: this.finishDate,
+        ...aux,
       };
     },
     datesEqual() {
@@ -64,6 +97,9 @@ export default {
     openSession(type) {
       this.sessionType = type;
       this.$socket.sendObj({ type: 'openSession', msg: this.session });
+    },
+    startSelectingSdSession() {
+      this.selectingSdSession = true;
     },
   },
 };

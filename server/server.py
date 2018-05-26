@@ -9,6 +9,7 @@ import aiohttp_cors
 from pymongo import ReturnDocument
 
 from calculation.spot import SpotModelAug
+from calculation.sd import SdModelAug
 from db_api.api import db
 
 HOST = os.getenv('HOST', '0.0.0.0')
@@ -132,12 +133,21 @@ async def websocket_handler(request):
 
             elif payload['type'] == 'calculate':
                 session = await db.sessions.find_one({'_id': payload['msg']})
-                if session['type'] == 'spot':
-                    SpotModelAug.spot_runner(session['_id'])
-                    await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
+                if session['type'] == 'free':
+                    SdModelAug.sd_runner(session['_id'])
+                    await ws_clients.broadcast({'type': 'hasNewSdd'})
+                elif session['type'] == 'spot':
+                    SpotModelAug.spot_runner(session['_id'], session['sd_session_id'])
                     await ws_clients.broadcast({'type': 'hasNewBid'})
+
+                await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
                 await ws_clients.broadcast({'type': 'hasNewSessions'})
 
+            elif payload['type'] == 'querySectionLimits':
+                tdate, limit_type = payload['targetDate'], payload['limitType']
+                section_limits = await db.section_limits.find_one({'target_date': tdate, 'limit_type': limit_type})
+                print('sec lims', section_limits)
+                await ws.send_json({'type': 'common/sectionLimits', 'msg': section_limits})
 
             # elif payload['type'] == 'queryBidAdmin':
             #     username = payload['msg']
@@ -191,6 +201,12 @@ async def websocket_handler(request):
                     await ws_clients[seller].send_json(msg)
                 await ws_clients.send_to_admin(msg)
 
+            elif payload['type'] == 'deleteSdd':
+                await db.sdd.delete_many({'_id': payload['msg']})
+                msg = {'type': 'hasNewSdd'}
+                await ws.send_json(msg)
+                await ws_clients.send_to_admin(msg)
+
             elif payload['type'] == 'querySdd':
                 username = ws['user']
                 session = await db.sessions.find_one({'_id': payload['msg']})
@@ -202,12 +218,24 @@ async def websocket_handler(request):
                 #     'sessionId': session['_id'],
                 # }]
                 query = {
-                    # 'sessionId': session['_id'],
+                    '$and': [
+                        {
+                            '$or': [
+                                {
+                                    'sessionId': session['_id'],
+                                },
+                                {
+                                    'dateEnd': {'$gte': session['startDate']}
+                                },
+                            ],
+                        },
+                        {},
+                    ]
                 }
 
                 if username != 'admin':
                     direction = 'buyer' if ws['rio_entry']['dir'] == 'buy' else 'seller'
-                    query['$or'] = [
+                    query['$and'][1]['$or'] = [
                         {
                             'author': username,
                             # '$or': sub_query,

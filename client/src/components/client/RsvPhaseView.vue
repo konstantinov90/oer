@@ -5,11 +5,6 @@
       v-if="selectedSession"
       :dates="[selectedSession.startDate, selectedSession.finishDate]"/>
     <vm-tabs>
-      <vm-tab-pane label="заявка РСВ">
-        <bid-editor
-          v-if="!queringBid && (selectedSession.status === 'open' || bid)"
-          :bid="bid"/>
-      </vm-tab-pane>
       <vm-tab-pane
         v-if="selectedSession.status !== 'open'"
         label="схема">
@@ -24,8 +19,27 @@
           :rus-arm="getSectionFlow(hour, 'RUS-ARM')"
           :rus-blr="getSectionFlow(hour, 'RUS-BLR')"
           :rus-kaz="getSectionFlow(hour, 'RUS-KAZ')"
-          :kaz-kgz="getSectionFlow(hour, 'KAZ-KGZ')"/>
+          :kaz-kgz="getSectionFlow(hour, 'KAZ-KGZ')"
+          :rus-gen="getCountryResults(hour, 'RUS', 'sell')"
+          :rus-cons="getCountryResults(hour, 'RUS', 'buy')"
+          :blr-gen="getCountryResults(hour, 'BLR', 'sell')"
+          :blr-cons="getCountryResults(hour, 'BLR', 'buy')"
+          :arm-gen="getCountryResults(hour, 'ARM', 'sell')"
+          :arm-cons="getCountryResults(hour, 'ARM', 'buy')"
+          :kaz-gen="getCountryResults(hour, 'KAZ', 'sell')"
+          :kaz-cons="getCountryResults(hour, 'KAZ', 'buy')"
+          :kgz-gen="getCountryResults(hour, 'KGZ', 'sell')"
+          :kgz-cons="getCountryResults(hour, 'KGZ', 'buy')"
+          :rus-arm-section-limits="getSectionLimits(hour, 'RUS-ARM')"
+          :rus-blr-section-limits="getSectionLimits(hour, 'RUS-BLR')"
+          :rus-kaz-section-limits="getSectionLimits(hour, 'RUS-KAZ')"
+          :kaz-kgz-section-limits="getSectionLimits(hour, 'KAZ-KGZ')"/>
         <button @click="testFn">test</button>
+      </vm-tab-pane>
+      <vm-tab-pane label="заявка РСВ">
+        <bid-editor
+          v-if="!queringBid && (selectedSession.status === 'open' || bid)"
+          :bid="bid"/>
       </vm-tab-pane>
     </vm-tabs>
   </div>
@@ -58,20 +72,21 @@ export default {
   },
   computed: {
     ...mapState('common', ['bid', 'queringBid', 'spotResults']),
-    ...mapGetters('common', ['selectedSession', 'getCountryResults']),
+    ...mapGetters('common', ['selectedSession', 'getCountryResults', 'getSectionLimits']),
   },
   created() {
     this.queryBid();
     this.queryResults();
+    this.querySectionLimits();
   },
   methods: {
-    ...mapActions('common', ['queryBid', 'queryResults']),
+    ...mapActions('common', ['queryBid', 'queryResults', 'querySectionLimits']),
     getSectionFlow(hour, sectionCode) {
       return this.spotResults && this.spotResults.hours[hour].sections
         .find(({ code }) => code === sectionCode).flow;
     },
     testFn() {
-      console.log(this.getCountryResults(3, 'KAZ', 'buy'))
+      console.log(this.getSectionLimits(0, 'RUS-BLR'))
     },
   },
 };

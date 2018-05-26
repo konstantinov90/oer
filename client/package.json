@@ -31,6 +31,7 @@
     "offline-plugin": "^4.8.0",
     "promise-polyfill": "^6.0.2",
     "topojson-client": "^3.0.0",
+    "v-tooltip": "^2.0.0-rc.32",
     "vue": "^2.5.16",
     "vue-ace-editor": "^1.0.3",
     "vue-cookie": "^1.1.4",

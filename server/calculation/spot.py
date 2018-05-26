@@ -3,9 +3,15 @@ from itertools import chain, product
 import os
 import os.path
 import json
+import functools
 from datetime import datetime
 
-from .model import CommonModel, DIR, SOLVER, SOLVER_PATH, MODEL_PATH
+try:
+    from model import CommonModel, DIR, SOLVER, SOLVER_PATH, MODEL_PATH
+except ModuleNotFoundError:
+    from .model import CommonModel, DIR, SOLVER, SOLVER_PATH, MODEL_PATH
+    from .model_db_loader import ModelDbLoader
+    import pymongo
 
 
 BIDS_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bids')
@@ -310,17 +316,30 @@ class SpotModel(CommonModel):
             m.print_result()
 
             for node_bid, var in m.opt_model.x.items():
+                bid_section = next(s for s in m.sections.values() if s.node_from == node_bid.node or s.node_to == node_bid.node)
                 input_data = next(b for b in bids_data if b['_id'] == node_bid.bid.id)
                 hour_data = next(bh for bh in input_data['hours'] if bh['hour'] == h)
                 interval_data = next(bi for bi in hour_data['intervals'] if bi['interval_num'] == node_bid.bid.interval_num)
-                node_data = next(bn for bn in interval_data['prices'] if bn['section_code'] == node_bid.section.code)
-                node_data['filled_volume'] = var.value
+                try:
+                    node_data = next(bn for bn in interval_data['prices'] if bn['section_code'] == bid_section.code)
+                except StopIteration:
+                    interval_data['prices'].append({
+                        'price': node_bid.price,
+                        'section_code': bid_section.code,
+                        'filled_volume': var.value,
+                    })
+                else:
+                    node_data['filled_volume'] = var.value
 
             hour_res['nodes'] = [{'code': n.code, 'price': n.price} for n in m.opt_model.nodes]
             hour_res['sections'] = [{'code': s.code, 'flow': s.calc_flow(m.opt_model, m.node_bids)} for s in m.opt_model.sections]
             results.append(hour_res)
 
         return bids_data, results
+
+    @classmethod
+    def load_section_limits_for_subclass(cls, target_date, hour):
+        return cls.LOADER.load_section_limits(target_date, hour, 'SECTION_FLOW_LIMIT_DAM')
 
     @classmethod
     def load_bid(cls, bids_path):
@@ -337,10 +356,10 @@ class SpotModel(CommonModel):
         bids_data, results = cls.spot_runner_core(model_config_path, bids_data)
 
         for bid in bids_data:
-            bid['target_date'] = f'{bid["target_date"]:%Y-%m-%d}'
+            bid['target_date'] = '{:%Y-%m-%d}'.format(bid["target_date"])
 
         for res in results:
-            res['tdate'] = f'{res["tdate"]:%Y-%m-%d}'
+            res['tdate'] = '{:%Y-%m-%d}'.format(res["tdate"])
 
         with open(os.path.join(results_path, 'bids_results.json'), 'w', encoding='utf8') as fp:
             json.dump(bids_data, fp)
@@ -349,18 +368,21 @@ class SpotModel(CommonModel):
             json.dump(results, fp)
 
 
-import pymongo
 
 class SpotModelAug(SpotModel):
+    @classmethod
+    def load_sec_lims(cls, target_date, hour, sd_session_id):
+        return cls.LOADER.load_section_limits(target_date, hour, 'SECTION_FLOW_LIMIT_DAM', sd_session_id)
+
     @classmethod
     def load_bid(cls, session_id):
         db = pymongo.MongoClient().inter_market
         return list(db.bids.find({'session_id': session_id}))
 
     @classmethod
-    def spot_runner(cls, session_id, model_config_path=MODEL_PATH):
-        from .model_db_loader import ModelDbLoader
+    def spot_runner(cls, session_id, sd_session_id, model_config_path=MODEL_PATH):
         CommonModel.set_loader(ModelDbLoader)
+        cls.load_section_limits_for_subclass = functools.partial(cls.load_sec_lims, sd_session_id=sd_session_id)
 
         bids_data = cls.load_bid(session_id)
 
