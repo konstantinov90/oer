@@ -43,7 +43,7 @@ class ModelDbLoader(ModelFileLoader):
 
 def init_section_limits():
     base_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'model')
-    data = ModelFileLoader.parse_section_limits(os.path.join(base_path, 'МДП.xlsx'))
+    data = ModelFileLoader.parse_section_limits(os.path.join(base_path, 'Section_limits_FC.xml'))
 
     db = pymongo.MongoClient().inter_market
     db.section_limits.remove({})

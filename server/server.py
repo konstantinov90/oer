@@ -10,6 +10,7 @@ from pymongo import ReturnDocument
 
 from calculation.spot import SpotModelAug
 from calculation.sd import SdModelAug
+from calculation.futures import make_registry, upload_registry
 from db_api.api import db
 
 HOST = os.getenv('HOST', '0.0.0.0')
@@ -137,7 +138,7 @@ async def websocket_handler(request):
                     SdModelAug.sd_runner(session['_id'])
                     await ws_clients.broadcast({'type': 'hasNewSdd'})
                 elif session['type'] == 'spot':
-                    SpotModelAug.spot_runner(session['_id'], session['sd_session_id'])
+                    SpotModelAug.spot_runner(session['_id'], session['futures_session_id'])
                     await ws_clients.broadcast({'type': 'hasNewBid'})
 
                 await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
@@ -148,6 +149,25 @@ async def websocket_handler(request):
                 section_limits = await db.section_limits.find_one({'target_date': tdate, 'limit_type': limit_type})
                 print('sec lims', section_limits)
                 await ws.send_json({'type': 'common/sectionLimits', 'msg': section_limits})
+
+            elif payload['type'] == 'queryContractsSumVolume':
+                session = await db.sessions.find_one({'_id': payload['msg']})
+                if session['type'] == 'spot':
+                    futures_session = await db.sessions.find_one({'_id': session['futures_session_id']})
+                    sd_session = await db.sessions.find_one({'_id': futures_session['sd_session_id']})
+                    if ws['rio_entry']['dir'] == 'buy':
+                        query = {'buyer': ws['user']}
+                    else:
+                        query = {'seller': ws['user']}
+                    sum_contracts = []
+                    async for doc in db.sdd.aggregate([
+                        {'$match': query},
+                        {'$unwind': '$values'},
+                        {'$match': {'values.tdate': session['startDate']}},
+                        {'$group': {'_id': '$values.hour', 'vol': {'$sum': '$values.accepted_volume'}}}
+                    ]):
+                        sum_contracts.append(doc)
+                    await ws.send_json({'type': 'common/contractsSumVolume', 'msg': sum_contracts})
 
             # elif payload['type'] == 'queryBidAdmin':
             #     username = payload['msg']
@@ -266,6 +286,12 @@ async def websocket_handler(request):
                 sessions = await db.sessions.find().sort([('openDate', -1)]).to_list(None)
                 await ws.send_json({'type': 'common/sessions', 'msg': sessions})
                 await ws_clients.broadcast({'type': 'hasNewResults'})
+
+            elif payload['type'] == 'futuresMakeRegistry':
+                make_registry(payload['msg'])
+            
+            elif payload['type'] == 'futuresUploadRegistry':
+                upload_registry(payload['msg'])
 
             
             

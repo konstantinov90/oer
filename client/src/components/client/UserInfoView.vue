@@ -4,6 +4,7 @@
     class="app__participant-info">
     <span>{{ rioEntry.name }}</span>
     <span>{{ username }}</span>
+    <span>{{ typeText }}</span>
     <!-- <p class="app__participant-info__prop">Код участника:</p>
     <p class="app__participant-info__val"><code>{{ username }}</code></p>
     <p class="app__participant-info__prop">Страна:</p>
@@ -26,7 +27,7 @@ export default {
       'username',
     ]),
     typeText() {
-      return this.rioEntry.dir === 'buy' ? 'покупатель' : 'продавец';
+      return this.rioEntry.dir === 'buy' ? 'потребитель' : 'поставщик';
     },
   },
 };

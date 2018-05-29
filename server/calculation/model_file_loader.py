@@ -1,6 +1,8 @@
 import functools
 import json
 import os.path
+from xml.etree import ElementTree
+from datetime import datetime
 
 import xlrd
 
@@ -32,6 +34,38 @@ class ModelFileLoader():
     SECTION_LIMITS_DATA = None
     @classmethod
     def parse_section_limits(cls, filename, limit_type='SECTION_FLOW_LIMIT_FC'):
+        if cls.SECTION_LIMITS_DATA:
+            return cls.SECTION_LIMITS_DATA
+
+        tree = ElementTree.parse(filename)
+        assert tree.getroot().attrib['class'] == limit_type
+
+        res = {}
+        for row in tree.iter('row'):
+            d = datetime.strptime(row.attrib['target-day'], '%Y%m%d')
+            day = res.setdefault(d, {'target_date': d, 'limit_type': limit_type, 'hours': {}})
+            hour = day['hours'].setdefault(row.attrib['target-hour'], {'hour': int(row.attrib['target-hour']), 'sections': {}})
+
+            section = hour['sections'].setdefault(row.attrib['section-code'], {'section_code': row.attrib['section-code']})
+            
+            section_code = '{}-{}'.format(row.attrib['country-code-from'], row.attrib['country-code-to'])
+
+            if section_code == row.attrib['section-code']:
+                section['pmax_fw'] = float(row.attrib['flow-limit'])
+            else:
+                section['pmax_bw'] = float(row.attrib['flow-limit'])
+
+        for day in res.values():
+            day['hours'] = list(day['hours'].values())
+            for hour in day['hours']:
+                hour['sections'] = list(hour['sections'].values())
+        
+        cls.SECTION_LIMITS_DATA = list(res.values())
+        return cls.SECTION_LIMITS_DATA
+
+
+    @classmethod
+    def parse_section_limits_excel(cls, filename, limit_type='SECTION_FLOW_LIMIT_FC'):
         if cls.SECTION_LIMITS_DATA:
             return cls.SECTION_LIMITS_DATA
 
@@ -67,7 +101,7 @@ class ModelFileLoader():
 
     @classmethod
     def load_section_limits(cls, target_date, hour, limit_type='SECTION_FLOW_LIMIT_FC', session_id='Не используется'):
-        data = cls.parse_section_limits(model_path_resolver('МДП.xlsx'), limit_type)
+        data = cls.parse_section_limits(model_path_resolver('Section_limits_FC.xml'), limit_type)
         [day] = [row for row in data if row['target_date'] == target_date]
         [hour] = [row for row in day['hours'] if row['hour'] == hour]
         return hour['sections']

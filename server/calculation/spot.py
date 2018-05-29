@@ -59,7 +59,7 @@ class NodeBid:
     def country_from_to(self):
         # Эта функция нужна для расчета перетоков по сечению
         # Перетоки считаем по заявкам на покупку. На продажу возвращаем одну и ту же страну, иначе переток задвоится
-        if dir == 'buy':
+        if self.bid.dir == 'buy':
             return (self.node.country, self.bid.country)
         else:
             return (self.bid.country, self.bid.country)
@@ -142,9 +142,11 @@ class SpotModel(CommonModel):
                     p = float(data['price']) * self.currencies[bid.country]
                     for node, mgp_list in section.distr_rule[bid.country].items():
                         mgp_price = sum(self.mgp_price[mgp_countries] for mgp_countries in mgp_list)
-                        bid.node_bids[node] = NodeBid(bid, section, node, p, mgp_price)
+                        if p > mgp_price:
+                            bid.node_bids[node] = NodeBid(bid, section, node, p, mgp_price)
 
-                assert len(bid.node_bids) == 4, 'Заявка подана не во все сечения: {}'.format(bid)
+                # теперь может быть меньше 4, т.к. стоимость МГП может быть больше заявки
+                # assert len(bid.node_bids) == 4, 'Заявка подана не во все сечения: {}'.format(bid)
             else:
                 raise ValueError('Неверное направление в заявке')
 
@@ -241,8 +243,8 @@ class SpotModel(CommonModel):
         for node_bid, var in model.x.items():
             node_bid.filled_volume = var.value
 
-        # for sec in model.section_flow_limits:
-        #     sec.calc_flow(model)
+        for sec in model.section_flow_limits:
+            sec.flow = sec.calc_flow(model, self.node_bids)
         #     sec.price = model.dual[model.section_flow_limits[sec]]
 
         # for node in model.node_balance_bids:
@@ -273,6 +275,8 @@ class SpotModel(CommonModel):
         for sec in self.sections.values():
             if sec.price is not None:
                 print('\t{:<30}: flow={:<5.0f} price={:<5.0f}'.format(str(sec), sec.flow, sec.price))
+            else:
+                print('\t{:<30}: flow={:<5.0f}'.format(str(sec), sec.flow))
 
         print('Узлы:')
         for node in sorted(self.nodes.values()):
@@ -371,8 +375,8 @@ class SpotModel(CommonModel):
 
 class SpotModelAug(SpotModel):
     @classmethod
-    def load_sec_lims(cls, target_date, hour, sd_session_id):
-        return cls.LOADER.load_section_limits(target_date, hour, 'SECTION_FLOW_LIMIT_DAM', sd_session_id)
+    def load_sec_lims(cls, target_date, hour, futures_session_id):
+        return cls.LOADER.load_section_limits(target_date, hour, 'SECTION_FLOW_LIMIT_DAM', futures_session_id)
 
     @classmethod
     def load_bid(cls, session_id):
@@ -380,9 +384,9 @@ class SpotModelAug(SpotModel):
         return list(db.bids.find({'session_id': session_id}))
 
     @classmethod
-    def spot_runner(cls, session_id, sd_session_id, model_config_path=MODEL_PATH):
+    def spot_runner(cls, session_id, futures_session_id, model_config_path=MODEL_PATH):
         CommonModel.set_loader(ModelDbLoader)
-        cls.load_section_limits_for_subclass = functools.partial(cls.load_sec_lims, sd_session_id=sd_session_id)
+        cls.load_section_limits_for_subclass = functools.partial(cls.load_sec_lims, futures_session_id=futures_session_id)
 
         bids_data = cls.load_bid(session_id)
 

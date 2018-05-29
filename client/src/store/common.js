@@ -29,6 +29,7 @@ export default {
     sessions: [],
     spotResults: null,
     sectionLimits: null,
+    contractsSumVolume: null,
     countrySectionNodeMap: {
       sell: {
         RUS: {
@@ -241,6 +242,9 @@ export default {
     sectionLimits(state, { msg }) {
       state.sectionLimits = msg;
     },
+    contractsSumVolume(state, { msg }) {
+      state.contractsSumVolume = msg;
+    },
   },
   actions: {
     querySessions() {
@@ -260,6 +264,7 @@ export default {
     },
     queryBid({ state: { username }, commit, getters: { selectedSession } }, payload) {
       if (selectedSession) {
+        this.$socket.sendObj({ type: 'queryContractsSumVolume', msg: selectedSession._id });
         commit('queringBid', true);
         this.$socket.sendObj({
           type: 'queryBid',

@@ -8,6 +8,7 @@ import FuturesPhaseView from './components/client/FuturesPhaseView.vue';
 import SessionsView from './components/client/SessionsView.vue';
 import SddAdminView from './components/admin/SddPhaseView.vue';
 import RsvAdminView from './components/admin/RsvPhaseView.vue';
+import FuturesAdminView from './components/admin/FuturesPhaseView.vue';
 import SessionsAdminView from './components/admin/SessionsView.vue';
 import Admin from './components/admin/Admin.vue';
 import Login from './components/Login.vue';
@@ -28,6 +29,7 @@ const routes = [
           { path: '/', name: 'sessionsAdmin', component: SessionsAdminView },
           { path: 'sdd/:id', name: 'sddAdmin', component: SddAdminView },
           { path: 'rsv/:id', name: 'rsvAdmin', component: RsvAdminView },
+          { path: 'futures/:id', name: 'futuresAdmin', component: FuturesAdminView },
         ],
       },
       {

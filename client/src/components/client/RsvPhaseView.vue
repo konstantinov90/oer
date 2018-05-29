@@ -34,7 +34,6 @@
           :rus-blr-section-limits="getSectionLimits(hour, 'RUS-BLR')"
           :rus-kaz-section-limits="getSectionLimits(hour, 'RUS-KAZ')"
           :kaz-kgz-section-limits="getSectionLimits(hour, 'KAZ-KGZ')"/>
-        <button @click="testFn">test</button>
       </vm-tab-pane>
       <vm-tab-pane label="заявка РСВ">
         <bid-editor
@@ -84,9 +83,6 @@ export default {
     getSectionFlow(hour, sectionCode) {
       return this.spotResults && this.spotResults.hours[hour].sections
         .find(({ code }) => code === sectionCode).flow;
-    },
-    testFn() {
-      console.log(this.getSectionLimits(0, 'RUS-BLR'))
     },
   },
 };

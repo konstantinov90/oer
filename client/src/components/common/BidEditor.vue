@@ -4,10 +4,12 @@
     <template v-if="!adminSession && !hasResults">
       <button
         :disabled="!bidReady()"
+        class="bid-editor__btn bid-editor__btn_save"
         @click="saveBid">
         Сохранить</button>
       <button
         :disabled="!bid"
+        class="bid-editor__btn bid-editor__btn_delete"
         @click="removeBid">
         Удалить</button>
     </template>
@@ -41,7 +43,7 @@
           Заявка
         </span>
         <span :key="`hr_${hour}`">{{ hour }}</span>
-        <span/>
+        <span :key="`sumContr_${hour}`">{{ getContractsSumVolume(hour) }}</span>
         <input
           :key="`vol_${hour}`"
           :class="isVolumeValid(hour)"
@@ -60,7 +62,11 @@
           v-if="!hasResults"
           :key="`btn_${hour}`"
           style="cursor: pointer;"
-          @click="multiplyHour(hour)">>></button>
+          @click="multiplyHour(hour)">
+          <img
+            src="/mult.svg"
+            style="transform: scale(0.7);">
+        </button>
         <template v-if="hasResults">
           <span
             :key="`type_res_${hour}`">
@@ -76,7 +82,7 @@
           <span
             v-for="section in sections"
             :key="`res_${section}_${hour}`">
-          {{ getSectionRes(hour, section) }}
+            {{ getSectionRes(hour, section) }}
           </span>
         </template>
       </template>
@@ -113,17 +119,18 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['username', 'rioEntry', 'adminSession', 'spotResults']),
+    ...mapState('common', ['username', 'rioEntry', 'adminSession', 'spotResults', 'contractsSumVolume']),
     ...mapGetters('common', ['selectedSession', 'getNodePrice']),
     title() {
+      const title = `ценовая заявка на ${this.rioEntry.dir === 'buy' ? 'покупку' : 'продажу'}`;
       if (!this.bid) {
-        return '❌ заявка не сохранена';
+        return `${title} (❌ заявка не сохранена)`;
       }
       if (isEqual(this.bid, { _id: this.bid._id, ...this.newBid })
         && isEqual(this.bid.hours.map(({ intervals }) => intervals[0].volume), this.volumes)) {
-        return '✅ заявка сохранена';
+        return `${title} (✅ заявка сохранена)`;
       }
-      return '⚠️ заявка отличается от сохраненной';
+      return `${title} (⚠️ заявка отличается от сохраненной)`;
     },
     newBid() {
       return {
@@ -161,6 +168,10 @@ export default {
     },
   },
   methods: {
+    getContractsSumVolume(hour) {
+      if (!this.contractsSumVolume || !this.contractsSumVolume.length) return null;
+      return this.contractsSumVolume.find(({ _id }) => _id === hour).vol;
+    },
     bidReady() {
       return this.volumesReady() && this.pricesReady();
     },
@@ -308,5 +319,31 @@ export default {
 
 .bid-editor__input_invalid {
   background: crimson;
+}
+
+.bid-editor__btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  padding: 15px;
+  border-radius: 5px;
+  color: white;
+}
+
+.bid-editor__btn_save {
+  background: #2b7;
+  right: 90px;
+  font-weight: bold;
+}
+
+.bid-editor__btn_save:disabled {
+  background: #bbb;
+}
+
+.bid-editor__btn_delete {
+  background: red;
+  padding: 5px;
+  top: 10px;
+  font-size: 14px;
 }
 </style>

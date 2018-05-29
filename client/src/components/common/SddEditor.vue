@@ -166,7 +166,9 @@
           :key="hour"
           style="cursor: pointer;"
           @click="multiplyHour(hour)">
-          >>
+          <img
+            src="/mult.svg"
+            style="transform: scale(0.7);">
         </span>
       </template>
     </div>
@@ -382,6 +384,9 @@ export default {
     updateSddProjValues() {
       if (!this.selectedDateStart || !this.selectedDateEnd) {
         return;
+      }
+      for (let i = 0; i < this.sddProjValues.length; i += 1) {
+        this.sddProjValues[i].tdate = addDays(this.selectedDateStart, parseInt(i / 24, 10));
       }
       for (let i = this.sddProjValues.length; i < this.dif * 24; i += 1) {
         const tdate = addDays(this.selectedDateStart, parseInt(i / 24, 10));

@@ -9,32 +9,60 @@
         :on-select="onSelectFinish"/>
     </template>
     <div v-if="finishDate">
-      <div v-if="datesEqual">
+      <div>
+        <button @click="openSession('free')">Открыть сессию СДД</button>
+      </div>
+      <div>
         <button
           @click="startSelectingSdSession">
-          Открыть сессию РСВ
+          Открыт биржевую сессию
         </button>
         <select
           v-if="selectingSdSession"
           v-model.number="selectedSdSessionId">
-          <option disabled selected value="">сессия СДД</option>
+          <option
+            disabled
+            selected
+            value="">
+            сессия СДД
+          </option>
           <option
             v-for="sdSession in sdSessions"
             :key="sdSession._id">
-          {{ sdSession._id }}
+            {{ sdSession._id }}
           </option>
         </select>
         <button
           v-if="selectedSdSessionId"
-          @click="openSession('spot')">
+          @click="openSession('futures')">
           открыть
         </button>
       </div>
-      <div>
-        <button @click="openSession('futures')">Открыт биржевую сессию</button>
-      </div>
-      <div>
-        <button @click="openSession('free')">Открыть сессию СДД</button>
+      <div v-if="datesEqual">
+        <button
+          @click="startSelectingFuturesSession">
+          Открыть сессию РСВ
+        </button>
+        <select
+          v-if="selectingFuturesSession"
+          v-model.number="selectedFuturesSessionId">
+          <option
+            disabled
+            selected
+            value="">
+            биржевая сессия
+          </option>
+          <option
+            v-for="futuresSession in futuresSessions"
+            :key="futuresSession._id">
+            {{ futuresSession._id }}
+          </option>
+        </select>
+        <button
+          v-if="selectedFuturesSessionId"
+          @click="openSession('spot')">
+          открыть
+        </button>
       </div>
     </div>
   </div>
@@ -57,6 +85,8 @@ export default {
       sessionType: null,
       selectedSdSessionId: '',
       selectingSdSession: false,
+      selectedFuturesSessionId: '',
+      selectingFuturesSession: false,
     };
   },
   computed: {
@@ -64,10 +94,20 @@ export default {
     sdSessions() {
       return this.sessions.filter(({ type }) => type === 'free');
     },
+    futuresSessions() {
+      return this.sessions.filter(({ type }) => type === 'futures');
+    },
     session() {
       const aux = {};
-      if (this.sessionType === 'spot') {
-        aux.sd_session_id = this.selectedSdSessionId;
+      switch (this.sessionType) {
+        case 'futures':
+          aux.sd_session_id = this.selectedSdSessionId;
+          break;
+        case 'spot':
+          aux.futures_session_id = this.selectedFuturesSessionId;
+          break;
+        default:
+          break;
       }
 
       return {
@@ -100,6 +140,9 @@ export default {
     },
     startSelectingSdSession() {
       this.selectingSdSession = true;
+    },
+    startSelectingFuturesSession() {
+      this.selectingFuturesSession = true;
     },
   },
 };
