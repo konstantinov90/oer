@@ -13,7 +13,8 @@ export default {
     authorized: false,
     adminSession: false,
     phase: 'start',
-    username: '',
+    // username: '',
+    mgp: null,
     bid: null,
     allBids: null,
     queringBid: false,
@@ -26,10 +27,113 @@ export default {
     },
     date: null,
     sdd: [],
+    allSdd: null,
     sessions: [],
     spotResults: null,
     sectionLimits: null,
     contractsSumVolume: null,
+    mgpMatrix: {
+      ARM: {
+        'RUS-BLR': { src: 'RUS-ARM', mgps: ['BLR-ARM'] },
+        'RUS-KAZ': { src: 'RUS-ARM', mgps: ['KAZ-ARM'] },
+        'KAZ-KGZ': { src: 'RUS-ARM', mgps: ['KAZ-ARM', 'KGZ-RUS'] },
+      },
+      BLR: {
+        'RUS-ARM': { src: 'RUS-BLR', mgps: ['ARM-BLR'] },
+        'RUS-KAZ': { src: 'RUS-BLR', mgps: ['KAZ-BLR'] },
+        'KAZ-KGZ': { src: 'RUS-BLR', mgps: ['KAZ-BLR', 'KGZ-RUS'] },
+      },
+      RUS: {
+        'KAZ-KGZ': { src: 'RUS-KAZ', mgps: ['KGZ-RUS'] },
+      },
+      KAZ: {
+        'RUS-ARM': { src: 'RUS-KAZ', mgps: ['ARM-KAZ'] },
+        'RUS-BLR': { src: 'RUS-KAZ', mgps: ['BLR-KAZ'] },
+      },
+      KGZ: {
+        'RUS-ARM': { src: 'KAZ-KGZ', mgps: ['ARM-KAZ', 'RUS-KGZ'] },
+        'RUS-BLR': { src: 'KAZ-KGZ', mgps: ['BLR-KAZ', 'RUS-KGZ'] },
+        'RUS-KAZ': { src: 'KAZ-KGZ', mgps: ['RUS-KGZ'] },
+      },
+    },
+    sectionFlowMatrix: {
+      'BLR-KGZ': {
+        'RUS-BLR': -1,
+        'RUS-KAZ': 1,
+        'KAZ-KGZ': 1,
+      },
+      'KGZ-BLR': {
+        'RUS-BLR': 1,
+        'RUS-KAZ': -1,
+        'KAZ-KGZ': -1,
+      },
+      'BLR-KAZ': {
+        'RUS-BLR': -1,
+        'RUS-KAZ': 1,
+      },
+      'KAZ-BLR': {
+        'RUS-BLR': 1,
+        'RUS-KAZ': -1,
+      },
+      'BLR-ARM': {
+        'RUS-BLR': -1,
+        'RUS-ARM': 1,
+      },
+      'ARM-BLR': {
+        'RUS-BLR': 1,
+        'RUS-ARM': -1,
+      },
+      'BLR-RUS': {
+        'RUS-BLR': -1,
+      },
+      'RUS-BLR': {
+        'RUS-BLR': 1,
+      },
+      'ARM-KGZ': {
+        'RUS-ARM': -1,
+        'RUS-KAZ': 1,
+        'KAZ-KGZ': 1,
+      },
+      'KGZ-ARM': {
+        'RUS-ARM': 1,
+        'RUS-KAZ': -1,
+        'KAZ-KGZ': -1,
+      },
+      'ARM-KAZ': {
+        'RUS-ARM': -1,
+        'RUS-KAZ': 1,
+      },
+      'KAZ-ARM': {
+        'RUS-ARM': 1,
+        'RUS-KAZ': -1,
+      },
+      'ARM-RUS': {
+        'RUS-ARM': -1,
+      },
+      'RUS-ARM': {
+        'RUS-ARM': 1,
+      },
+      'RUS-KGZ': {
+        'RUS-KAZ': 1,
+        'KAZ-KGZ': 1,
+      },
+      'KGZ-RUS': {
+        'RUS-KAZ': -1,
+        'KAZ-KGZ': -1,
+      },
+      'RUS-KAZ': {
+        'RUS-KAZ': 1,
+      },
+      'KAZ-RUS': {
+        'RUS-KAZ': -1,
+      },
+      'KAZ-KGZ': {
+        'KAZ-KGZ': 1,
+      },
+      'KGZ-KAZ': {
+        'KAZ-KGZ': -1,
+      },
+    },
     countrySectionNodeMap: {
       sell: {
         RUS: {
@@ -80,6 +184,9 @@ export default {
     },
   },
   getters: {
+    username({ rioEntry }) {
+      return rioEntry && rioEntry._id;
+    },
     selectedSession(state, _, { route }) {
       if (route.params) {
         const session = state.sessions.find(s => s._id === route.params.id);
@@ -90,7 +197,7 @@ export default {
     getNodePrice({ countrySectionNodeMap, spotResults }) {
       return (hour, countryCode, sectionCode, direction) => {
         const node = countrySectionNodeMap[direction][countryCode][sectionCode];
-        return spotResults.hours
+        return spotResults && spotResults.hours
           .find(({ hour: h }) => h === hour)
           .nodes.find(({ code }) => code === node).price;
       };
@@ -98,7 +205,7 @@ export default {
     getCountryResults({ allBids }, { getNodePrice }) {
       return (hour, countryCode, direction, traderCode = null) => {
         hour = Number.parseInt(hour, 10);
-        if (!allBids) return [0,0];
+        if (!allBids) return [0, 0];
         const [amount, volume] = allBids
           .filter(({ trader_code, country_code, dir }) => {
             if (traderCode) {
@@ -115,21 +222,77 @@ export default {
             return hours.find(({ hour: h }) => h === hour).intervals[0].prices;
           })
           .reduce((ar, bs) => ([...ar, ...bs]), [])
-          .reduce(([am, vol], { section_code : sc, filled_volume : fv}) => {
-            return [am + getNodePrice(hour, countryCode, sc, direction) * fv, vol + fv];
+          .reduce(([am, vol], { section_code: sc, filled_volume: fv }) => {
+            return [am + (getNodePrice(hour, countryCode, sc, direction) * fv), vol + fv];
           }, [0, 0]);
 
-        return [volume, amount/volume];
+        return [volume, volume ? amount / volume : 0];
       };
     },
     getSectionLimits({ sectionLimits }) {
       return (hour, sectionCode) => {
-        hour = Number.parseInt(hour, 10)
+        hour = Number.parseInt(hour, 10);
         if (!sectionLimits) return [0, 0];
-        const { pmax_fw, pmax_bw } =  sectionLimits.hours
+        const { pmax_fw, pmax_bw } = sectionLimits.hours
           .find(({ hour: h }) => h === hour)
-          .sections.find(({ section_code: sc}) => sc === sectionCode);
+          .sections.find(({ section_code }) => section_code === sectionCode);
         return [pmax_fw, pmax_bw];
+      };
+    },
+    getCountryResultsSdd({ allSdd }) {
+      return (targetDate, hour, countryCode, direction, limitType) => {
+        if (!allSdd) return 0;
+        hour = Number.parseInt(hour, 10);
+        let filterFn;
+        switch (direction) {
+          case 'buy':
+            filterFn = ({ buyer }) => buyer.country_code === countryCode;
+            break;
+          case 'sell':
+            filterFn = ({ seller }) => seller.country_code === countryCode;
+            break;
+          default:
+            throw new Error('incorrect direction!');
+        }
+        const filteredData = allSdd.filter(filterFn);
+        if (!filteredData.length) return 0;
+
+        const [acc_vol, vol] = filteredData
+          .map(({ values }) => values.find(({ tdate, hour: h }) => tdate.getTime() === targetDate.getTime() && h === hour))
+          .filter(d => d)
+          .reduce(([s_acc, s], { accepted_volume, volume }) => [s_acc + accepted_volume, s + volume], [0, 0]);
+        if (limitType === 'SECTION_FLOW_LIMIT_FC') {
+          return vol;
+        }
+        return acc_vol;
+      };
+    },
+    getSectionFlowSdd({ sectionFlowMatrix, allSdd }) {
+      return (targetDate, hour, sectionCode, limitType) => {
+        if (!allSdd || !allSdd.length) return 0;
+        hour = Number.parseInt(hour, 10);
+        const filteredData = allSdd.filter(({ buyer, seller }) => {
+          const sdCode = `${seller.country_code}-${buyer.country_code}`;
+          return Object.keys(sectionFlowMatrix[sdCode]).includes(sectionCode);
+        });
+        if (!filteredData.length) return 0;
+        const [acc_vol, vol] = filteredData
+          .map(({ buyer, seller, values }) => {
+            const nugget = values
+              .find(({ tdate, hour: h }) => tdate.getTime() === targetDate.getTime() && h === hour);
+            if (!nugget) return null;
+            nugget.coeff = sectionFlowMatrix[`${seller.country_code}-${buyer.country_code}`][sectionCode];
+            return nugget;
+          }).filter(d => d)
+          .reduce(
+            ([acc_sum, sum], { accepted_volume, volume, coeff }) =>
+              [acc_sum + (accepted_volume * coeff), sum + (volume * coeff)],
+            [0, 0],
+          );
+        if (limitType === 'SECTION_FLOW_LIMIT_FC') {
+          return vol;
+        }
+        return acc_vol;
       };
     },
     // phaseName(state) {
@@ -182,11 +345,11 @@ export default {
       const isAdmin = username === 'admin';
       state.adminSession = isAdmin;
       state.authorized = true;
-      state.username = username;
+      // state.username = username;
     },
     unauthorize(state) {
       state.authorized = false;
-      state.username = '';
+      // state.username = '';
       state.adminSession = false;
       this.$cookie.delete('AUTH_TKT');
     },
@@ -224,6 +387,9 @@ export default {
       state.sdd = msg;
       state.queringSdd = false;
     },
+    allSdd(state, { msg }) {
+      state.allSdd = msg;
+    },
     sessions(state, { msg }) {
       state.sessions = msg;
     },
@@ -245,26 +411,45 @@ export default {
     contractsSumVolume(state, { msg }) {
       state.contractsSumVolume = msg;
     },
+    mgp(state, { msg }) {
+      state.mgp = msg;
+    },
   },
   actions: {
+    queryMgp({ getters: { selectedSession } }) {
+      if (selectedSession) {
+        this.$socket.sendObj({ type: 'queryMgp', msg: selectedSession.startDate });
+      }
+    },
     querySessions() {
       this.$socket.sendObj({ type: 'querySessions' });
     },
-    querySdd({ commit, getters: { selectedSession } }) {
+    querySdd({ commit, getters: { selectedSession }, dispatch }) {
       if (selectedSession) {
         commit('queringSdd', true);
         this.$socket.sendObj({ type: 'querySdd', msg: selectedSession._id });
+        dispatch('queryAllSdd');
+      }
+    },
+    queryAllSdd({ commit, getters: { selectedSession } }) {
+      // commit('allSdd', { msg: null });
+      if (selectedSession) {
+        this.$socket.sendObj({ type: 'queryAllSdd', msg: selectedSession._id });
       }
     },
     queryResults({ commit, getters: { selectedSession } }) {
       commit('spotResults', { msg: null });
-      if (selectedSession.type === 'spot' && selectedSession.status === 'closed') {
+      if (selectedSession && selectedSession.type === 'spot' && selectedSession.status === 'closed') {
         this.$socket.sendObj({ type: 'querySpotResults', msg: selectedSession._id });
       }
     },
-    queryBid({ state: { username }, commit, getters: { selectedSession } }, payload) {
+    queryBid({ commit, getters: { username, selectedSession } }, payload) {
       if (selectedSession) {
-        this.$socket.sendObj({ type: 'queryContractsSumVolume', msg: selectedSession._id });
+        this.$socket.sendObj({
+          type: 'queryContractsSumVolume',
+          sessionId: selectedSession._id,
+          username: payload || username,
+        });
         commit('queringBid', true);
         this.$socket.sendObj({
           type: 'queryBid',
@@ -273,28 +458,32 @@ export default {
             username: payload || username,
           },
         });
-        if (selectedSession.status === 'closed') {
-          this.$socket.sendObj({ type: 'queryAllBids', msg: selectedSession._id })
-        }
+        // if (selectedSession.status === 'closed') {
+        this.$socket.sendObj({ type: 'queryAllBids', msg: selectedSession._id });
+        // }
       }
     },
-    querySectionLimits({ getters: { selectedSession } }) {
+    querySectionLimits({ getters: { selectedSession } }, { limitType, targetDate } = {}) {
       if (selectedSession) {
-        let limitType;
-        switch (selectedSession.type) {
-          case 'spot':
-            limitType = 'SECTION_FLOW_LIMIT_DAM';
-            break;
-          case 'free':
-            limitType = 'SECTION_FLOW_LIMIT_FC';
-            break;
-          case 'futures':
-            limitType = 'SECTION_FLOW_LIMIT_EX';
-            break;
+        if (!limitType) {
+          switch (selectedSession.type) {
+            case 'spot':
+              limitType = 'SECTION_FLOW_LIMIT_DAM';
+              break;
+            case 'free':
+              limitType = 'SECTION_FLOW_LIMIT_FC';
+              break;
+            case 'futures':
+              limitType = 'SECTION_FLOW_LIMIT_EX';
+              break;
+            default:
+              return;
+          }
         }
         this.$socket.sendObj({
           type: 'querySectionLimits',
-          targetDate: selectedSession.startDate,
+          sessionId: selectedSession._id,
+          targetDate: targetDate || selectedSession.startDate,
           limitType,
         });
       }

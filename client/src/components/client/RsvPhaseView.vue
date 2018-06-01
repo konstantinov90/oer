@@ -4,17 +4,30 @@
     <date-view
       v-if="selectedSession"
       :dates="[selectedSession.startDate, selectedSession.finishDate]"/>
-    <vm-tabs>
+    <vm-tabs
+      :value="selectedTab">
       <vm-tab-pane
-        v-if="selectedSession.status !== 'open'"
         label="схема">
-        <label>Час:</label>
-        <multiselect
-          v-model="hour"
-          :options="hours"
-          :placeholder="'час'"
-          :allow-empty="false"
-          class="rsv__multiselect-wrapper"/>
+        <div class="rsv__selectors">
+          <label>Час:</label>
+          <multiselect
+            v-model="hour"
+            :options="hours"
+            :placeholder="'час'"
+            :allow-empty="false"
+            class="rsv__multiselect-wrapper"/>
+          <div style="display: inline-block;">
+            <div
+              style="display: flex; flex-direction: column;">
+              <button
+                class="rsv__selector_up-btn"
+                @click="hourUp"/>
+              <button
+                class="rsv__selector_down-btn"
+                @click="hourDown"/>
+            </div>
+          </div>
+        </div>
         <map-view
           :rus-arm="getSectionFlow(hour, 'RUS-ARM')"
           :rus-blr="getSectionFlow(hour, 'RUS-BLR')"
@@ -37,7 +50,7 @@
       </vm-tab-pane>
       <vm-tab-pane label="заявка РСВ">
         <bid-editor
-          v-if="!queringBid && (selectedSession.status === 'open' || bid)"
+          v-if="selectedSession.status === 'open' || bid"
           :bid="bid"/>
       </vm-tab-pane>
     </vm-tabs>
@@ -46,7 +59,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
-import { VmTabs, VmTabPane } from 'vue-multiple-tabs'
+import { VmTabs, VmTabPane } from 'vue-multiple-tabs';
 import Multiselect from 'vue-multiselect';
 import BidEditor from '../common/BidEditor.vue';
 import DateView from '../common/DateView.vue';
@@ -67,43 +80,78 @@ export default {
     return {
       hours: new Array(24).fill().map(() => (i++).toString()), // eslint-disable-line
       hour: '0',
+      selectedTab: 0,
     };
   },
   computed: {
     ...mapState('common', ['bid', 'queringBid', 'spotResults']),
     ...mapGetters('common', ['selectedSession', 'getCountryResults', 'getSectionLimits']),
   },
+  watch: {
+    selectedSession() {
+      if (this.selectedSession.status === 'open') {
+        this.selectedTab = 1;
+      }
+    },
+  },
   created() {
     this.queryBid();
     this.queryResults();
     this.querySectionLimits();
+    this.queryMgp();
   },
   methods: {
-    ...mapActions('common', ['queryBid', 'queryResults', 'querySectionLimits']),
+    ...mapActions('common', ['queryMgp', 'queryBid', 'queryResults', 'querySectionLimits']),
     getSectionFlow(hour, sectionCode) {
       return this.spotResults && this.spotResults.hours[hour].sections
         .find(({ code }) => code === sectionCode).flow;
+    },
+    hourUp() {
+      if (this.hour === this.hours[0]) return;
+      this.hour = this.hours[this.hours.indexOf(this.hour) - 1];
+    },
+    hourDown() {
+      if (this.hour === this.hours[this.hours.length - 1]) return;
+      this.hour = this.hours[this.hours.indexOf(this.hour) + 1];
     },
   },
 };
 </script>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
 <style>
-  .vm-tabs__item,
-  .vm-tabs__item.is-active {
-    color: rgb(101,104,155) !important;
-    font-size: 1rem;
-  }
+.rsv__multiselect-wrapper {
+  display: inline-block !important;
+  width: 30% !important;
+  flex: 1;
+  margin: 0 10px;
+}
 
-  .vm-tabs__header,
-  .vm-tabs__active.is-triangle::before {
-    border-bottom-color: rgb(221,234,255) !important;
-  }
+.rsv__selectors {
+  display: flex;
+  align-items: center;
+  max-width: 300px;
+  justify-content: space-between;
+}
 
-  .rsv__multiselect-wrapper {
-    width: 30%;
-    display: inline-block;
-  }
+.rsv__selector_up-btn:before {
+  position: relative;
+  display: block;
+  content: "";
+  margin-bottom: 4px;
+  border: solid 5px transparent;
+  border-bottom-color: #999;
+  height: 0;
+  width: 0;
+}
+
+.rsv__selector_down-btn:before {
+  position: relative;
+  display: block;
+  content: "";
+  margin-top: 4px;
+  border: solid 5px transparent;
+  border-top-color: #999;
+  height: 0;
+  width: 0;
+}
 </style>

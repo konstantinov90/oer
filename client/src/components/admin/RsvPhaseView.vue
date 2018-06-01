@@ -5,14 +5,19 @@
       @click="calculate">
       Провести расчет
     </button>
+    <button
+      v-if="selectedSession.status === 'closed'"
+      @click="reopen">
+      Переоткрыть сессию
+    </button>
     <bid-editor
-      v-if="!queringBid && rioEntry && bid"
+      v-if="rioEntry && bid"
       :bid="bid"/>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 import BidEditor from '../common/BidEditor.vue';
 
 export default {
@@ -24,9 +29,16 @@ export default {
     ...mapGetters('common', ['selectedSession']),
     ...mapState('common', ['bid', 'queringBid', 'rioEntry', 'spotResults']),
   },
+  created() {
+    this.queryMgp();
+  },
   methods: {
+    ...mapActions('common', ['queryMgp']),
     calculate() {
-      this.$socket.sendObj({ type: 'calculate', msg: this.selectedSession._id});
+      this.$socket.sendObj({ type: 'calculate', msg: this.selectedSession._id });
+    },
+    reopen() {
+      this.$socket.sendObj({ type: 'reopen', msg: this.selectedSession._id });
     },
   },
 };

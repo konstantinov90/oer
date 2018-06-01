@@ -2,6 +2,9 @@
   <div
     v-if="rioEntry"
     class="app__participant-info">
+    <span
+      :class="`sprite__flag_${flagClass}`"
+      class="sprite sprite__flag"/>
     <span>{{ rioEntry.name }}</span>
     <span>{{ username }}</span>
     <span>{{ typeText }}</span>
@@ -17,17 +20,31 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'UserInfoView',
   computed: {
-    ...mapState('common', [
-      'rioEntry',
-      'username',
-    ]),
+    ...mapGetters('common', ['username']),
+    ...mapState('common', ['rioEntry']),
     typeText() {
       return this.rioEntry.dir === 'buy' ? 'потребитель' : 'поставщик';
+    },
+    flagClass() {
+      switch (this.rioEntry.country_code) {
+        case 'ARM':
+          return 'armenia';
+        case 'BLR':
+          return 'belarus';
+        case 'RUS':
+          return 'russia';
+        case 'KAZ':
+          return 'kazakhstan';
+        case 'KGZ':
+          return 'kyrgyzstan';
+        default:
+          return null;
+      }
     },
   },
 };
@@ -43,11 +60,14 @@ export default {
     /* align-items: center; */
     /* margin: 40px 0; */
     font-style: italic;
-    margin: 0 20px;
+    margin: 0 40px;
+    display: flex;
+    align-items: flex-end;
+    flex-direction: column;
   }
 
   .app__participant-info * {
-    margin: 0 10px;
+    margin: 2px 0;
   }
 
   /* .app__participant-info__prop,

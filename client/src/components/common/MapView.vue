@@ -222,12 +222,12 @@
           id="path9102-7"
           ry="18.776312"
           rx="24.463507"
-          cy="99.39257"
-          cx="47.317959"
-          style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
+          cy="105.75159"
+          cx="31.466959"
+          style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:'markers fill stroke'" />
         <g
           id="flag_ARM"
-          transform="matrix(0.02075522,0,0,0.02340316,40.676288,83.731774)"
+          transform="matrix(0.02075522,0,0,0.02340316,24.825292,90.090819)"
           inkscape:label="#g9120-2">
           <path
             id="path9104-3"
@@ -251,7 +251,7 @@
           rx="22.384638"
           cy="25.882694"
           cx="24.036814"
-          style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
+          style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:'markers fill stroke'" />
         <g
           id="flag_BLR"
           style="fill-rule:evenodd"
@@ -308,7 +308,7 @@
           rx="42.260384"
           cy="44.9715"
           cx="103.3828"
-          style="opacity:1;fill:#96dff0;fill-opacity:0.28899081;fill-rule:evenodd;stroke:#000000;stroke-width:0.26621842;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
+          style="opacity:1;fill:#96dff0;fill-opacity:0.28899081;fill-rule:evenodd;stroke:#000000;stroke-width:0.26621842;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:'markers fill stroke'" />
         <g
           id="g6226-9-3"
           style="stroke-width:0.18590704;stroke-miterlimit:4;stroke-dasharray:none"
@@ -360,7 +360,7 @@
           rx="22.881187"
           cy="46.067616"
           cx="185.7438"
-          style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
+          style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:'markers fill stroke'" />
         <g
           id="flag_KAZ"
           transform="matrix(0.02069812,0,0,0.02312735,175.6068,29.640493)"
@@ -452,7 +452,7 @@
             rx="8.1459894"
             cy="94.324112"
             cx="110.65809"
-            style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.04693152;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
+            style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.04693152;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:'markers fill stroke'" />
         </g>
         <g
           id="flag_KGZ"
@@ -565,7 +565,7 @@
             sodipodi:role="line"
             x="88.536728"
             y="32.620899">
-            {{ round(RusGen[0], 2) }} @ {{ round(RusGen[1], 3) }}
+            {{ getCountryValue(RusGen) }}
           </tspan>
         </text>
         <text
@@ -581,7 +581,7 @@
             sodipodi:role="line"
             x="88.218719"
             y="40.413822">
-            {{ round(RusCons[0], 3) }} @ {{ round(RusCons[1], 2) }}
+            {{ getCountryValue(RusCons) }}
           </tspan>
         </text>
         <g
@@ -621,7 +621,7 @@
             sodipodi:role="line"
             x="168.31807"
             y="48.335754">
-            {{ round(KazGen[0], 3) }} @ {{ round(KazGen[1], 2) }}
+            {{ getCountryValue(KazGen) }}
           </tspan>
         </text>
         <text
@@ -638,7 +638,7 @@
             y="56.487839"
             x="168.00006"
             sodipodi:role="line">
-            {{ round(KazCons[0], 3)}} @ {{ round(KazCons[1], 2) }}
+            {{ getCountryValue(KazCons) }}
           </tspan>
         </text>
         <g
@@ -679,7 +679,7 @@
             sodipodi:role="line"
             x="167.60158"
             y="102.84569">
-            {{ round(KgzGen[0], 3) }} @ {{ round(KgzGen[1], 2) }}
+            {{ getCountryValue(KgzGen) }}
           </tspan>
         </text>
         <text
@@ -695,7 +695,7 @@
             y="110.99778"
             x="167.28357"
             sodipodi:role="line">
-            {{ round(KgzCons[0], 3)}} @ {{ round(KgzCons[1], 2) }}
+            {{ getCountryValue(KgzCons) }}
           </tspan>
         </text>
         <g
@@ -736,7 +736,7 @@
             sodipodi:role="line"
             x="10.648436"
             y="24.947378">
-            {{ round(BlrGen[0], 3) }} @ {{ round(BlrGen[1], 2) }}
+            {{ getCountryValue(BlrGen) }}
           </tspan>
         </text>
         <text
@@ -753,13 +753,13 @@
             sodipodi:role="line"
             x="10.330427"
             y="32.740299">
-            {{ round(BlrCons[0], 3)}} @ {{ round(BlrCons[1], 2) }}
+            {{ getCountryValue(BlrCons) }}
           </tspan>
         </text>
         <g
           id="g6226-9-3-8-8"
           style="stroke-width:0.18590704;stroke-miterlimit:4;stroke-dasharray:none"
-          transform="matrix(2.0660367,0,0,1.5833619,-337.64597,-66.066644)">
+          transform="matrix(2.0660367,0,0,1.5833619,-353.49702,-59.707599)">
           <path
             id="path2544-8-7-9-6"
             style="fill:none;stroke:#000000;stroke-width:0.18590704;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -778,40 +778,40 @@
           id="path9062-1-9-5-6-2"
           sodipodi:nodetypes="ccccccccccccc"
           inkscape:connector-curvature="0"
-          d="m 31.65848,107.27523 h 0.7216 v 1.61683 h 1.38623 v -2.57778 h 0.94948 l -2.95261,-2.12018 -2.9526,2.12018 h 0.94947 v 2.57778 h 1.38624 v -1.61683 h 0.7216"
+          d="m 15.807484,113.63429 h 0.7216 v 1.61683 h 1.38623 v -2.57778 h 0.94948 l -2.95261,-2.12018 -2.9526,2.12018 h 0.94947 v 2.57778 h 1.38624 v -1.61683 h 0.7216"
           style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.26887411;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
         <text
           id="Gen_ARM"
           xml:space="preserve"
           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458344"
-          x="34.96151"
-          y="103.42374"
+          x="19.61306"
+          y="109.99099"
           inkscape:label="#text9990"
           transform="scale(1.0327427,0.96829539)">
           <tspan
             id="tspan10122-3"
             style="stroke-width:0.26458344"
             sodipodi:role="line"
-            x="34.96151"
-            y="103.42374">
-            {{ round(ArmGen[0], 3) }} @ {{ round(ArmGen[1], 2) }}
+            x="19.61306"
+            y="109.99099">
+            {{ getCountryValue(ArmGen) }}
           </tspan>
         </text>
         <text
           id="Cons_ARM"
           xml:space="preserve"
           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458344"
-          x="34.643501"
-          y="111.57583"
+          x="19.295052"
+          y="118.14309"
           inkscape:label="#text9990"
           transform="scale(1.0327427,0.96829539)">
           <tspan
             id="tspan10084-5-1"
             style="stroke-width:0.26458344"
-            y="111.57583"
-            x="34.643501"
+            y="118.14309"
+            x="19.295052"
             sodipodi:role="line">
-            {{ round(ArmCons[0], 3)}} @ {{ round(ArmCons[1], 2) }}
+            {{ getCountryValue(ArmCons) }}
           </tspan>
         </text>
         <text
@@ -935,7 +935,7 @@
         <path
           id="rect9806-0-4-9"
           style="fill:#fb950e;fill-opacity:0.93922652;stroke:none;stroke-width:0.26458332;stroke-opacity:1;paint-order:fill markers stroke"
-          d="m 50.712573,79.236703 4.75521,-2.457009 -1.15013,-0.990098 8.29515,-9.635977 -0.73407,-0.631926 -8.29515,9.635977 -1.1501,-0.990068 z"
+          d="m 52.300074,76.590868 4.75521,-2.457009 -1.15013,-0.990098 8.29515,-9.635977 -0.73407,-0.631926 -8.29515,9.635977 -1.1501,-0.990068 z"
           inkscape:connector-curvature="0" />
         <path
           id="path9986-9-9-8"
@@ -953,7 +953,7 @@
             id="tspan9988-45-5-7"
             sodipodi:role="line"
             x="46.081543"
-            y="70.289719"
+            y="68.702217"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
             {{ RusArmSectionLimits[0] }}
           </tspan>
@@ -963,13 +963,13 @@
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
           x="74.406746"
-          y="87.133064"
+          y="85.545563"
           inkscape:label="#text9990">
           <tspan
             id="tspan9988-45-8-3-06"
             sodipodi:role="line"
             x="74.406746"
-            y="87.133064"
+            y="86.545563"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
             {{ RusArmSectionLimits[1] }}
           </tspan>
@@ -1025,12 +1025,39 @@
             {{ Math.abs(RusKazFlow) }}
           </tspan>
         </text>
+        <ellipse
+          id="path9102-7-0"
+          ry="6.8308725"
+          rx="21.437397"
+          cy="28.05286"
+          cx="99.002655"
+          style="opacity:1;fill:#afafaf;fill-opacity:0.29019609;fill-rule:evenodd;stroke:#000000;stroke-width:0.47395667;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.42187001, 0.47395667000000002;stroke-dashoffset:0;stroke-opacity:1;paint-order:'markers fill stroke'"
+          transform="matrix(0.73814599,0.67464101,-0.73814599,0.67464101,0,0)" />
+        <text
+          id="Max_Flow_RUS-ARM-9"
+          xml:space="preserve"
+          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.09341955px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke:none;stroke-width:0.38083872;"
+          x="89.56485"
+          y="30.498621"
+          inkscape:label="#text9990"
+          transform="matrix(0.74707049,0.66928089,-0.74707049,0.66928089,0,0)">
+          <tspan
+            id="tspan575"
+            sodipodi:role="line"
+            x="89.56485"
+            y="30.498621"
+            style="stroke-width:0.38083872">
+            Грузия
+          </tspan>
+        </text>
       </g>
     </svg>
   </div>
 </template>
 
 <script>
+import { round } from 'lodash';
+
 export default {
   name: 'MapView',
   props: {
@@ -1038,16 +1065,16 @@ export default {
     RusBlr: Number,
     RusKaz: Number,
     KazKgz: Number,
-    RusGen: Array,
-    RusCons: Array,
-    BlrGen: Array,
-    BlrCons: Array,
-    ArmGen: Array,
-    ArmCons: Array,
-    KazGen: Array,
-    KazCons: Array,
-    KgzGen: Array,
-    KgzCons: Array,
+    RusGen: [Array, Number],
+    RusCons: [Array, Number],
+    BlrGen: [Array, Number],
+    BlrCons: [Array, Number],
+    ArmGen: [Array, Number],
+    ArmCons: [Array, Number],
+    KazGen: [Array, Number],
+    KazCons: [Array, Number],
+    KgzGen: [Array, Number],
+    KgzCons: [Array, Number],
     RusBlrSectionLimits: Array,
     RusArmSectionLimits: Array,
     RusKazSectionLimits: Array,
@@ -1068,9 +1095,11 @@ export default {
     },
   },
   methods: {
-    round(val, dim) {
-      if (Number.isNaN(val)) return 0;
-      return Math.round(val * 10 ** dim) / 10 ** dim
+    getCountryValue(val) {
+      if (Array.isArray(val)) {
+        return `${round(val[0], 3)} @ ${round(val[1], 2)}`;
+      }
+      return round(val, 3);
     },
   },
 };

@@ -6,6 +6,7 @@ module.exports = {
     'src/polyfills.js',
     'src/index.js',
   ],
+  homepage: 'http://example.com/blog/',
   html: {
     title: pkg.productName,
     description: pkg.description,
@@ -17,6 +18,7 @@ module.exports = {
     ],
   },
   /* eslint-disable*/
+  sourceMap: 'eval-source-map',
   presets: [
     require('poi-preset-bundle-report')(),
     // require('poi-preset-offline')({
@@ -38,4 +40,8 @@ module.exports = {
   //     vue$: 'E:/git/InterMarketDemo/client/node_module/vue/index.js',
   //   },
   // },
+  webpack(config) {
+    config.output.publicPath = '/model-iris';
+    return config;
+  },
 };

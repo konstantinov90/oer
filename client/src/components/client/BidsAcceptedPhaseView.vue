@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import BidEditor from '../common/BidEditor.vue';
 
 export default {
@@ -13,7 +13,7 @@ export default {
   components: {
     BidEditor,
   },
-  computed: mapState('common', ['username']),
+  computed: mapGetters('common', ['username']),
 };
 </script>
 

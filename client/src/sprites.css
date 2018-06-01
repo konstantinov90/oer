@@ -1,0 +1,47 @@
+.sprite {
+    height: 40px;
+    width: 40px;
+    transform: scale(0.8);
+    display: inline-block;
+}
+
+.sprite__flag {
+    background: url(/emojione-sprite-40-flags.png);
+}
+
+.sprite__flag_armenia {
+    background-position: -328px 0;
+}
+
+.sprite__flag_belarus {
+    background-position: -1517px 0;
+}
+
+.sprite__flag_russia {
+    background-position: -8077px 0;
+}
+
+.sprite__flag_kazakhstan {
+    background-position: -5371px 0;
+}
+
+.sprite__flag_kyrgyzstan {
+    background-position: -5002px 0;
+}
+
+.sprite__icon {
+    background: url(/emojione-sprite-40-symbols.png);
+    transform: scale(0.5);
+}
+
+.sprite__icon_ok {
+    background-position: -10496px 0;
+}
+
+.sprite__icon_changed {
+    background-position: -10291px 0;
+}
+
+.sprite__icon_deleted {
+    background-position: -10824px 0;
+}

@@ -2,7 +2,7 @@ from pyomo.environ import *
 from itertools import chain, product
 import os
 import json
-from datetime import datetime
+from datetime import datetime, timedelta
 try:
     from model import CommonModel, DIR, SOLVER, SOLVER_PATH, MODEL_PATH
 except ModuleNotFoundError:
@@ -178,9 +178,8 @@ class SdModel(CommonModel):
         return sd
 
     @classmethod
-    def sd_runner_core(cls, input_data, model_config_path=MODEL_PATH, sd_path=INPUT_PATH, results_path=RESULTS_PATH):
+    def sd_runner_core(cls, input_data, dates, model_config_path=MODEL_PATH, sd_path=INPUT_PATH, results_path=RESULTS_PATH):
         section_limits = list()
-        dates = set(chain.from_iterable([[gr['tdate'] for gr in sd['values']] for sd in input_data]))
         for d in dates:
             day = {'target_date': d, 'limit_type': 'SECTION_FLOW_LIMIT_EX', 'hours': []}
             section_limits.append(day)
@@ -198,8 +197,8 @@ class SdModel(CommonModel):
                 hour['sections'].extend(
                     {
                         'section_code': sec.code,
-                        'pmax_fw': m.sections[sec.code].pmax_fw,
-                        'pmax_bw': m.sections[sec.code].pmax_bw,
+                        'pmax_fw': round(sec.pmax_fw - sec.calc_flow(m.model, m.sd), 3),
+                        'pmax_bw': round(sec.pmax_bw + sec.calc_flow(m.model, m.sd), 3)
                     } for sec in m.sections.values()
                 )
 
@@ -207,7 +206,9 @@ class SdModel(CommonModel):
 
     @classmethod
     def sd_runner(cls, model_config_path=MODEL_PATH, sd_path=INPUT_PATH, results_path=RESULTS_PATH):
-        sd, section_limits = cls.sd_runner_core(cls.load_sd(sd_path), model_config_path, sd_path, results_path)
+        input_data = cls.load_sd(sd_path)
+        dates = set(chain.from_iterable([[gr['tdate'] for gr in sd['values']] for sd in input_data]))
+        sd, section_limits = cls.sd_runner_core(input_data, dates, model_config_path, sd_path, results_path)
 
         for c in sd:
             c['dateStart'] = '{:%Y-%m-%d}'.format(c['dateStart'])
@@ -239,7 +240,10 @@ class SdModelAug(SdModel):
         cls.load_section_limits_for_subclass = cls.load_sec_lims
 
         db = pymongo.MongoClient().inter_market
-        sd, section_limits = cls.sd_runner_core(cls.load_sd(session_id))
+        session = db.sessions.find_one({'_id': session_id})
+        dates = [session['startDate'] + timedelta(i) for i in range(1 + (session['finishDate'] - session['startDate']).days)]
+
+        sd, section_limits = cls.sd_runner_core(cls.load_sd(session_id), dates)
 
         for c in sd:
             db.sdd.find_one_and_replace({'_id': c['_id']}, c)

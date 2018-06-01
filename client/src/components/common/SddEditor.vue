@@ -1,6 +1,8 @@
 <template>
   <div class="sdd-editor">
-    <span>{{ title }}</span>
+    <span
+      style="display: flex; align-items: center;"
+      v-html="title"/>
     <template v-if="!adminSession">
       <template v-if="isNew">
         <button
@@ -28,7 +30,7 @@
             :disabled="!sddProj"
             class="sdd-editor__button sdd-editor__button_offer"
             @click="reoffer">
-            Отправить на переодобрение
+            Отправить на согласование контрагенту
           </button>
         </template>
         <template v-if="!isChanged">
@@ -75,13 +77,15 @@
         <option
           :disabled="adminSession"
           selected
-          value>{{ !adminSession ? '-- выберите --' : sdd.seller }}</option>
+          value>
+          {{ !adminSession ? '-- выберите --' : selectedContragent && selectedContragent.name }}
+        </option>
         <option
           v-for="contr in possibleContragents"
           :value="contr._id"
           :key="contr._id"
-          :selected="(selectedContragent && selectedContragent._id == contr._id)"
-        >{{ contr._id }}
+          :selected="(selectedContragent && selectedContragent._id == contr._id)">
+          {{ contr.name }}
         </option>
       </select>
     </div>
@@ -89,7 +93,10 @@
       v-if="selectedContragent"
       class="picker-wrapper">
       <label>Сечение поставки:</label>
-      <select
+      <input
+        :value="selectedSection"
+        disabled>
+        <!-- <select
         :disabled="inputDisabled"
         @input="onSelectSection">
         <option
@@ -105,7 +112,7 @@
           :value="sec">
           {{ sec }}
         </option>
-      </select>
+      </select> -->
     </div>
     <div class="picker-wrapper picker-wrapper_dates">
       <label>Период поставки:</label>
@@ -113,13 +120,17 @@
       <date-selector
         :value="selectedDateStart"
         :prev-date="selectedDateStart"
-        :on-select="onSelectDateStart"/>
+        :on-select="onSelectDateStart"
+        :from-date="selectedSession.startDate"
+        :to-date="selectedSession.finishDate"/>
       <template v-if="selectedDateStart">
         <label>по</label>
         <date-selector
           :value="selectedDateEnd"
           :prev-date="selectedDateStart"
-          :on-select="onSelectDateEnd"/>
+          :on-select="onSelectDateEnd"
+          :from-date="selectedSession.startDate"
+          :to-date="selectedSession.finishDate"/>
       </template>
     </div>
     <div
@@ -148,7 +159,7 @@
         <input
           :key="`vol_${hour}`"
           :disabled="inputDisabled"
-          :value="sddProjValues[hour]['volume']"
+          :value="sddProjValues[hour].volume"
           @input="changeValue('volume', hour, $event)">
         <span
           v-if="hasResults"
@@ -158,10 +169,10 @@
         <input
           :key="`pr_${hour}`"
           :disabled="inputDisabled"
-          :value="sddProjValues[hour]['price']"
+          :value="sddProjValues[hour].price"
           @input="changeValue('price', hour, $event)" >
         <span
-          v-tooltip.left="'продлить значения до конца'"
+          v-tooltip.right="'продлить значения до конца'"
           v-if="!inputDisabled"
           :key="hour"
           style="cursor: pointer;"
@@ -178,7 +189,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { addDays, compareAsc, differenceInDays, format } from 'date-fns';
-import { isEqual } from 'lodash';
+import { isEqual, round } from 'lodash';
 // import Datepicker from 'vuejs-datepicker';
 import DateSelector from './DateSelector.vue';
 
@@ -203,7 +214,7 @@ export default {
     closeFn: {
       type: Function,
       required: false,
-      default: null,
+      default: () => {},
     },
     sdd: {
       type: Object,
@@ -233,33 +244,53 @@ export default {
       selectedDateStart,
       selectedDateEnd,
       possibleSections: {
-        'ARM-BLR': ['RUS-ARM', 'RUS-BLR'],
-        'ARM-RUS': ['RUS-ARM'],
-        'ARM-KAZ': ['RUS-ARM', 'RUS-KAZ'],
-        'ARM-KGZ': ['RUS-ARM', 'RUS-KAZ', 'KAZ-KGZ'],
-        'BLR-ARM': ['RUS-BLR', 'RUS-ARM'],
-        'BLR-RUS': ['RUS-BLR'],
-        'BLR-KAZ': ['RUS-BLR', 'RUS-KAZ'],
-        'BLR-KGZ': ['RUS-BLR', 'RUS-KAZ', 'KAZ-KGZ'],
-        'RUS-ARM': ['RUS-ARM'],
-        'RUS-BLR': ['RUS-BLR'],
-        'RUS-KAZ': ['RUS-KAZ'],
-        'RUS-KGZ': ['RUS-KAZ', 'KAZ-KGZ'],
-        'KAZ-ARM': ['RUS-KAZ', 'RUS-ARM'],
-        'KAZ-BLR': ['RUS-KAZ', 'RUS-BLR'],
-        'KAZ-RUS': ['RUS-KAZ'],
-        'KAZ-KGZ': ['KAZ-KGZ'],
-        'KGZ-ARM': ['KAZ-KGZ', 'RUS-KAZ', 'RUS-ARM'],
-        'KGZ-BLR': ['KAZ-KGZ', 'RUS-KAZ', 'RUS-BLR'],
-        'KGZ-RUS': ['KAZ-KGZ', 'RUS-KAZ'],
-        'KGZ-KAZ': ['KAZ-KGZ'],
+        // 'ARM-BLR': ['RUS-ARM', 'RUS-BLR'],
+        // 'ARM-RUS': ['RUS-ARM'],
+        // 'ARM-KAZ': ['RUS-ARM', 'RUS-KAZ'],
+        // 'ARM-KGZ': ['RUS-ARM', 'RUS-KAZ', 'KAZ-KGZ'],
+        // 'BLR-ARM': ['RUS-BLR', 'RUS-ARM'],
+        // 'BLR-RUS': ['RUS-BLR'],
+        // 'BLR-KAZ': ['RUS-BLR', 'RUS-KAZ'],
+        // 'BLR-KGZ': ['RUS-BLR', 'RUS-KAZ', 'KAZ-KGZ'],
+        // 'RUS-ARM': ['RUS-ARM'],
+        // 'RUS-BLR': ['RUS-BLR'],
+        // 'RUS-KAZ': ['RUS-KAZ'],
+        // 'RUS-KGZ': ['RUS-KAZ', 'KAZ-KGZ'],
+        // 'KAZ-ARM': ['RUS-KAZ', 'RUS-ARM'],
+        // 'KAZ-BLR': ['RUS-KAZ', 'RUS-BLR'],
+        // 'KAZ-RUS': ['RUS-KAZ'],
+        // 'KAZ-KGZ': ['KAZ-KGZ'],
+        // 'KGZ-ARM': ['KAZ-KGZ', 'RUS-KAZ', 'RUS-ARM'],
+        // 'KGZ-BLR': ['KAZ-KGZ', 'RUS-KAZ', 'RUS-BLR'],
+        // 'KGZ-RUS': ['KAZ-KGZ', 'RUS-KAZ'],
+        // 'KGZ-KAZ': ['KAZ-KGZ'],
+        'ARM-BLR': 'RUS-ARM',
+        'ARM-RUS': 'RUS-ARM',
+        'ARM-KAZ': 'RUS-ARM',
+        'ARM-KGZ': 'RUS-ARM',
+        'BLR-ARM': 'RUS-BLR',
+        'BLR-RUS': 'RUS-BLR',
+        'BLR-KAZ': 'RUS-BLR',
+        'BLR-KGZ': 'RUS-BLR',
+        'RUS-ARM': 'RUS-ARM',
+        'RUS-BLR': 'RUS-BLR',
+        'RUS-KAZ': 'RUS-KAZ',
+        'RUS-KGZ': 'RUS-KAZ',
+        'KAZ-ARM': 'RUS-KAZ',
+        'KAZ-BLR': 'RUS-KAZ',
+        'KAZ-RUS': 'RUS-KAZ',
+        'KAZ-KGZ': 'KAZ-KGZ',
+        'KGZ-ARM': 'KAZ-KGZ',
+        'KGZ-BLR': 'KAZ-KGZ',
+        'KGZ-RUS': 'KAZ-KGZ',
+        'KGZ-KAZ': 'KAZ-KGZ',
       },
     };
   },
   computed: {
-    ...mapState('common', ['rioEntry', 'username', 'adminSession']),
+    ...mapState('common', ['rioEntry', 'adminSession']),
     ...mapState('client', ['possibleContragents']),
-    ...mapGetters('common', ['selectedSession']),
+    ...mapGetters('common', ['username', 'selectedSession']),
     hasResults() {
       return this.selectedSession.status === 'closed' && this.sdd.values[0].accepted_volume !== undefined;
     },
@@ -281,7 +312,12 @@ export default {
       return this.rioEntry && this.rioEntry.dir === 'buy' ? 'Продавец' : 'Покупатель';
     },
     possibleSectionKey() {
-      return this.adminSession ? this.sdd.section : `${this.rioEntry.country_code}-${this.selectedContragent.country_code}`;
+      // return this.adminSession ? this.sdd.section : `${this.rioEntry.country_code}-${this.selectedContragent.country_code}`;
+      const countries = [this.rioEntry.country_code, this.selectedContragent.country_code];
+      if (this.rioEntry.dir === 'buy') {
+        countries.reverse();
+      }
+      return this.adminSession ? this.sdd.section : countries.join('-');
     },
     sddProj() {
       if (!this.selectedDateStart || !this.selectedDateEnd
@@ -291,7 +327,7 @@ export default {
       }
 
       return {
-        sessionId: this.selectedSession._id,
+        sessionId: this.sdd ? this.sdd.sessionId : this.selectedSession._id,
         dateStart: this.selectedDateStart,
         dateEnd: this.selectedDateEnd,
         author: this.sdd ? this.sdd.author : this.username,
@@ -335,28 +371,43 @@ export default {
         return '';
       }
       if (!this.isChanged) {
-        return '✅ договор сохранен';
+        return '<span class="sprite sprite__icon sprite__icon_ok"></span> договор сохранен';
       }
-      return '⚠️ договор отличается от сохраненного';
+      return '<span class="sprite sprite__icon sprite__icon_changed"></span> договор отличается от сохраненного';
+    },
+  },
+  watch: {
+    sdd() {
+      if (this.sdd) {
+        this.sddProjValues = this.sdd.values.map(d => ({ ...d }));
+        this.selectedDateStart = new Date(this.sdd.dateStart);
+        this.selectedDateEnd = new Date(this.sdd.dateEnd);
+        this.selectedSection = this.sdd.section;
+
+        this.elaborateSddContragent();
+      }
     },
   },
   created() {
-    if (this.sdd) {
-      let contrId;
-      if (this.sdd.author === this.username) {
-        contrId = this.sdd.author === this.sdd.buyer ? this.sdd.seller : this.sdd.buyer;
-      } else {
-        contrId = this.sdd.author;
-      }
-      this.selectedContragent = this.possibleContragents
-        .find(({ _id }) => _id === contrId);
-    }
+    this.elaborateSddContragent();
     window.addEventListener('keydown', this.processKeyDown);
   },
   destroyed() {
     window.removeEventListener('keydown', this.processKeyDown);
   },
   methods: {
+    elaborateSddContragent() {
+      if (this.sdd) {
+        let contrId;
+        if (this.sdd.author === this.username) {
+          contrId = this.sdd.author === this.sdd.buyer ? this.sdd.seller : this.sdd.buyer;
+        } else {
+          contrId = this.sdd.author;
+        }
+        this.selectedContragent = this.possibleContragents
+          .find(({ _id }) => _id === contrId);
+      }
+    },
     processKeyDown({ key }) {
       if (key === 'Escape') {
         this.closeFn();
@@ -366,7 +417,18 @@ export default {
       return format(addDays(this.selectedDateStart, idx), 'DD.MM.YYYY');
     },
     changeValue(valueType, hour, { target }) {
-      const value = parseFloat(target.value.replace(',', '.'), 10);
+      let dim;
+      switch (valueType) {
+        case 'price':
+          dim = 2;
+          break;
+        case 'volume':
+          dim = 3;
+          break;
+        default:
+          throw new Error('invalid valueType!');
+      }
+      const value = round(parseFloat(target.value.replace(',', '.'), 10), dim);
       this.sddProjValues[hour][valueType] = value;
     },
     onSelectDateStart(selectedDate) {
@@ -402,13 +464,14 @@ export default {
     onSelectContragent({ target }) {
       this.selectedContragent = this.possibleContragents
         .find(({ _id }) => _id === target.value);
-      if (!this.possibleSections[this.possibleSectionKey].includes(this.selectedSection)) {
-        this.selectedSection = null;
-      }
+      // if (!this.possibleSections[this.possibleSectionKey].includes(this.selectedSection)) {
+      //   this.selectedSection = null;
+      // }
+      this.selectedSection = this.possibleSections[this.possibleSectionKey];
     },
-    onSelectSection({ target: { value } }) {
-      this.selectedSection = value;
-    },
+    // onSelectSection({ target: { value } }) {
+    //   this.selectedSection = value;
+    // },
     multiplyHour(thour) {
       const curHour = this.sddProjValues[thour];
       this.sddProjValues = [
@@ -467,6 +530,7 @@ export default {
   border: 1px solid black;
   border-radius: 5px;
   margin: 2px;
+  align-items: center;
 }
 
 .picker-wrapper input,
@@ -497,6 +561,9 @@ export default {
   border: 1px solid black;
   padding: 4px;
   text-align: end;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .graph-grid > p {
@@ -512,6 +579,7 @@ export default {
   position: absolute;
   border-radius: 15px;
   max-width: 200px;
+  top: 0;
 }
 
 .sdd-editor__button_offer {

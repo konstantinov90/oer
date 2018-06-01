@@ -47,7 +47,7 @@ class NodeBid:
         self.bid = bid
         self.section = section
         self.node = node
-        self.price = price - mgp_price
+        self.price = max(price - mgp_price, 0)
         self.mgp_price = mgp_price
         self.filled_volume = None
         self.basic_liability = 0.0
@@ -142,8 +142,7 @@ class SpotModel(CommonModel):
                     p = float(data['price']) * self.currencies[bid.country]
                     for node, mgp_list in section.distr_rule[bid.country].items():
                         mgp_price = sum(self.mgp_price[mgp_countries] for mgp_countries in mgp_list)
-                        if p > mgp_price:
-                            bid.node_bids[node] = NodeBid(bid, section, node, p, mgp_price)
+                        bid.node_bids[node] = NodeBid(bid, section, node, p, mgp_price)
 
                 # теперь может быть меньше 4, т.к. стоимость МГП может быть больше заявки
                 # assert len(bid.node_bids) == 4, 'Заявка подана не во все сечения: {}'.format(bid)
@@ -159,7 +158,11 @@ class SpotModel(CommonModel):
 
     def make_model(self):
         bids = self.fixed_bids + self.bids
-        self.node_bids = list(chain.from_iterable(b.node_bids.values() for b in bids))
+        for b in bids:
+            for nb in b.node_bids.values():
+                if nb.price <= 0:
+                    nb.filled_volume = 0
+        self.node_bids = [nb for b in bids for nb in b.node_bids.values()]
 
         model = ConcreteModel()
         model.nodes = Set(initialize=self.nodes.values())
@@ -188,7 +191,7 @@ class SpotModel(CommonModel):
 
         @simple_constraintlist_rule
         def bid_node_sum(model, bid):
-            return sum(model.x[node_bid] for node_bid in bid.node_bids.values()) <= bid.volume
+            return sum(model.x[node_bid] for node_bid in bid.node_bids.values() if node_bid in model.x) <= bid.volume
 
         model.cost = Objective(rule=wellfare_function, sense=maximize)
         model.node_balance_bids = Constraint(model.nodes, rule=node_balance_constraint)

@@ -21,6 +21,10 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex';
+import exitImg from '../../../static/exit.svg';
+// import './public-path';
+
+console.log(exitImg)
 
 export default {
   name: 'AppLayout',

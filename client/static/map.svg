@@ -16,7 +16,7 @@
    version="1.1"
    id="svg8"
    inkscape:version="0.92.1 r15371"
-   sodipodi:docname="Карта ОЭР_with_2_arrows.svg">
+   sodipodi:docname="Карта ОЭР_with_2_arrows_Georgia_1.svg">
   <defs
      id="defs2">
     <marker
@@ -57,66 +57,6 @@
     </clipPath>
     <meshgradient
        inkscape:collect="always"
-       id="meshgradient6134"
-       gradientUnits="userSpaceOnUse"
-       x="82.71833"
-       y="101.98365"
-       gradientTransform="matrix(0,-0.26458333,0.26458332,0,138.81183,51.557607)">
-      <meshrow
-         id="meshrow6146">
-        <meshpatch
-           id="meshpatch6144">
-          <stop
-             id="stop6136"
-             style="stop-color:#ffffff;stop-opacity:1"
-             path="c 3.88747,0  7.77495,0  11.6624,0" />
-          <stop
-             id="stop6138"
-             style="stop-color:#3cdda8;stop-opacity:1"
-             path="c 0,5.58522  0,11.1704  0,16.7557" />
-          <stop
-             id="stop6140"
-             style="stop-color:#ffffff;stop-opacity:1"
-             path="c -3.88747,0  -7.77495,0  -11.6624,0" />
-          <stop
-             id="stop6142"
-             style="stop-color:#3cdda8;stop-opacity:1"
-             path="c 0,-5.58522  0,-11.1704  0,-16.7557" />
-        </meshpatch>
-      </meshrow>
-    </meshgradient>
-    <meshgradient
-       inkscape:collect="always"
-       id="meshgradient4754"
-       gradientUnits="userSpaceOnUse"
-       gradientTransform="matrix(0.05484116,0.05235515,-0.04972394,0.05676536,4.7777655,-5.5345049)"
-       x="82.71833"
-       y="101.98365">
-      <meshrow
-         id="meshrow4766">
-        <meshpatch
-           id="meshpatch4764">
-          <stop
-             path="c 3.88747,0  7.77495,0  11.6624,0"
-             style="stop-color:#ffffff;stop-opacity:1"
-             id="stop4756" />
-          <stop
-             path="c 0,5.58522  0,11.1704  0,16.7557"
-             style="stop-color:#3cdda8;stop-opacity:1"
-             id="stop4758" />
-          <stop
-             path="c -3.88747,0  -7.77495,0  -11.6624,0"
-             style="stop-color:#ffffff;stop-opacity:1"
-             id="stop4760" />
-          <stop
-             path="c 0,-5.58522  0,-11.1704  0,-16.7557"
-             style="stop-color:#3cdda8;stop-opacity:1"
-             id="stop4762" />
-        </meshpatch>
-      </meshrow>
-    </meshgradient>
-    <meshgradient
-       inkscape:collect="always"
        id="meshgradient4872"
        gradientUnits="userSpaceOnUse"
        gradientTransform="matrix(-2.9886804e-4,0.00126171,-0.00126171,-2.9886804e-4,0.43302945,0.91541545)"
@@ -145,6 +85,82 @@
         </meshpatch>
       </meshrow>
     </meshgradient>
+    <meshgradient
+       inkscape:collect="always"
+       id="meshgradient495"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-2.9886804e-4,0.00126171,-0.00126171,-2.9886804e-4,0.43302945,-0.67208456)"
+       x="82.71833"
+       y="101.98365">
+      <meshrow
+         id="meshrow507">
+        <meshpatch
+           id="meshpatch505">
+          <stop
+             path="c 3.88747,0  7.77495,0  11.6624,0"
+             style="stop-color:#ffffff;stop-opacity:1"
+             id="stop497" />
+          <stop
+             path="c 0,5.58522  0,11.1704  0,16.7557"
+             style="stop-color:#3cdda8;stop-opacity:1"
+             id="stop499" />
+          <stop
+             path="c -3.88747,0  -7.77495,0  -11.6624,0"
+             style="stop-color:#ffffff;stop-opacity:1"
+             id="stop501" />
+          <stop
+             path="c 0,-5.58522  0,-11.1704  0,-16.7557"
+             style="stop-color:#3cdda8;stop-opacity:1"
+             id="stop503" />
+        </meshpatch>
+      </meshrow>
+    </meshgradient>
+    <meshgradient
+       inkscape:collect="always"
+       id="meshgradient509"
+       gradientUnits="userSpaceOnUse"
+       gradientTransform="matrix(-2.9886804e-4,0.00126171,-0.00126171,-2.9886804e-4,0.43302945,-0.67208456)"
+       x="82.71833"
+       y="101.98365">
+      <meshrow
+         id="meshrow521">
+        <meshpatch
+           id="meshpatch519">
+          <stop
+             path="c 3.88747,0  7.77495,0  11.6624,0"
+             style="stop-color:#ffffff;stop-opacity:1"
+             id="stop511" />
+          <stop
+             path="c 0,5.58522  0,11.1704  0,16.7557"
+             style="stop-color:#3cdda8;stop-opacity:1"
+             id="stop513" />
+          <stop
+             path="c -3.88747,0  -7.77495,0  -11.6624,0"
+             style="stop-color:#ffffff;stop-opacity:1"
+             id="stop515" />
+          <stop
+             path="c 0,-5.58522  0,-11.1704  0,-16.7557"
+             style="stop-color:#3cdda8;stop-opacity:1"
+             id="stop517" />
+        </meshpatch>
+      </meshrow>
+    </meshgradient>
+    <clipPath
+       id="a-6-4">
+      <path
+         style="fill-opacity:0.7"
+         inkscape:connector-curvature="0"
+         id="path9349-1"
+         d="M 0,0 H 682.6 V 512 H 0 Z" />
+    </clipPath>
+    <clipPath
+       id="a-1">
+      <path
+         style="fill-opacity:0.7"
+         inkscape:connector-curvature="0"
+         id="path9316-5"
+         d="M -85,0 H 597.7 V 512 H -85 Z" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -153,16 +169,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="1.31"
-     inkscape:cx="466.90574"
-     inkscape:cy="984.25489"
+     inkscape:zoom="0.92630988"
+     inkscape:cx="434.22604"
+     inkscape:cy="852.92968"
      inkscape:document-units="mm"
      inkscape:current-layer="layer1"
      showgrid="false"
-     inkscape:window-width="1366"
-     inkscape:window-height="706"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-width="1920"
+     inkscape:window-height="1132"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
      inkscape:window-maximized="1"
      inkscape:snap-grids="false"
      inkscape:snap-global="false" />
@@ -174,7 +190,7 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title />
+        <dc:title></dc:title>
       </cc:Work>
     </rdf:RDF>
   </metadata>
@@ -199,16 +215,16 @@
        inkscape:transform-center-x="3.0430887"
        inkscape:transform-center-y="4.3988411" />
     <path
-       style="opacity:0;fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient4872);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
-       d="m 59.62622,83.2725 0.80399,-8.848986 2.59193,2.71499 8.397953,-7.35624 3.28536,3.44136 -8.397963,7.35624 2.59191,2.714976 z"
+       style="opacity:0;fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient509);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 59.62622,81.684999 0.80399,-8.848986 2.59193,2.71499 8.397953,-7.35624 3.28536,3.44136 -8.397963,7.35624 2.59191,2.714976 z"
        id="arrow_RUS_ARM"
        inkscape:label="#rect85"
        inkscape:connector-curvature="0"
        inkscape:transform-center-x="-0.7877196"
        inkscape:transform-center-y="2.4206648" />
     <path
-       style="opacity:1;fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient4872);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
-       d="m 74.037689,70.421601 -0.80399,8.84899 -2.59193,-2.71499 -8.397953,7.356238 -3.28536,-3.441358 8.39796,-7.35624 -2.59191,-2.71498 z"
+       style="opacity:1;fill:#3cdda8;fill-opacity:1;stroke:url(#meshgradient495);stroke-width:0.14938472;stroke-opacity:1;paint-order:fill markers stroke"
+       d="m 74.037689,68.8341 -0.80399,8.84899 -2.59193,-2.71499 -8.397953,7.356238 -3.28536,-3.441358 8.39796,-7.35624 -2.59191,-2.71498 z"
        id="arrow_ARM_RUS"
        inkscape:label="#rect85"
        inkscape:connector-curvature="0"
@@ -217,12 +233,12 @@
     <ellipse
        ry="18.776312"
        rx="24.463507"
-       cy="99.39257"
-       cx="47.317959"
+       cy="105.75159"
+       cx="31.466959"
        id="path9102-7"
        style="opacity:1;fill:#96dff0;fill-opacity:0.29019608;fill-rule:evenodd;stroke:#000000;stroke-width:0.1291526;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;paint-order:markers fill stroke" />
     <g
-       transform="matrix(0.02075522,0,0,0.02340316,40.676288,83.731774)"
+       transform="matrix(0.02075522,0,0,0.02340316,24.825292,90.090819)"
        id="flag_ARM"
        inkscape:label="#g9120-2">
       <path
@@ -517,13 +533,13 @@
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:10.58333302px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458332"
        x="56.833649"
-       y="79.62204"
+       y="78.034538"
        id="Flow_ARM_RUS"
        inkscape:label="#text9990"><tspan
          sodipodi:role="line"
          id="tspan9988-1"
          x="56.833649"
-         y="79.62204"
+         y="78.034538"
          style="font-size:6.3499999px;stroke-width:0.26458332">1000</tspan></text>
     <text
        xml:space="preserve"
@@ -713,7 +729,7 @@
          y="32.740299">500 @ 2220</tspan></text>
     <g
        style="stroke-width:0.18590704;stroke-miterlimit:4;stroke-dasharray:none"
-       transform="matrix(2.0660367,0,0,1.5833619,-337.64597,-66.066644)"
+       transform="matrix(2.0660367,0,0,1.5833619,-353.49702,-59.707599)"
        id="g6226-9-3-8-8">
       <path
          style="fill:none;stroke:#000000;stroke-width:0.18590704;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -733,32 +749,32 @@
        sodipodi:nodetypes="ccccccccccccc"
        inkscape:connector-curvature="0"
        id="path9062-1-9-5-6-2"
-       d="m 31.65848,107.27523 h 0.7216 v 1.61683 h 1.38623 v -2.57778 h 0.94948 l -2.95261,-2.12018 -2.9526,2.12018 h 0.94947 v 2.57778 h 1.38624 v -1.61683 h 0.7216"
+       d="m 15.807484,113.63429 h 0.7216 v 1.61683 h 1.38623 v -2.57778 h 0.94948 l -2.95261,-2.12018 -2.9526,2.12018 h 0.94947 v 2.57778 h 1.38624 v -1.61683 h 0.7216"
        style="fill:#000000;fill-opacity:0;stroke:#000000;stroke-width:0.26887411;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458344"
-       x="34.96151"
-       y="103.42374"
+       x="19.61306"
+       y="109.99099"
        id="Gen_ARM"
        inkscape:label="#text9990"
        transform="scale(1.0327427,0.96829539)"><tspan
          style="stroke-width:0.26458344"
          sodipodi:role="line"
          id="tspan10122-3"
-         x="34.96151"
-         y="103.42374">1000@1220</tspan></text>
+         x="19.61306"
+         y="109.99099">1000@1220</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.93888903px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.26458344"
-       x="34.643501"
-       y="111.57583"
+       x="19.295052"
+       y="118.14309"
        id="Cons_ARM"
        inkscape:label="#text9990"
        transform="scale(1.0327427,0.96829539)"><tspan
          style="stroke-width:0.26458344"
-         y="111.57583"
-         x="34.643501"
+         y="118.14309"
+         x="19.295052"
          sodipodi:role="line"
          id="tspan10084-5-1">500 @ 2220</tspan></text>
     <text
@@ -857,37 +873,37 @@
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">1000</tspan></text>
     <path
        style="fill:#fb950e;fill-opacity:0.93922652;stroke:none;stroke-width:0.26458332;stroke-opacity:1;paint-order:fill markers stroke"
-       d="m 50.712573,79.236703 4.75521,-2.457009 -1.15013,-0.990098 8.29515,-9.635977 -0.73407,-0.631926 -8.29515,9.635977 -1.1501,-0.990068 z"
+       d="m 52.300074,76.590868 4.75521,-2.457009 -1.15013,-0.990098 8.29515,-9.635977 -0.73407,-0.631926 -8.29515,9.635977 -1.1501,-0.990068 z"
        id="rect9806-0-4-9"
        inkscape:connector-curvature="0" />
     <path
        inkscape:connector-curvature="0"
        id="path9986-9-9-8"
-       d="m 80.251079,75.368195 -1.72251,5.067737 -1.15012,-0.99009 -8.29515,9.63597 -0.73407,-0.63192 8.29514,-9.63598 -1.1501,-0.99006 z"
+       d="m 78.134411,74.839028 -1.72251,5.067737 -1.15012,-0.99009 -8.29515,9.63597 -0.73407,-0.63192 8.29514,-9.63598 -1.1501,-0.99006 z"
        style="fill:#82959a;fill-opacity:0.93922652;stroke:none;stroke-width:0.26458332;stroke-opacity:1;paint-order:fill markers stroke" />
     <text
        xml:space="preserve"
        style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
        x="46.081543"
-       y="70.289719"
+       y="68.702217"
        id="Max_Flow_RUS-ARM"
        inkscape:label="#text9990"><tspan
          sodipodi:role="line"
          id="tspan9988-45-5-7"
          x="46.081543"
-         y="70.289719"
+         y="68.702217"
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">1000</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
        x="74.406746"
-       y="87.133064"
+       y="85.545563"
        id="Max_Flow_ARM-RUS"
        inkscape:label="#text9990"><tspan
          sodipodi:role="line"
          id="tspan9988-45-8-3-06"
          x="74.406746"
-         y="87.133064"
+         y="85.545563"
          style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">1000</tspan></text>
     <path
        style="opacity:1;fill:#3cdda8;fill-opacity:1;stroke:none;stroke-width:0.36133996;stroke-opacity:0.1;paint-order:fill markers stroke"
@@ -930,5 +946,26 @@
          x="140.98347"
          y="49.252056"
          style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458344">1000</tspan></text>
+    <ellipse
+       ry="6.8308725"
+       rx="21.437397"
+       cy="28.05286"
+       cx="99.002655"
+       id="path9102-7-0"
+       style="opacity:1;fill:#afafaf;fill-opacity:0.29019609;fill-rule:evenodd;stroke:#000000;stroke-width:0.47395667;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:1.42187001, 0.47395667000000002;stroke-dashoffset:0;stroke-opacity:1;paint-order:markers fill stroke"
+       transform="matrix(0.73814599,0.67464101,-0.73814599,0.67464101,0,0)" />
+    <text
+       xml:space="preserve"
+       style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.09341955px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke:none;stroke-width:0.38083872"
+       x="89.56485"
+       y="30.498621"
+       id="Max_Flow_RUS-ARM-9"
+       inkscape:label="#text9990"
+       transform="matrix(0.74707049,0.66928089,-0.74707049,0.66928089,0,0)"><tspan
+         sodipodi:role="line"
+         id="tspan575"
+         x="89.56485"
+         y="30.498621"
+         style="stroke-width:0.38083872">Грузия</tspan></text>
   </g>
 </svg>

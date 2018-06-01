@@ -123,6 +123,7 @@ export default {
       margin 5px 0
 
   &_failed
+    border 2px solid white
     animation login-failed 1s linear
 
 @keyframes login-failed

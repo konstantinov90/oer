@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
 import SessionItem from '../common/SessionItem.vue';
 
 const links = {
@@ -29,7 +29,14 @@ export default {
   computed: {
     ...mapState('common', ['sessions']),
   },
+  mounted() {
+    this.bid({ msg: null });
+    this.allBids({ msg: null });
+    this.sdd({ msg: null });
+    this.allSdd({ msg: null });
+  },
   methods: {
+    ...mapMutations('common', ['bid', 'allBids', 'sdd', 'allSdd']),
     getLink(session) {
       const name = links[session.type];
       return { name, params: { id: session._id } };

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1>{{ selectedSession.sd_session_id }}</h1>
     <button @click="makeRegistry">Выгрузить реестр МДП после сессии СДД</button>
     <button @click="uploadRegistry">Загрузить реестр МДП после биржевой сессии</button>
   </div>

@@ -48,6 +48,7 @@ export default new Vuex.Store({
 
     hasNewSdd() {
       this.dispatch('common/querySdd');
+      this.dispatch('common/queryAllSdd');
     },
 
     hasNewBid({ common: { adminSession }, admin: { selectedUser } }) {

@@ -1,6 +1,5 @@
 <template>
   <div
-    v-if="!queringSdd"
     class="sdd-list">
     <multiselect
       v-model="value"
@@ -13,6 +12,9 @@
       class="multiselect-wrapper"
       placeholder="фильтр"
       label="description"
+      select-label=""
+      selected-label=""
+      deselect-label=""
       track-by="description">
       <template
         slot="tag"
@@ -65,7 +67,7 @@ export default {
     ...mapState('common', ['sdd', 'queringSdd']),
     sddFiltered() {
       const values = this.value.map(({ status }) => status);
-      return this.sdd.filter(sd => values.includes(sd.status));
+      return this.sdd ? this.sdd.filter(sd => values.includes(sd.status)) : [];
     },
   },
   created() {
@@ -93,6 +95,7 @@ export default {
 <style>
 .sdd-list {
   margin-top: 10px;
+  min-height: 300px;
 }
 
 .custom__tag {

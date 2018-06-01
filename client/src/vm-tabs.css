@@ -1,0 +1,10 @@
+.vm-tabs__item,
+.vm-tabs__item.is-active {
+color: rgb(101,104,155) !important;
+font-size: 1rem;
+}
+
+.vm-tabs__header,
+.vm-tabs__active.is-triangle::before {
+border-bottom-color: rgb(221,234,255) !important;
+}

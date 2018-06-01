@@ -12,6 +12,7 @@ from calculation.spot import SpotModelAug
 from calculation.sd import SdModelAug
 from calculation.futures import make_registry, upload_registry
 from db_api.api import db
+import reports
 
 HOST = os.getenv('HOST', '0.0.0.0')
 PORT = int(os.getenv('PORT', 8080))
@@ -29,6 +30,15 @@ async def login(request):
         return aiohttp.web.Response(text=username)
     
     return aiohttp.web.HTTPForbidden(text='password')
+
+async def bids(request):
+    session_id = int(request.rel_url.query['session_id'])
+    bids = await db.bids.find({'session_id': session_id}).to_list(None)
+    return aiohttp.web.json_response(bids)
+
+async def bid_report(request):
+    session_id = int(request.rel_url.query['session_id'])
+    file_path = reports.report_bids(session_id)
 
 
 def handle_socket_payload(payload):
@@ -78,7 +88,7 @@ async def websocket_handler(request):
                 ws_clients[username] = ws
                 await ws_clients.send_to_admin({'type': 'admin/clients', 'msg': ws_clients.get_users()})
 
-                rio_entry = await db.rio.find_one({'_id': username})
+                rio_entry = await db.rio.find_one({'login': username})
                 ws['rio_entry'] = rio_entry
                 await ws.send_json({'type': 'common/rioEntry', 'msg': rio_entry})
 
@@ -90,7 +100,6 @@ async def websocket_handler(request):
                     await ws.send_json({'type': 'client/possibleContragents', 'msg': possible_contragents})
 
                 await ws.send_json({'type': 'hasNewSessions'})
-
             elif 'user' not in ws:
                 continue
             # elif payload['type'] == 'common/phase':
@@ -115,15 +124,26 @@ async def websocket_handler(request):
             #         await ws_clients.send_to_admin({'type': 'common/bid', 'msg': new_bid})
 
             elif payload['type'] == 'queryBid':
-                bid = await db.bids.find_one({
-                    'trader_code': payload['msg']['username'],
-                    'session_id': payload['msg']['session_id']
-                })
                 if username == 'admin':
-                    await ws.send_json({'type': 'common/rioEntry', 'msg': await db.rio.find_one({'_id': payload['msg']['username']})})
+                    if not payload['msg']['username']:
+                        continue
+                    rio_entry = await db.rio.find_one({'login': payload['msg']['username']})
+                    await ws.send_json({'type': 'common/rioEntry', 'msg': rio_entry})
+                    bid = await db.bids.find_one({
+                        'trader_code': rio_entry['_id'],
+                        'session_id': payload['msg']['session_id']
+                    })
+                else:
+                    bid = await db.bids.find_one({
+                        'trader_code': payload['msg']['username'],
+                        'session_id': payload['msg']['session_id']
+                    })
                 await ws.send_json({'type': 'common/bid', 'msg': bid })
 
             elif payload['type'] == 'queryAllBids':
+                session = await db.sessions.find_one({'_id': payload['msg']})
+                if session['status'] != 'closed':
+                    continue
                 bids = await db.bids.find({'session_id': payload['msg']}).to_list(None)
                 await ws.send_json({'type': 'common/allBids', 'msg': bids})
 
@@ -136,29 +156,46 @@ async def websocket_handler(request):
                 session = await db.sessions.find_one({'_id': payload['msg']})
                 if session['type'] == 'free':
                     SdModelAug.sd_runner(session['_id'])
+                    await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
                     await ws_clients.broadcast({'type': 'hasNewSdd'})
                 elif session['type'] == 'spot':
                     SpotModelAug.spot_runner(session['_id'], session['futures_session_id'])
+                    await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
                     await ws_clients.broadcast({'type': 'hasNewBid'})
 
-                await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
                 await ws_clients.broadcast({'type': 'hasNewSessions'})
-
             elif payload['type'] == 'querySectionLimits':
-                tdate, limit_type = payload['targetDate'], payload['limitType']
-                section_limits = await db.section_limits.find_one({'target_date': tdate, 'limit_type': limit_type})
-                print('sec lims', section_limits)
+                session_id, target_date, limit_type = payload['sessionId'], payload['targetDate'], payload['limitType']
+                session = await db.sessions.find_one({'_id': session_id})
+                if limit_type == 'SECTION_FLOW_LIMIT_FC' and session['type'] == 'free':
+                    session_id = {'$exists': False}
+                elif limit_type == 'SECTION_FLOW_LIMIT_EX' and session['type'] == 'futures':
+                    session_id = session['sd_session_id']
+                elif limit_type == 'SECTION_FLOW_LIMIT_DAM' and session['type'] == 'spot':
+                    session_id = session['futures_session_id']
+
+                section_limits = await db.section_limits.find_one({
+                    'session_id': session_id,
+                    'target_date': target_date,
+                    'limit_type': limit_type,
+                })
                 await ws.send_json({'type': 'common/sectionLimits', 'msg': section_limits})
 
             elif payload['type'] == 'queryContractsSumVolume':
-                session = await db.sessions.find_one({'_id': payload['msg']})
+                if ws['user'] == 'admin':
+                    if not payload['username']:
+                        continue
+                    rio_entry = await db.rio.find_one({'login': payload['username']})
+                else:
+                    rio_entry = ws['rio_entry']
+                session = await db.sessions.find_one({'_id': payload['sessionId']})
                 if session['type'] == 'spot':
                     futures_session = await db.sessions.find_one({'_id': session['futures_session_id']})
                     sd_session = await db.sessions.find_one({'_id': futures_session['sd_session_id']})
-                    if ws['rio_entry']['dir'] == 'buy':
-                        query = {'buyer': ws['user']}
+                    if rio_entry['dir'] == 'buy':
+                        query = {'buyer': rio_entry['_id']}
                     else:
-                        query = {'seller': ws['user']}
+                        query = {'seller': rio_entry['_id']}
                     sum_contracts = []
                     async for doc in db.sdd.aggregate([
                         {'$match': query},
@@ -212,14 +249,15 @@ async def websocket_handler(request):
                     payload['msg']['_id'] = seq['sequence_value']
                     await db.sdd.insert_one(payload['msg'])
                 msg = {'type': 'hasNewSdd'}
-                buyer = payload['msg']['buyer']
-                seller = payload['msg']['seller']
+                buyer = (await db.rio.find_one({'_id': payload['msg']['buyer']}))['login']
+                seller = (await db.rio.find_one({'_id': payload['msg']['seller']}))['login']
 
-                if ws_clients[buyer]:
-                    await ws_clients[buyer].send_json(msg)
-                if ws_clients[seller]:
-                    await ws_clients[seller].send_json(msg)
-                await ws_clients.send_to_admin(msg)
+                # if ws_clients[buyer]:
+                #     await ws_clients[buyer].send_json(msg)
+                # if ws_clients[seller]:
+                #     await ws_clients[seller].send_json(msg)
+                # await ws_clients.send_to_admin(msg)
+                await ws_clients.broadcast(msg)
 
             elif payload['type'] == 'deleteSdd':
                 await db.sdd.delete_many({'_id': payload['msg']})
@@ -228,7 +266,6 @@ async def websocket_handler(request):
                 await ws_clients.send_to_admin(msg)
 
             elif payload['type'] == 'querySdd':
-                username = ws['user']
                 session = await db.sessions.find_one({'_id': payload['msg']})
                 # sub_query = [{
                 #     'dateStart': {'$lte': session['targetDate']},
@@ -253,15 +290,15 @@ async def websocket_handler(request):
                     ]
                 }
 
-                if username != 'admin':
+                if ws['user'] != 'admin':
                     direction = 'buyer' if ws['rio_entry']['dir'] == 'buy' else 'seller'
                     query['$and'][1]['$or'] = [
                         {
-                            'author': username,
+                            'author': ws['rio_entry']['_id'],
                             # '$or': sub_query,
                         },
                         {
-                            direction: username,
+                            direction: ws['rio_entry']['_id'],
                             '$and': [
                                 {'status': {'$ne': 'rejected'}},
                                 {'status': {'$ne': 'created'}},
@@ -271,17 +308,27 @@ async def websocket_handler(request):
                     ]
 
                     sdd = await db.sdd.find(query).to_list(None)
-                    await ws_clients[username].send_json({'type': 'common/sdd', 'msg': sdd})
+                    await ws.send_json({'type': 'common/sdd', 'msg': sdd})
                 else:
                     sdd = await db.sdd.find(query).to_list(None)
                     await ws_clients.send_to_admin({'type': 'common/sdd', 'msg': sdd})
+
+            elif payload['type'] == 'queryAllSdd':
+                rio = await db.rio.find().to_list(None)
+                session = await db.sessions.find_one({'_id': payload['msg']})
+                # if session['status'] != 'closed' and ws['user'] != 'admin':
+                #     continue
+                sdd = await db.sdd.find({'sessionId': payload['msg'], 'status': 'registered'}).to_list(None)
+                for sd in sdd:
+                    sd['buyer'] = [row for row in rio if row['_id'] == sd['buyer']][0]
+                    sd['seller'] = [row for row in rio if row['_id'] == sd['seller']][0]
+                await ws.send_json({'type': 'common/allSdd', 'msg': sdd})
 
             elif payload['type'] == 'openSession':
                 seq = await db.counters.find_one_and_update({'_id': 'session'},{'$inc': {'sequence_value': 1}}, return_document=ReturnDocument.AFTER)
                 payload['msg']['_id'] = seq['sequence_value']
                 await db.sessions.insert_one(payload['msg'])
                 await ws_clients.broadcast({'type': 'hasNewSessions'})
-
             elif payload['type'] == 'querySessions':
                 sessions = await db.sessions.find().sort([('openDate', -1)]).to_list(None)
                 await ws.send_json({'type': 'common/sessions', 'msg': sessions})
@@ -293,6 +340,28 @@ async def websocket_handler(request):
             elif payload['type'] == 'futuresUploadRegistry':
                 upload_registry(payload['msg'])
 
+            elif payload['type'] == 'queryMgp':
+                mgp = await db.mgp_prices.find_one({
+                    'period_type': 'D',
+                    'graph_type': 'FR',
+                    'date_from': payload['msg'],
+                    'date_to': payload['msg'],
+                })
+                await ws.send_json({'type': 'common/mgp', 'msg': mgp})
+
+            elif payload['type'] == 'reopen':
+                session = await db.sessions.find_one({'_id': payload['msg']})
+                if session['type'] == 'spot':
+                    rio = {row['_id']: row for row in await db.rio.find({}).to_list(None)}
+                    for bid in await db.bids.find({'session_id': payload['msg']}).to_list(None):
+                        rio_entry = rio[bid['trader_code']]
+                        for hour in bid['hours']:
+                            hour['intervals'][0]['prices'] = [row for row in hour['intervals'][0]['prices'] if row['section_code'] in rio_entry['section_codes']]
+                        await db.bids.find_one_and_replace({'_id': bid['_id']}, bid)
+                    await db.spot_results.delete_many({'session_id': payload['msg']})
+                    await db.sessions.update_one({'_id': payload['msg']}, {'$set': {'status': 'open'}})
+                    await ws_clients.broadcast({'type': 'hasNewSessions'})
+                    await ws_clients.broadcast({'type': 'hasNewBid'})
             
             
             if 'addressee' in payload:
@@ -398,6 +467,8 @@ def main():
     r2 = app.router.add_route('POST', '/login/', login)
 
     r3 = app.router.add_route('GET', '/ws', websocket_handler)
+
+    app.router.add_get('/rest/bids/', bids)
     
     if os.environ['NODE_ENV'] == 'production':
         app.router.add_route('GET', '/', index)

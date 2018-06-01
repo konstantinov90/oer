@@ -52,8 +52,15 @@ class ModelFileLoader():
 
             if section_code == row.attrib['section-code']:
                 section['pmax_fw'] = float(row.attrib['flow-limit'])
+                if 'extra-limit-ex' in row.attrib:
+                    section['extra_limit_ex_fw'] = float(row.attrib['extra-limit-ex'])
+                    section['extra_limit_dam_fw'] = float(row.attrib['extra-limit-dam'])
             else:
                 section['pmax_bw'] = float(row.attrib['flow-limit'])
+                if 'extra-limit-ex' in row.attrib:
+                    section['extra_limit_ex_bw'] = float(row.attrib['extra-limit-ex'])
+                    section['extra_limit_dam_bw'] = float(row.attrib['extra-limit-dam'])
+
 
         for day in res.values():
             day['hours'] = list(day['hours'].values())

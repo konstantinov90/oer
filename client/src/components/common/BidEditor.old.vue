@@ -13,71 +13,52 @@
         @click="removeBid">
         Удалить</button>
     </template>
-    <h3
-      style="display: flex; align-items: center; margin: 0;"
-      v-html="title"/>
+    <h3>{{ title }}</h3>
     <div
       :style="getStyle"
       class="bid-editor">
-      <span style="grid-row: span 3;">Час</span>
-      <span style="grid-row: span 3;">
-        <span style="font-size: 25px;">&Sigma;&thinsp;</span> дог
+      <span
+        v-if="hasResults"
+        style="grid-row: span 2;">
+        Тип
       </span>
-      <span style="grid-row: span 3;">Объем</span>
-      <span :style="`grid-row: span 2; grid-column: span ${sections.length};`">Цены</span>
+      <span style="grid-row: span 2;">Час</span>
+      <span style="grid-row: span 2;">
+        <span style="font-size: 25px;">&Sigma;</span> дог
+      </span>
+      <span style="grid-row: span 2;">Объем</span>
+      <span :style="`grid-column: span ${sections.length};`">Цены</span>
       <span
         v-if="!hasResults"
-        style="grid-row: span 3;"/>
-      <template
-        v-if="hasResults">
-        <span :style="`grid-column: span ${sections.length * 2 + (rioEntry.dir === 'buy' ? 3 : 2)};`">
-          Результаты
-        </span>
-        <span
-          v-for="section in sections"
-          :key="`res_${section}`"
-          style="grid-column: span 2;">
-          {{ section }}
-        </span>
-        <span :style="`grid-row: span 2;`">Объем</span>
-        <span :style="`grid-row: span 2;`">Стоимость</span>
-        <span
-          v-if="rioEntry.dir === 'buy'"
-          :style="`grid-row: span 2;`">
-          Стоимость МГП
-        </span>
-      </template>
+        style="grid-row: span 2;"/>
       <span
         v-for="section in sections"
         :key="section">
         {{ section }}
       </span>
-      <template
-        v-if="hasResults">
-        <template
-          v-for="section in sections">
-          <span :key="`head_res_vol_${section}`">Объем</span>
-          <span :key="`head_res_price_${section}`">Цена</span>
-        </template>
-      </template>
       <template v-for="hour in hours">
+        <span
+          v-if="hasResults"
+          :key="`type_${hour}`">
+          Заявка
+        </span>
         <span :key="`hr_${hour}`">{{ hour }}</span>
-        <span :key="`sumContr_${hour}`">{{ splitter(getContractsSumVolume(hour)) }}</span>
+        <span :key="`sumContr_${hour}`">{{ getContractsSumVolume(hour) }}</span>
         <input
           :key="`vol_${hour}`"
           :class="isVolumeValid(hour)"
-          :value="splitter(getVolume(hour))"
+          :value="getVolume(hour)"
           :disabled="hasResults"
           @input="setVolume(hour, $event)">
         <input
           v-for="section in sections"
           :key="`${section}_${hour}`"
           :class="isPriceValid(hour, section)"
-          :value="splitter(getPrice(hour, section))"
+          :value="getPrice(hour, section)"
           :disabled="isInputDisabled(section) || hasResults"
           @input="setPrice(hour, section, $event)">
         <button
-          v-tooltip.right="'продлить значения до конца'"
+          v-tooltip.left="'продлить значения до конца'"
           v-if="!hasResults"
           :key="`btn_${hour}`"
           style="cursor: pointer;"
@@ -87,26 +68,22 @@
             style="transform: scale(0.7);">
         </button>
         <template v-if="hasResults">
-          <template
-            v-for="section in sections">
-            <span
-              :key="`res_vol_${section}_${hour}`">
-              {{ splitter(getSectionVolume(hour, section)) }}
-            </span>
-            <span
-              :key="`res_pr_${section}_${hour}`">
-              {{ splitter(getSectionPrice(hour, section)) }}
-            </span>
-          </template>
           <span
-            :key="`res_sum_vol_${hour}`">
-            {{ splitter(getSumResVolume(hour)) }}
+            :key="`type_res_${hour}`">
+            Результат
           </span>
           <span
-            :key="`res_amount_${hour}`">{{ splitter(getAmount(hour)) }}</span>
+            :key="`res_void_${hour}`"
+            style="grid-column: span 2;"/>
           <span
-            v-if="rioEntry.dir === 'buy'"
-            :key="`res_amount_mgp_${hour}`">{{ splitter(getAmountMgp(hour)) }}</span>
+            :key="`res_sum_vol_${hour}`">
+            {{ getSumResVolume(hour) }}
+          </span>
+          <span
+            v-for="section in sections"
+            :key="`res_${section}_${hour}`">
+            {{ getSectionRes(hour, section) }}
+          </span>
         </template>
       </template>
     </div>
@@ -115,7 +92,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex';
-import { isEqual, round } from 'lodash';
+import { isEqual } from 'lodash';
 
 export default {
   name: 'BidEditor',
@@ -142,18 +119,18 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['mgp', 'mgpMatrix', 'rioEntry', 'adminSession', 'spotResults', 'contractsSumVolume']),
+    ...mapState('common', ['rioEntry', 'adminSession', 'spotResults', 'contractsSumVolume']),
     ...mapGetters('common', ['username', 'selectedSession', 'getNodePrice']),
     title() {
       const title = `ценовая заявка на ${this.rioEntry.dir === 'buy' ? 'покупку' : 'продажу'}`;
       if (!this.bid) {
-        return `${title} (<span class="sprite sprite__icon sprite__icon_deleted"></span> заявка не сохранена)`;
+        return `${title} (❌ заявка не сохранена)`;
       }
       if (isEqual(this.bid, { _id: this.bid._id, ...this.newBid })
         && isEqual(this.bid.hours.map(({ intervals }) => intervals[0].volume), this.volumes)) {
-        return `${title} (<span class="sprite sprite__icon sprite__icon_ok"></span> заявка сохранена)`;
+        return `${title} (✅ заявка сохранена)`;
       }
-      return `${title} (<span class="sprite sprite__icon sprite__icon_changed"></span> заявка отличается от сохраненной)`;
+      return `${title} (⚠️ заявка отличается от сохраненной)`;
     },
     newBid() {
       return {
@@ -182,40 +159,15 @@ export default {
     },
     getStyle() {
       // const dif = this.hasResults ? 1 : 0;
-      if (this.hasResults) {
-        return {
-          'grid-template-columns': `40px repeat(2, minmax(50px, 100px)) repeat(${this.sections.length * 3}, minmax(60px, 150px)) repeat(${this.rioEntry.dir === 'buy' ? 3 : 2}, minmax(80px, 200px))`,
-        };
-      }
       return {
-        'grid-template-columns': `40px repeat(2, minmax(50px, 100px)) repeat(${this.sections.length}, minmax(100px, 200px)) 33px`,
+        'grid-template-columns': `repeat(3, 4fr) repeat(${this.sections.length}, 12fr) 1fr`,
       };
     },
     hasResults() {
       return !!this.spotResults;
     },
   },
-  watch: {
-    bid() {
-      if (this.bid) {
-        this.volumes = this.bid.hours.map(({ intervals }) => intervals[0].volume);
-        this.prices = this.bid.hours
-          .map(({ intervals }) => intervals[0].prices.map(d => ({ ...d })));
-      }
-    },
-  },
   methods: {
-    getAmount(hour) {
-      return this.sections
-        .reduce((s, sec) =>
-          (this.getSectionVolume(hour, sec) * this.getSectionPrice(hour, sec)) + s, 0);
-    },
-    getAmountMgp(hour) {
-      const mgpMatrixElement = this.mgpMatrix[this.rioEntry.country_code];
-      return Object.entries(mgpMatrixElement).reduce((S, [sectionCode, { mgps }]) =>
-        S + (this.getSectionVolume(hour, sectionCode) * mgps.reduce((s, transit) =>
-          s + this.getMgpTransitPrice(transit), 0)), 0);
-    },
     getContractsSumVolume(hour) {
       if (!this.contractsSumVolume || !this.contractsSumVolume.length) return null;
       return this.contractsSumVolume.find(({ _id }) => _id === hour).vol;
@@ -266,14 +218,11 @@ export default {
       return this.bid.hours[hour].intervals[0].prices
         .reduce((prev, { filled_volume: fv }) => prev + fv, 0);
     },
-    splitter(val) {
-      return val.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ' ');
-    },
     getVolume(hour) {
       return this.volumes[hour];
     },
     setVolume(hour, { target: { value } }) {
-      const volume = round(parseFloat(value.toString().replace(/\s/g, ''), 10), 3);
+      const volume = parseFloat(value, 10);
       this.$set(this.volumes, hour, volume);
       this.validateVolume(volume, hour);
     },
@@ -309,35 +258,19 @@ export default {
       const { country_code: countryCode, dir } = this.rioEntry;
       return this.spotResults && this.getNodePrice(hour, countryCode, sectionCode, dir);
     },
-    getSectionVolume(hour, sectionCode) {
+    getSectionRes(hour, sectionCode) {
       const pr = this.prices[hour] && this.prices[hour]
         .find(({ section_code: sc }) => sc === sectionCode);
-      return pr ? pr.filled_volume : null;
-    },
-    getSectionRes(hour, sectionCode) {
-      return `${this.getSectionVolume(hour, sectionCode)} x ${this.getSectionPrice(hour, sectionCode)}`;
-    },
-    getMgpTransitPrice(transit) {
-      return this.mgp && this.mgp.sections
-        .find(({ section_code }) => section_code === transit).mgp_price;
-    },
-    getMgpPrice(hour, sectionCode) {
-      if (!this.mgp) return null;
-      const mgpMatrixElement = this.mgpMatrix[this.rioEntry.country_code][sectionCode];
-      if (!mgpMatrixElement) return null;
-      const srcPrice = this.getPrice(hour, mgpMatrixElement.src);
-      return mgpMatrixElement.mgps.reduce((s, mgpSecCode) => {
-        return s - this.getMgpTransitPrice(mgpSecCode);
-      }, srcPrice);
+      return pr ? `${pr.filled_volume} x ${this.getSectionPrice(hour, sectionCode)}` : null;
     },
     getPrice(hour, sectionCode) {
       const pr = this.prices[hour] && this.prices[hour]
         .find(({ section_code: sc }) => sc === sectionCode);
       if (pr) return pr.price;
-      return this.getMgpPrice(hour, sectionCode);
+      return null;
     },
     setPrice(hour, sectionCode, { target: { value } }) {
-      const price = round(parseFloat(value.toString().replace(/\s/g, ''), 10), 2);
+      const price = parseFloat(value, 10);
       if (!this.prices[hour]) {
         this.prices[hour] = [];
       }
@@ -354,9 +287,7 @@ export default {
       const curVol = this.volumes[hour];
       const curPr = this.prices[hour];
       for (let i = hour + 1; i < 24; i += 1) {
-        if (curVol) {
-          this.setVolume(i, { target: { value: curVol.toString() } });
-        }
+        this.setVolume(i, { target: { value: curVol.toString() } });
         if (curPr) {
           this.prices[i] = [];
           curPr.forEach(({ section_code: sc, price }) => {
@@ -380,18 +311,10 @@ export default {
   display: grid;
 }
 
-.bid-editor input {
-  width: 100%;
-  box-sizing: border-box;
-}
-
 .bid-editor > * {
   border: 1px solid black;
   padding: 4px;
   text-align: end;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .bid-editor__input_invalid {

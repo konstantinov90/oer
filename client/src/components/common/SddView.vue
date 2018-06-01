@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <div
+    class="sdd-item__wrapper">
     <div
       class="sdd-item"
       @click="onClick">
@@ -46,19 +47,21 @@
         <img
           v-if="sdd.status === 'created' && sdd.author === username"
           class="sdd-item__delete-img"
-          src="/static/delete.svg"
+          src="/delete.svg"
           @click.stop="deleteSdd(sdd._id)">
       </div>
     </div>
 
-    <div v-if="!collapsed">
+    <div
+      :class="{'sdd-editor__wrapper_collapsed': collapsed}"
+      class="sdd-editor__wrapper">
       <sdd-editor :sdd="sdd"/>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import { format } from 'date-fns';
 import SddEditor from './SddEditor.vue';
 
@@ -78,11 +81,14 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['username']),
+    ...mapGetters('common', ['username']),
     status() {
-      const { status } = this.sdd;
+      const { status, reviewer } = this.sdd;
       if (status === 'created') return 'Проект';
-      if (status === 'negotiation') return 'На согласовании';
+      if (status === 'negotiation') {
+        if (reviewer === this.username) return 'Требуется согласование';
+        return 'Ожидается согласование контрагента';
+      }
       if (status === 'registered') return 'Зарегистрирован';
       if (status === 'rejected') return 'Отклонен';
       return 'Ошибка!';
@@ -97,7 +103,9 @@ export default {
   },
   methods: {
     deleteSdd(sddId) {
-      this.$socket.sendObj({ type: 'deleteSdd', msg: sddId });
+      if (confirm(`Вы уверены, что хотите удалить договор # ${sddId}?`)) {
+        this.$socket.sendObj({ type: 'deleteSdd', msg: sddId });
+      }
     },
   },
 };
@@ -109,9 +117,11 @@ export default {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border: 1px solid cornflowerblue;
     padding: 5px;
     background: #eee;
+  }
+  .sdd-item__wrapper {
+    border: 1px solid cornflowerblue;
     margin: 5px;
   }
 
@@ -127,5 +137,17 @@ export default {
     background: #ccc;
     box-sizing: border-box;
     border-radius: 4px;
+  }
+
+  .sdd-editor__wrapper {
+    transition: max-height 300ms linear, transform 300ms linear;
+    overflow-y: auto;
+    max-height: 800px;
+    transform: rotateX(0);
+  }
+
+  .sdd-editor__wrapper_collapsed {
+    max-height: 0px;
+    transform: rotateX(90deg);
   }
 </style>

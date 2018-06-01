@@ -17,9 +17,7 @@ export default {
     ServerStateIndicator,
   },
   computed: {
-    ...mapState('common', [
-      'authorized',
-    ]),
+    ...mapState('common', ['authorized']),
     gridLayout() {
       return {
         'app-root_grid-layout': !this.authorized,
@@ -48,7 +46,11 @@ export default {
 <!-- CSS libraries -->
 <style src="normalize.css/normalize.css"></style>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
+
 <style src="../tooltip.css"></style>
+<style src="../vm-tabs.css"></style>
+<style src="../sprites.css"></style>
 
 <!-- Global CSS -->
 <style>
