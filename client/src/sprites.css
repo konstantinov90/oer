@@ -6,7 +6,7 @@
 }
 
 .sprite__flag {
-    background: url(/emojione-sprite-40-flags.png);
+    background: url(/model-iris/emojione-sprite-40-flags.png);
 }
 
 .sprite__flag_armenia {
@@ -30,7 +30,7 @@
 }
 
 .sprite__icon {
-    background: url(/emojione-sprite-40-symbols.png);
+    background: url(/model-iris/emojione-sprite-40-symbols.png);
     transform: scale(0.5);
 }
 

@@ -5,14 +5,14 @@
         <router-link
           :to="{ name: adminSession ? 'sessionsAdmin' : 'sessions' }">
           <img
-            src="/logo.svg"
+            :src="logoImg"
             alt="logo">
         </router-link>
       </div>
       <slot name="user-info"/>
       <img
+        :src="exitImg"
         class="app-layout__header__btn"
-        src="/exit.svg"
         @click="logoff">
     </div>
     <slot/>
@@ -22,12 +22,17 @@
 <script>
 import { mapMutations, mapState } from 'vuex';
 import exitImg from '../../../static/exit.svg';
+import logoImg from '../../../static/logo.svg';
 // import './public-path';
-
-console.log(exitImg)
 
 export default {
   name: 'AppLayout',
+  data() {
+    return {
+      exitImg,
+      logoImg,
+    };
+  },
   computed: mapState('common', ['adminSession']),
   methods: {
     ...mapMutations('common', ['unauthorize']),

@@ -46,8 +46,8 @@
         </span>
         <img
           v-if="sdd.status === 'created' && sdd.author === username"
+          :src="deleteImg"
           class="sdd-item__delete-img"
-          src="/delete.svg"
           @click.stop="deleteSdd(sdd._id)">
       </div>
     </div>
@@ -64,6 +64,7 @@
 import { mapGetters } from 'vuex';
 import { format } from 'date-fns';
 import SddEditor from './SddEditor.vue';
+import deleteImg from '../../../static/delete.svg';
 
 export default {
   name: 'SddView',
@@ -77,6 +78,7 @@ export default {
   },
   data() {
     return {
+      deleteImg,
       dateFmt: 'DD.MM.YYYY',
     };
   },

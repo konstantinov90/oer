@@ -445,6 +445,9 @@ async def index_middleware(request, handler):
             return await index(request)
         raise
 
+async def indx(req):
+    return aiohttp.web.Response(text='bye')
+
 def main():
     loop = asyncio.get_event_loop()
 
@@ -461,6 +464,8 @@ def main():
     app['admin_subscribed_bid'] = ''
     app.on_startup.append(prepare_ws_clients)
     app.on_shutdown.append(shutdown_websockets)
+
+    app.router.add_get('/index/', indx)
 
     r1 = app.router.add_route('GET', '/test_auth/', test_auth)
 

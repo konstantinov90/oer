@@ -41,7 +41,9 @@ module.exports = {
   //   },
   // },
   webpack(config) {
-    config.output.publicPath = '/model-iris';
+    if (process.env.NODE_ENV === 'production') {
+      config.output.publicPath = '/model-iris/';
+    }
     return config;
   },
 };

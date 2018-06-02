@@ -3,8 +3,8 @@
     v-if="needLogin"
     class="login">
     <img
+      :src="logoImg"
       class="login__logo"
-      src="/logo.svg"
       alt="logo">
     <form
       class="login__form">
@@ -29,13 +29,15 @@
 <script>
 import { setTimeout } from 'timers';
 import { mapMutations, mapState } from 'vuex';
+import logoImg from '../../static/logo.svg';
 
-const API_URL = IS_PROD ? '/' : 'http://ats-konstantin1:8080/';
+const API_URL = IS_PROD ? __webpack_public_path__ : 'http://ats-konstantin1:8080/';
 
 export default {
   name: 'Login',
   data() {
     return {
+      logoImg,
       username: '',
       password: '',
       failed: '',

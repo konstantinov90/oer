@@ -178,7 +178,7 @@
           style="cursor: pointer;"
           @click="multiplyHour(hour)">
           <img
-            src="/mult.svg"
+            :src="multImg"
             style="transform: scale(0.7);">
         </span>
       </template>
@@ -192,6 +192,7 @@ import { addDays, compareAsc, differenceInDays, format } from 'date-fns';
 import { isEqual, round } from 'lodash';
 // import Datepicker from 'vuejs-datepicker';
 import DateSelector from './DateSelector.vue';
+import multImg from '../../../static/mult.svg';
 
 const {
   c: CREATED,
@@ -238,6 +239,7 @@ export default {
     }
 
     return {
+      multImg,
       sddProjValues,
       selectedContragent,
       selectedSection,

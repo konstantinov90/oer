@@ -83,7 +83,7 @@
           style="cursor: pointer;"
           @click="multiplyHour(hour)">
           <img
-            src="/mult.svg"
+            :src="multImg"
             style="transform: scale(0.7);">
         </button>
         <template v-if="hasResults">
@@ -116,6 +116,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { isEqual, round } from 'lodash';
+import multImg from '../../../static/mult.svg';
 
 export default {
   name: 'BidEditor',
@@ -134,6 +135,7 @@ export default {
       prices = this.bid.hours.map(({ intervals }) => intervals[0].prices.map(d => ({ ...d })));
     }
     return {
+      multImg,
       hours: new Array(24).fill().map(() => i++), // eslint-disable-line
       volumes,
       prices,

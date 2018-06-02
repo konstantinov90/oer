@@ -14,9 +14,13 @@ import Admin from './components/admin/Admin.vue';
 import Login from './components/Login.vue';
 import Placeholder from './components/Placeholder.vue';
 
+function modPath(path) {
+  return `${__webpack_public_path__}${path}`;
+}
+
 const routes = [
   {
-    path: '/',
+    path: modPath('/'),
     name: 'root',
     component: AppRoot,
     children: [
