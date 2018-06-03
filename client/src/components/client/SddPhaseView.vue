@@ -34,6 +34,7 @@
               @click="dayDown"/>
           </div>
           <multiselect
+            v-tooltip.right="'час'"
             v-model="hour"
             :options="hours"
             :placeholder="'час'"
@@ -41,7 +42,11 @@
             select-label=""
             selected-label=""
             deselect-label=""
-            class="sdd__multiselect-wrapper"/>
+            class="sdd__multiselect-wrapper">
+            <template slot="option" slot-scope="props">
+              <div v-tooltip.left="'час'">{{ props.option }}</div>
+            </template>
+          </multiselect>
           <div
             style="display: flex; flex-direction: column;">
             <div

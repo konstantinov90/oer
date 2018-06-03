@@ -98,6 +98,8 @@ async def websocket_handler(request):
                         'dir': {'$ne': rio_entry['dir']}}
                     ).to_list(None)
                     await ws.send_json({'type': 'client/possibleContragents', 'msg': possible_contragents})
+                else:
+                    await ws.send_json({'type': 'client/possibleContragents', 'msg': (await db.rio.find().to_list(None))})
 
                 await ws.send_json({'type': 'hasNewSessions'})
             elif 'user' not in ws:

@@ -18,7 +18,7 @@
     position: absolute;
     margin: 5px;
     border-color: rgb(221,234,255);
-    z-index: 1;
+    z-index: 100000;
 }
 
 .tooltip[x-placement^="top"] {

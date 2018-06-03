@@ -55,7 +55,9 @@
     <div
       :class="{'sdd-editor__wrapper_collapsed': collapsed}"
       class="sdd-editor__wrapper">
-      <sdd-editor :sdd="sdd"/>
+      <sdd-editor
+        :sdd="sdd"
+        :tooltip-visible="!collapsed"/>
     </div>
   </div>
 </template>

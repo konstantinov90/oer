@@ -1,5 +1,7 @@
 <template>
-  <div class="sdd-editor">
+  <div
+    ref="self"
+    class="sdd-editor">
     <span
       style="display: flex; align-items: center;"
       v-html="title"/>
@@ -71,23 +73,42 @@
     </div>
     <div class="picker-wrapper">
       <label>{{ !adminSession ? contragentType : 'Продавец' }}:</label>
-      <select
-        :disabled="inputDisabled || (sdd && sdd.author !== username)"
-        @input="onSelectContragent">
-        <option
-          :disabled="adminSession"
-          selected
-          value>
-          {{ !adminSession ? '-- выберите --' : selectedContragent && selectedContragent.name }}
-        </option>
-        <option
-          v-for="contr in possibleContragents"
-          :value="contr._id"
-          :key="contr._id"
-          :selected="(selectedContragent && selectedContragent._id == contr._id)">
-          {{ contr.name }}
-        </option>
-      </select>
+      <multiselect
+        v-tooltip.right="{
+          autoHide: false,
+          content: selectedContragent && selectedContragent.name,
+          show: !!selectedContragent && tooltipVisible,
+          delay: { show: 5000 },
+        }"
+        :value="selectedContragent"
+        :options="possibleContragents"
+        :placeholder="'выберите'"
+        :allow-empty="false"
+        :disabled="!!sdd"
+        select-label=""
+        selected-label=""
+        deselect-label=""
+        class="sdd-editor__multiselect-wrapper"
+        @select="onSelectContragent">
+        <template
+          slot="option"
+          slot-scope="props">
+          <div
+            v-tooltip.right="{
+              boundariesElement: 'body',
+              content: props.option.name,
+              delay: 0,
+            }"
+            style="padding: 12px; margin: -12px">
+            {{ props.option._id }}
+          </div>
+        </template>
+        <template
+          slot="singleLabel"
+          slot-scope="props">
+          <span>{{ props.option._id }}</span>
+        </template>
+      </multiselect>
     </div>
     <div
       v-if="selectedContragent"
@@ -159,7 +180,7 @@
         <input
           :key="`vol_${hour}`"
           :disabled="inputDisabled"
-          :value="sddProjValues[hour].volume"
+          :value="splitter(sddProjValues[hour].volume)"
           @input="changeValue('volume', hour, $event)">
         <span
           v-if="hasResults"
@@ -169,7 +190,7 @@
         <input
           :key="`pr_${hour}`"
           :disabled="inputDisabled"
-          :value="sddProjValues[hour].price"
+          :value="splitter(sddProjValues[hour].price)"
           @input="changeValue('price', hour, $event)" >
         <span
           v-tooltip.right="'продлить значения до конца'"
@@ -190,6 +211,7 @@
 import { mapState, mapGetters } from 'vuex';
 import { addDays, compareAsc, differenceInDays, format } from 'date-fns';
 import { isEqual, round } from 'lodash';
+import Multiselect from 'vue-multiselect';
 // import Datepicker from 'vuejs-datepicker';
 import DateSelector from './DateSelector.vue';
 import multImg from '../../../static/mult.svg';
@@ -210,6 +232,7 @@ export default {
   name: 'SddEditor',
   components: {
     DateSelector,
+    Multiselect,
   },
   props: {
     closeFn: {
@@ -221,6 +244,10 @@ export default {
       type: Object,
       required: false,
       default: null,
+    },
+    tooltipVisible: {
+      type: Boolean,
+      default: true,
     },
   },
   data() {
@@ -398,6 +425,10 @@ export default {
     window.removeEventListener('keydown', this.processKeyDown);
   },
   methods: {
+    splitter(val) {
+      if (!val) return null;
+      return val.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ' ');
+    },
     elaborateSddContragent() {
       if (this.sdd) {
         let contrId;
@@ -430,7 +461,7 @@ export default {
         default:
           throw new Error('invalid valueType!');
       }
-      const value = round(parseFloat(target.value.replace(',', '.'), 10), dim);
+      const value = round(parseFloat(target.value.replace(',', '.').replace(' ', ''), 10), dim);
       this.sddProjValues[hour][valueType] = value;
     },
     onSelectDateStart(selectedDate) {
@@ -463,9 +494,8 @@ export default {
       }
       this.sddProjValues = this.sddProjValues.slice(0, this.dif * 24);
     },
-    onSelectContragent({ target }) {
-      this.selectedContragent = this.possibleContragents
-        .find(({ _id }) => _id === target.value);
+    onSelectContragent(value) {
+      this.selectedContragent = value;
       // if (!this.possibleSections[this.possibleSectionKey].includes(this.selectedSection)) {
       //   this.selectedSection = null;
       // }
@@ -620,5 +650,8 @@ export default {
   right: 25px
 }
 
+.sdd-editor__multiselect-wrapper {
+  width: 50%;
+}
 </style>
 

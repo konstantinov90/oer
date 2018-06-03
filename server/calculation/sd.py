@@ -88,64 +88,68 @@ class SdModel(CommonModel):
     def reduce_graph(self):
         model = ConcreteModel()
         self.model = model
-        model.sd = Set(initialize=self.sd)
-        model.sections = Set(initialize=self.sections.values())
-        def fb(model, sd):
-           return (0, sd.volume)
-        model.x = Var(model.sd, initialize=0, within=NonNegativeReals, bounds=fb)
+        if len(self.sd):
+            model.sd = Set(initialize=self.sd)
+            model.sections = Set(initialize=self.sections.values())
+            def fb(model, sd):
+                return (0, sd.volume)
+            model.x = Var(model.sd, initialize=0, within=NonNegativeReals, bounds=fb)
 
-        def target_function(model):
-            return sum(model.x[sd] for sd in model.sd)
+            def target_function(model):
+                return sum(model.x[sd] for sd in model.sd)
 
-        def section_flow_limits(model, section):
-            return (
-                - section.pmax_bw,
-                sum(model.x[sd] * section.flow_dir(*sd.country_from_to())
-                    for sd in model.sd),
-                section.pmax_fw
-            )
+            def section_flow_limits(model, section):
+                return (
+                    - section.pmax_bw,
+                    sum(model.x[sd] * section.flow_dir(*sd.country_from_to())
+                        for sd in model.sd),
+                    section.pmax_fw
+                )
 
-        model.cost = Objective(rule=target_function, sense=maximize)
-        model.section_flow_limits = Constraint(model.sections, rule=section_flow_limits)
+            model.cost = Objective(rule=target_function, sense=maximize)
+            model.section_flow_limits = Constraint(model.sections, rule=section_flow_limits)
 
-        opt = SolverFactory(SOLVER, executable=SOLVER_PATH)
-        results = opt.solve(model)
-        self.check_opt_status(results)
-        # model.solutions.load_from(results)
-
-        # Фиксируем сумму объемов оптимального решения
-        total_vol = sum(var.value for var in model.x.values())
-        @simple_constraintlist_rule
-        def total_vol_fix(model):
-            return target_function(model) == total_vol
-
-        model.fix_vol_limit = Constraint(rule=total_vol_fix)
-
-        max_sec = set()
-        new_max_sec = self.get_max_sections()
-        while new_max_sec > max_sec:
-            # выравнивание сниженных объемов СД по сработавшим сечениям
-            def equalize_target_function(model):
-                res = 0
-                for dir, section in new_max_sec:
-                    for sd in model.sd:
-                        if dir == section.flow_dir(*sd.country_from_to()):
-                            res += model.x[sd] * model.x[sd]
-                return res
-                # return sum(model.x[sd] * model.x[sd] for sd in model.sd)
-
-            model.del_component('cost')
-            model.cost = Objective(rule=equalize_target_function, sense=minimize)
-            # results = opt.solve(model, tee=True)
+            opt = SolverFactory(SOLVER, executable=SOLVER_PATH)
             results = opt.solve(model)
-            # self.check_opt_status(results)  doesn't work correctly with cplex
-            max_sec = new_max_sec
-            new_max_sec =  self.get_max_sections()
+            self.check_opt_status(results)
+            # model.solutions.load_from(results)
+
+            # Фиксируем сумму объемов оптимального решения
+            total_vol = sum(var.value for var in model.x.values())
+
+            @simple_constraintlist_rule
+            def total_vol_fix(model):
+                return target_function(model) == total_vol
+
+            model.fix_vol_limit = Constraint(rule=total_vol_fix)
+
+            max_sec = set()
+            new_max_sec = self.get_max_sections()
+            while new_max_sec > max_sec:
+                # выравнивание сниженных объемов СД по сработавшим сечениям
+                def equalize_target_function(model):
+                    # res = 0
+                    limit_sds = set()
+                    for dir, section in new_max_sec:
+                        for sd in model.sd:
+                            if dir == section.flow_dir(*sd.country_from_to()):
+                                # res += model.x[sd] * model.x[sd]
+                                limit_sds.add(sd)
+                    return sum(model.x[sd] * model.x[sd] for sd in limit_sds)
+                    # return res
+
+                model.del_component('cost')
+                model.cost = Objective(rule=equalize_target_function, sense=minimize)
+                # results = opt.solve(model, tee=True)
+                results = opt.solve(model)
+                # self.check_opt_status(results)  doesn't work correctly with cplex
+                max_sec = new_max_sec
+                new_max_sec =  self.get_max_sections()
 
 
 
-        for sd, var in model.x.items():
-            sd.accepted_volume = round(var.value, 3)
+            for sd, var in model.x.items():
+                sd.accepted_volume = round(var.value, 3)
 
     def save_results_to_file(self):
         results = list()
