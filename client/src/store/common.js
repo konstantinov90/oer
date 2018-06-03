@@ -32,6 +32,7 @@ export default {
     spotResults: null,
     sectionLimits: null,
     contractsSumVolume: null,
+    prevLoc: null,
     mgpMatrix: {
       ARM: {
         'RUS-BLR': { src: 'RUS-ARM', mgps: ['BLR-ARM'] },
@@ -341,6 +342,9 @@ export default {
     // },
   },
   mutations: {
+    prevLoc(state, prevLoc) {
+      state.prevLoc = prevLoc;
+    },
     authorize(state, username) {
       const isAdmin = username === 'admin';
       state.adminSession = isAdmin;

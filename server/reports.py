@@ -7,12 +7,86 @@ BASE_PATH = os.path.join(os.path.dirname(__file__), 'reports')
 
 db = pymongo.MongoClient().inter_market
 
+MGP_MATRIX = {
+    'ARM': {
+        'RUS-BLR': { 'src': 'RUS-ARM', 'mgps': ['BLR-ARM'] },
+        'RUS-KAZ': { 'src': 'RUS-ARM', 'mgps': ['KAZ-ARM'] },
+        'KAZ-KGZ': { 'src': 'RUS-ARM', 'mgps': ['KAZ-ARM', 'KGZ-RUS'] },
+    },
+    'BLR': {
+        'RUS-ARM': { 'src': 'RUS-BLR', 'mgps': ['ARM-BLR'] },
+        'RUS-KAZ': { 'src': 'RUS-BLR', 'mgps': ['KAZ-BLR'] },
+        'KAZ-KGZ': { 'src': 'RUS-BLR', 'mgps': ['KAZ-BLR', 'KGZ-RUS'] },
+    },
+    'RUS': {
+        'KAZ-KGZ': { 'src': 'RUS-KAZ', 'mgps': ['KGZ-RUS'] },
+    },
+    'KAZ': {
+        'RUS-ARM': { 'src': 'RUS-KAZ', 'mgps': ['ARM-KAZ'] },
+        'RUS-BLR': { 'src': 'RUS-KAZ', 'mgps': ['BLR-KAZ'] },
+    },
+    'KGZ': {
+        'RUS-ARM': { 'src': 'KAZ-KGZ', 'mgps': ['ARM-KAZ', 'RUS-KGZ'] },
+        'RUS-BLR': { 'src': 'KAZ-KGZ', 'mgps': ['BLR-KAZ', 'RUS-KGZ'] },
+        'RUS-KAZ': { 'src': 'KAZ-KGZ', 'mgps': ['RUS-KGZ'] },
+    },
+}
+
+COUNTRY_SECTION_NODE_MAP = {
+    'sell': {
+        'RUS': {
+            'RUS-BLR': 'RUS1',
+            'RUS-ARM': 'RUS2',
+            'RUS-KAZ': 'RUS3',
+        },
+        'KAZ': {
+            'RUS-KAZ': 'KAZ1',
+            'KAZ-KGZ': 'KAZ2',
+        },
+        'ARM': { 'RUS-ARM': 'ARM1' },
+        'BLR': { 'RUS-BLR': 'BLR1' },
+        'KGZ': { 'KAZ-KGZ': 'KGZ1' },
+    },
+    'buy': {
+        'RUS': {
+            'RUS-BLR': 'BLR1',
+            'RUS-ARM': 'ARM1',
+            'RUS-KAZ': 'KAZ1',
+            'KAZ-KGZ': 'KGZ1',
+        },
+        'KAZ': {
+            'RUS-KAZ': 'RUS3',
+            'KAZ-KGZ': 'KGZ1',
+            'RUS-ARM': 'ARM1',
+            'RUS-BLR': 'BLR1',
+        },
+        'ARM': {
+            'RUS-ARM': 'RUS2',
+            'RUS-BLR': 'BLR1',
+            'RUS-KAZ': 'KAZ1',
+            'KAZ-KGZ': 'KGZ1',
+        },
+        'BLR': {
+            'RUS-BLR': 'RUS1',
+            'RUS-ARM': 'ARM1',
+            'RUS-KAZ': 'KAZ1',
+            'KAZ-KGZ': 'KGZ1',
+        },
+        'KGZ': {
+            'KAZ-KGZ': 'KAZ2',
+            'RUS-BLR': 'BLR1',
+            'RUS-ARM': 'ARM1',
+            'RUS-KAZ': 'RUS3',
+        },
+    },
+}
+
 bid_getter = itemgetter('target_date', 'country_code', 'trader_code', 'dir')
 section_getter = itemgetter('section_code', 'price', 'filled_volume')
 
 def report_bids(session_id):
     bids = db.bids.find({'session_id': session_id})
-    file_path = os.path.join(f'bids_session_{session_id}.xlsx')
+    file_path = os.path.join(BASE_PATH, f'bids_session_{session_id}.xlsx')
     wb = xlsxwriter.Workbook(file_path, {'default_date_format': 'dd-mm-yyyy'})
     ws = wb.add_worksheet()
     ws.set_column('A:A', 10)
@@ -24,4 +98,79 @@ def report_bids(session_id):
             for section in hour['intervals'][0]['prices']:
                 ws.write_row(i, 0, bid_getter(bid) + (hour['hour'], hour['intervals'][0]['volume']) + section_getter(section))
                 i += 1
+    return file_path
+
+
+sec_p_v_getter = itemgetter('filled_volume', 'node_price')
+
+def report_user_bid(session_id, username):
+    session = db.sessions.find_one({'_id': session_id})
+    futures_session = db.sessions.find_one({'_id': session['futures_session_id']})
+    sd_session = db.sessions.find_one({'_id': futures_session['sd_session_id']})
+
+    bid = db.bids.find_one({'session_id': session_id, 'trader_code': username})
+    rio = db.rio.find_one({'_id': username})
+    spot_results = db.spot_results.find_one({'session_id': session_id})
+    mgp_prices = {sec['section_code']: sec['mgp_price'] for sec in db.mgp_prices.find_one({'period_type': 'D', 'graph_type': 'FR', 'date_from': bid['target_date']})['sections']}
+    sdd = list(db.sdd.find({'sessionId': sd_session['_id'], f'{rio["dir"]}er': username}))
+
+    file_path = os.path.join(BASE_PATH, f'bid_{username}_{session_id}.xlsx')
+    wb = xlsxwriter.Workbook(file_path, {'default_date_format': 'dd.mm.yyyy'})
+    ws = wb.add_worksheet()
+    # ws.write_row(0, 0, ['час', 'сумма дог', 'Объем', 'Цены', 'Результаты'])
+    sections = rio['section_codes'] if rio['dir'] == 'sell' else ['RUS-ARM', 'RUS-BLR', 'RUS-KAZ', 'KAZ-KGZ']
+    sec_len = len(sections)
+    merge_format = wb.add_format({'align': 'center', 'valign': 'vcenter', 'text_wrap': True, 'border': 1})
+    bold_fmt = wb.add_format({'bold': True})
+    cntr_fmt = wb.add_format({'align': 'center', 'valign': 'vcenter', 'text_wrap': True})
+    date_fmt = wb.add_format({'align': 'center', 'num_format': 'dd.mm.yyyy'})
+    brdr_fmt = wb.add_format({'border': 1, 'num_format': '# ##0'})
+
+    ws.set_column('B:B', 22)
+    ws.set_column('C:R', 10)
+
+    ws.write(0, 0, f'Ценовая заявка на {"продажу" if rio["dir"] == "sell" else "покупку"} на рынке на сутки вперед', bold_fmt)
+    ws.write(1, 0, 'Участник:', bold_fmt)
+    ws.write(1, 1, rio['name'], cntr_fmt)
+    ws.write(2, 0, 'Дата:', bold_fmt)
+    ws.write(2, 1, bid['target_date'], date_fmt)
+    ws.write(3, 0, 'Сессия №:', bold_fmt)
+    ws.write(3, 1, session['_id'], cntr_fmt)
+
+    ws.merge_range('A6:A8', 'час', merge_format)
+    ws.merge_range('B6:B8', 'Суммарный объем, заключенных ранее договоров (СДД, срочные контракты)', merge_format)
+    ws.merge_range('C6:C8', 'Объем, МВт·ч', merge_format)
+    ws.merge_range(5, 3, 6, 3 + sec_len - 1, 'Цены, руб/МВт·ч', merge_format)
+    ws.write_row(7, 3, sections, merge_format)
+    ws.merge_range(5, 3 + sec_len, 5, 3 + sec_len * 3 + (1 if rio['dir'] == 'sell' else 2), 'Результаты', merge_format)
+    for i, sec in enumerate(sections):
+        ws.merge_range(6, 3 + sec_len + i * 2, 6, 4 + sec_len + i * 2, sec, merge_format)
+        ws.write_row(7, 3 + sec_len + i * 2, ['Объем, МВт·ч', 'Цена, руб/МВт·ч'], merge_format)
+    ws.merge_range(6, 3 + sec_len * 3, 7, 3 + sec_len * 3, 'Объем, МВт·ч', merge_format)
+    ws.merge_range(6, 4 + sec_len * 3, 7, 4 + sec_len * 3, 'Стоимость, руб', merge_format)
+    if rio['dir'] == 'buy':
+        ws.merge_range(6, 5 + sec_len * 3, 7, 5 + sec_len * 3, 'Стоимость МГП, руб', merge_format)
+
+    for hour, row in enumerate(range(8, 27)):
+        [bid_hour] = [h['intervals'][0] for h in bid['hours'] if h['hour'] == hour]
+        [spot_result] = [s['nodes'] for s in spot_results['hours'] if s['hour'] == hour]
+        sum_sd = sum(h['accepted_volume'] for sd in sdd for h in sd['values'] if h['hour'] == hour and h['tdate'] == bid['target_date'])
+        section_results = {sec: sec_pr for sec in sections for sec_pr in bid_hour['prices'] if sec_pr['section_code'] == sec}
+        section_prices = [sec['price'] for sec in section_results.values()]
+        for sec, sec_pr in section_results.items():
+            [node_price] = [node['price'] for node in spot_result if node['code'] == COUNTRY_SECTION_NODE_MAP[rio['dir']][rio['country_code']][sec]]
+            sec_pr['node_price'] = node_price
+            if rio['dir'] == 'buy':
+                if sec in MGP_MATRIX[rio['country_code']]:
+                    sec_pr['mgp_price'] = 0
+                    for mgp_sec in MGP_MATRIX[rio['country_code']][sec]['mgps']:
+                        sec_pr['mgp_price'] += mgp_prices[mgp_sec]
+        sec_res_p_v = [v for sec in section_results.values() for v in sec_p_v_getter(sec)]
+        sum_res_v = sum(sec['filled_volume'] for sec in section_results.values())
+        sum_res_am = sum(sec['filled_volume'] * sec['node_price'] for sec in section_results.values())
+        if rio['dir'] == 'buy':
+            sum_res_mgp = sum(sec['filled_volume'] * sec['mgp_price'] for sec in section_results.values() if 'mgp_price' in sec)
+        ws.write_row(row, 0, [hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
+    
+    wb.close()
     return file_path

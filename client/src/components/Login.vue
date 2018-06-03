@@ -45,7 +45,7 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['adminSession']),
+    ...mapState('common', ['adminSession', 'prevLoc']),
     credentials() {
       const { username, password } = this;
       return { username, password };
@@ -65,6 +65,7 @@ export default {
           res.text().then((username) => {
             this.authorize(username);
             this.$router.push({ name: this.adminSession ? 'sessionsAdmin' : 'sessions' });
+            // this.$router.push(this.prevLoc && this.prevLoc.name === 'login' ? { name: this.adminSession ? 'sessionsAdmin' : 'sessions' } : this.prevLoc);
             this.$socket.sendObj({
               type: 'auth',
               msg: username,

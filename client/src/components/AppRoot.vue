@@ -36,6 +36,10 @@ export default {
   methods: {
     watchAuth(state) {
       if (!state.common.authorized) {
+        // this.$store.commit('common/prevLoc', {
+        //   name: this.$route.name,
+        //   params: { ...this.$route.params },
+        // });
         this.$router.push({ name: 'login' });
       }
     },

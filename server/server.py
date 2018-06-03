@@ -7,6 +7,7 @@ from aiohttp_auth import auth
 import aiohttp.web
 import aiohttp_cors
 from pymongo import ReturnDocument
+from multidict import MultiDict
 
 from calculation.spot import SpotModelAug
 from calculation.sd import SdModelAug
@@ -37,8 +38,22 @@ async def bids(request):
     return aiohttp.web.json_response(bids)
 
 async def bid_report(request):
-    session_id = int(request.rel_url.query['session_id'])
-    file_path = reports.report_bids(session_id)
+    session_id, username = int(request.rel_url.query['session_id']), request.rel_url.query['username']
+
+    filename = reports.report_user_bid(session_id, username)
+
+    resp = aiohttp.web.StreamResponse(headers=MultiDict({
+        'CONTENT-DISPOSITION': f'attachment; filename="{os.path.split(filename)[-1]}"',
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    }))
+
+    resp.content_length = os.stat(filename).st_size
+    await resp.prepare(request)
+
+    with open(filename, 'rb') as fd:
+        await resp.write(fd.read())
+
+    return resp
 
 
 def handle_socket_payload(payload):
@@ -476,6 +491,7 @@ def main():
     r3 = app.router.add_route('GET', '/ws', websocket_handler)
 
     app.router.add_get('/rest/bids/', bids)
+    r4 = app.router.add_get('/rest/bid_report/', bid_report)
     
     if os.environ['NODE_ENV'] == 'production':
         app.router.add_route('GET', '/', index)
@@ -491,6 +507,7 @@ def main():
         cors.add(r1)
         cors.add(r2)
         cors.add(r3)
+        cors.add(r4)
 
     aiohttp.web.run_app(app, host=HOST, port=PORT)
 

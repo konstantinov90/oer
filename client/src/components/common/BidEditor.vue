@@ -13,9 +13,19 @@
         @click="removeBid">
         Удалить</button>
     </template>
-    <h3
-      style="display: flex; align-items: center; margin: 0;"
-      v-html="title"/>
+    <div
+      style="display: flex; justify-content: space-between; align-items: center;">
+      <h3
+        style="display: flex; align-items: center; margin: 0;"
+        v-html="title"/>
+      <a
+        href="#"
+        @click="getFile">
+        <img
+          :src="xlsxImg"
+          style="height: 32px;">
+      </a>
+    </div>
     <div
       :style="getStyle"
       class="bid-editor">
@@ -116,7 +126,9 @@
 <script>
 import { mapState, mapGetters } from 'vuex';
 import { isEqual, round } from 'lodash';
+import axios from 'axios';
 import multImg from '../../../static/mult.svg';
+import xlsxImg from '../../../static/xlsx_96x3.png';
 
 export default {
   name: 'BidEditor',
@@ -135,6 +147,7 @@ export default {
       prices = this.bid.hours.map(({ intervals }) => intervals[0].prices.map(d => ({ ...d })));
     }
     return {
+      xlsxImg,
       multImg,
       hours: new Array(24).fill().map(() => i++), // eslint-disable-line
       volumes,
@@ -196,6 +209,9 @@ export default {
     hasResults() {
       return !!this.spotResults;
     },
+    filelink() {
+      return `${IS_PROD ? __webpack_public_path__ : 'http://ats-konstantin1:8080/'}rest/bid_report/?session_id=${this.selectedSession._id}&username=${this.bid.trader_code}`;
+    },
   },
   watch: {
     bid() {
@@ -207,6 +223,20 @@ export default {
     },
   },
   methods: {
+    getFile() {
+      axios({
+        url: this.filelink,
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', `bid_${this.selectedSession._id}_${this.bid.trader_code}.xlsx`);
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     getAmount(hour) {
       return this.sections
         .reduce((s, sec) =>
