@@ -81,12 +81,14 @@ export default {
   border: 1px solid cornflowerblue;
   margin: 5px;
   background: #eee;
+  flex-wrap: wrap;
 }
 
 .future-item__info {
   display: flex;
   flex-direction: column;
   padding: 10px 0;
+  margin: 0 10px;
 }
 
 .future-item__info:not(.future-item__info_head) {
