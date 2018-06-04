@@ -8,7 +8,7 @@ BASE_PATH = os.path.join(os.path.dirname(__file__), 'model')
 
 db = pymongo.MongoClient().inter_market
 
-COL_NAME, COL_DIRECTION, COL_CODE, COL_PWD, COL_COUNTRY = 1, 2, 3, 4, 8
+COL_NAME, COL_DIRECTION, COL_CODE, COL_PWD, COL_COUNTRY = 2, 3, 4, 5, 9
 
 SECTION_CODES = {
     'ARM': ['RUS-ARM'],
@@ -19,7 +19,7 @@ SECTION_CODES = {
 }
 
 def upload_users():
-    wb = xlrd.open_workbook(os.path.join(BASE_PATH, 'out_310518.xls'))
+    wb = xlrd.open_workbook(os.path.join(BASE_PATH, 'out_Final.xls'))
     data = wb.sheet_by_index(0)._cell_values
 
     users = [{'_id': 'admin', 'password': 'admin'}]
