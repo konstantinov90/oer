@@ -86,7 +86,7 @@ export default {
       // upload data to the server
       this.currentStatus = STATUS_SAVING;
 
-      axios.post(`http://ats-konstantin1:8080/rest/upload_file/?session_id=${this.selectedSession._id}`, formData)
+      axios.post(`${IS_PROD ? __webpack_public_path__ : 'http://ats-konstantin1:8080/'}rest/upload_file/?session_id=${this.selectedSession._id}`, formData)
         .then(({ data }) => {
           this.uploadedFiles = [].concat(data);
           this.currentStatus = STATUS_SUCCESS;
