@@ -36,7 +36,7 @@
       v-if="rioEntry['dir'] === 'buy'"
       class="future-item__info">
       <span>стоимость МГП</span>
-      <span>{{ splitter(future.sum_volume * future.mgp_price) }}</span>
+      <span>{{ future.mgp_price ? splitter(future.sum_volume * future.mgp_price) : 0 }}</span>
     </div>
   </div>
 </template>
