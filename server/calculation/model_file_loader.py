@@ -169,6 +169,9 @@ class ModelFileLoader():
                 price = float(row.attrib['price']),
                 transient_country_codes = row.attrib['transient-country-codes'].split(','),
             )
+            mgp_price = row.attrib['mgp-price']
+            if mgp_price:
+                doc['mgp_price'] = float(mgp_price)
             res.append(doc)
         return res
 

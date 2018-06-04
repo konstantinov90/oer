@@ -82,25 +82,31 @@
       </vm-tab-pane>
       <vm-tab-pane
         label="контракты">
+        <future-item
+          v-for="future in futures"
+          :key="future['_id']"
+          :future="future"/>
       </vm-tab-pane>
     </vm-tabs>
   </div>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import { compareAsc, addDays } from 'date-fns';
 import { VmTabs, VmTabPane } from 'vue-multiple-tabs';
 import Multiselect from 'vue-multiselect';
 import DateView from '../common/DateView.vue';
 import DateSelector from '../common/DateSelector.vue';
 import MapView from '../common/MapView.vue';
+import FutureItem from '../common/FutureItem.vue';
 
 export default {
   name: 'FuturesPhaseView',
   components: {
     DateSelector,
     DateView,
+    FutureItem,
     MapView,
     Multiselect,
     VmTabPane,
@@ -116,7 +122,25 @@ export default {
     };
   },
   computed: {
-    ...mapGetters('common', ['selectedSession', 'getSectionLimits', 'getSectionFlowFutures', 'getCountryResultsFutures']),
+    ...mapState('common', ['allFutures', 'rioEntry']),
+    ...mapGetters('common', ['selectedSession', 'getSectionLimits', 'getSectionFlowFutures', 'getCountryResultsFutures', 'username']),
+    futures() {
+      if (!this.allFutures) return [];
+      
+      let filterFn;
+      switch (this.rioEntry.dir) {
+        case 'sell':
+          filterFn = ({ seller_code }) => seller_code === this.username;
+          break;
+        case 'buy':
+          filterFn = ({ buyer_code }) => buyer_code === this.username;
+          break;
+        default:
+          throw new Error('invalid direction!');
+      }
+
+      return this.allFutures.filter(filterFn);
+    },
   },
   created() {
     this.selectedDate = this.selectedSession.startDate;
