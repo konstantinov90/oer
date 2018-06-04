@@ -52,7 +52,7 @@ export default {
       disabledDates: {
         ranges: [{
           from: new Date(1900, 0, 1),
-          to: this.prevDate || this.fromDate || new Date(2018, 5, 11),
+          to: this.prevDate || this.fromDate || new Date(2018, 5, 4),
         }, {
           from: this.toDate || new Date(2018, 5, 24),
           to: new Date(2099, 11, 31),

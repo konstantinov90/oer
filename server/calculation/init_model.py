@@ -2,6 +2,8 @@ import os.path
 import xlrd
 import pymongo
 
+from .model_file_loader import ModelFileLoader
+
 BASE_PATH = os.path.join(os.path.dirname(__file__), 'model')
 
 db = pymongo.MongoClient().inter_market
@@ -42,3 +44,8 @@ def upload_users():
     db.rio.delete_many({})
     db.users.insert_many(users)
     db.rio.insert_many(rio)
+
+def upload_mgp_prices():
+    data = ModelFileLoader.parse_mgp_prices(os.path.join(BASE_PATH, 'МГП_биржа_рсв.XLSX'))
+    db.mgp_prices.remove({})
+    db.mgp_prices.insert_many(data)
