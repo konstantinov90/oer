@@ -212,7 +212,7 @@ def report_user_sdd(session_id, username):
 
     ws.write(0, 0, 'Отчет об исполнении свободных двусторонних договоров', big_bold_fmt)
     ws.write(1, 0, 'Участник:', bold_fmt)
-    ws.write(1, 1, rio[username]['name'], cntr_fmt)
+    ws.write(1, 1, username if username == 'admin' else rio[username]['name'], cntr_fmt)
     ws.write(2, 0, 'Сессия №:', bold_fmt)
     ws.write(2, 1, session['_id'], cntr_fmt)
     ws.write(3, 0, 'Начало периода:', bold_fmt)
