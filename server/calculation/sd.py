@@ -242,8 +242,9 @@ class SdModelAug(SdModel):
     def sd_runner(cls, session_id):
         CommonModel.set_loader(ModelDbLoader)
         cls.load_section_limits_for_subclass = cls.load_sec_lims
-
         db = pymongo.MongoClient().inter_market
+
+        old_section_limits = list(db.section_limits.find({'limit_type': 'SECTION_FLOW_LIMIT_FC', 'session_id': {'$exists': False}}))
         session = db.sessions.find_one({'_id': session_id})
         dates = [session['startDate'] + timedelta(i) for i in range(1 + (session['finishDate'] - session['startDate']).days)]
 
@@ -255,4 +256,16 @@ class SdModelAug(SdModel):
         for s in section_limits:
             s['session_id'] = session_id
         db.section_limits.remove({'session_id': session_id})
+        db.section_limits.insert_many(section_limits)
+        
+        for row in section_limits:
+            del row['_id']
+            row['limit_type'] += '_mod'
+            for hour in row['hours']:
+                for section in hour['sections']:
+                    [old_sec] = [s for o in old_section_limits for h in o['hours'] for s in h['sections']
+                                if o['target_date'] == row['target_date'] and h['hour'] == hour['hour'] and s['section_code'] == section['section_code']]
+                    section['pmax_fw'] += old_sec['extra_limit_ex_fw']
+                    section['pmax_bw'] += old_sec['extra_limit_ex_bw']
+
         db.section_limits.insert_many(section_limits)

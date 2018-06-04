@@ -15,7 +15,7 @@
       <div>
         <button
           @click="startSelectingSdSession">
-          Открыт биржевую сессию
+          Открыть биржевую сессию
         </button>
         <select
           v-if="selectingSdSession"

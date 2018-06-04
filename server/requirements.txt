@@ -3,3 +3,5 @@ aiohttp_cors
 aiohttp_auth
 motor
 xlsxwriter
+pyomo
+xlrd

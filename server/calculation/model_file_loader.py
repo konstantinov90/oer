@@ -31,12 +31,8 @@ class ModelFileLoader():
     def load_participants(cls):
         return cls.parse_generic_json(model_path_resolver('participants.json'))
 
-    SECTION_LIMITS_DATA = None
     @classmethod
     def parse_section_limits(cls, filename, limit_type='SECTION_FLOW_LIMIT_FC'):
-        if cls.SECTION_LIMITS_DATA:
-            return cls.SECTION_LIMITS_DATA
-
         tree = ElementTree.parse(filename)
         assert tree.getroot().attrib['class'] == limit_type
 
@@ -149,6 +145,33 @@ class ModelFileLoader():
         [day] = [row for row in data
                  if row['date_from'] == target_date and row['period_type'] == 'D' and row['graph_type'] == 'FR']
         return day['sections']
+
+    @classmethod
+    def parse_futures(cls, filename):
+        tree = ElementTree.parse(filename)
+        res = []
+        for row in tree.iter('row'):
+            doc = dict(
+                deal_id = row.attrib['deal-id'],
+                deal_date = datetime.strptime(row.attrib['deal-date'], '%Y%m%d%H%M%S'),
+                instrument_code = row.attrib['instrument-code'],
+                period_type = row.attrib['period-type'],
+                start_date = datetime.strptime(row.attrib['start-exec-day'], '%Y%m%d'),
+                finish_date = datetime.strptime(row.attrib['finish-exec-day'], '%Y%m%d'),
+                graph_type = row.attrib['graph-type'],
+                section_code = row.attrib['section-code'],
+                buyer_code = row.attrib['buyer-code'],
+                buyer_country_code = row.attrib['buyer-country-code'],
+                seller_code = row.attrib['seller-code'],
+                seller_country_code = row.attrib['seller-country-code'],
+                volume = float(row.attrib['contract_qnt']),
+                sum_volume = float(row.attrib['deal-volume']),
+                price = float(row.attrib['price']),
+                transient_country_codes = row.attrib['transient-country-codes'].split(','),
+            )
+            res.append(doc)
+        return res
+
 
 if __name__ == '__main__':
     import datetime

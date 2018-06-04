@@ -379,7 +379,7 @@ class SpotModel(CommonModel):
 class SpotModelAug(SpotModel):
     @classmethod
     def load_sec_lims(cls, target_date, hour, futures_session_id):
-        return cls.LOADER.load_section_limits(target_date, hour, 'SECTION_FLOW_LIMIT_DAM', futures_session_id)
+        return cls.LOADER.load_section_limits(target_date, hour, 'SECTION_FLOW_LIMIT_DAM_mod', futures_session_id)
 
     @classmethod
     def load_bid(cls, session_id):

@@ -10,11 +10,11 @@
     <div class="session-item__target-date">
       <span>{{ targetDate }}</span>
     </div>
-    <div>
+    <div style="min-width: 50px; display: flex; justify-content: center;">
       <span>{{ sessionNum }}</span>
     </div>
-    <div>
-      <span>{{ session.status }}</span>
+    <div style="min-width: 100px; display: flex; justify-content: center;">
+      <span>{{ session.status === 'open' ? 'открыта' : 'завершена' }}</span>
     </div>
   </div>
 </template>

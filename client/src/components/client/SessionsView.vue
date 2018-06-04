@@ -1,6 +1,17 @@
 <template>
   <div>
-    <h2>Сессии</h2>
+    <div style="display: flex; justify-content: space-around; padding: 6px;">
+      <h3 style="width: 200px; display: flex; justify-items: center;">Тип сессии</h3>
+      <div style="display: flex; justify-content: space-around; width: 250px;">
+        <h3>Период</h3>
+      </div>
+      <div style="display: flex; justify-content: space-around; width: 50px;">
+        <h3>Номер</h3>
+      </div>
+      <div style="display: flex; justify-content: space-around; width: 100px;">
+        <h3>Статус</h3>
+      </div>
+    </div>
     <router-link
       v-for="(session, idx) in sessions"
       :key="idx"

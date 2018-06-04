@@ -71,44 +71,47 @@
         type="text"
         disabled>
     </div>
-    <div class="picker-wrapper">
-      <label>{{ !adminSession ? contragentType : 'Продавец' }}:</label>
-      <multiselect
-        v-tooltip.right="{
-          autoHide: false,
-          content: selectedContragent && selectedContragent.name,
-          show: !!selectedContragent && tooltipVisible,
-          delay: { show: 5000 },
-        }"
-        :value="selectedContragent"
-        :options="possibleContragents"
-        :placeholder="'выберите'"
-        :allow-empty="false"
-        :disabled="!!sdd"
-        select-label=""
-        selected-label=""
-        deselect-label=""
-        class="sdd-editor__multiselect-wrapper"
-        @select="onSelectContragent">
-        <template
-          slot="option"
-          slot-scope="props">
-          <div
-            v-tooltip.right="{
-              boundariesElement: 'body',
-              content: props.option.name,
-              delay: 0,
-            }"
-            style="padding: 12px; margin: -12px">
-            {{ props.option._id }}
-          </div>
-        </template>
-        <template
-          slot="singleLabel"
-          slot-scope="props">
-          <span>{{ props.option._id }}</span>
-        </template>
-      </multiselect>
+    <div style="display: flex; align-items: center;">
+      <div class="picker-wrapper" style="width: 500px;">
+        <label>{{ !adminSession ? contragentType : 'Продавец' }}:</label>
+        <multiselect
+          :value="selectedContragent"
+          :options="possibleContragents"
+          :placeholder="'выберите'"
+          :allow-empty="false"
+          :disabled="!!sdd"
+          select-label=""
+          selected-label=""
+          deselect-label=""
+          class="sdd-editor__multiselect-wrapper"
+          @select="onSelectContragent">
+          <template
+            slot="option"
+            slot-scope="props">
+            <div
+              v-tooltip.right="{
+                boundariesElement: 'body',
+                content: props.option.name,
+                delay: 0,
+              }"
+              style="padding: 12px; margin: -12px">
+              {{ props.option._id }}
+            </div>
+          </template>
+          <template
+            slot="singleLabel"
+            slot-scope="props">
+            <span>{{ props.option._id }}</span>
+          </template>
+        </multiselect>
+      </div>
+      <div class="tooltip">
+        <span
+          v-if="selectedContragent"
+          class="tooltip-inner">
+          {{ selectedContragent.name }}
+        </span>
+      </div>
     </div>
     <div
       v-if="selectedContragent"
@@ -426,7 +429,7 @@ export default {
   },
   methods: {
     splitter(val) {
-      if (!val) return null;
+      if (val === undefined || val === null) return null;
       return val.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ' ');
     },
     elaborateSddContragent() {

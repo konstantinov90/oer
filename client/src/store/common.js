@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { format } from 'date-fns';
+import { format, compareAsc } from 'date-fns';
 
 export default {
   namespaced: true,
@@ -10,6 +10,8 @@ export default {
       isConnected: false,
       reconnectError: false,
     },
+    calendar: null,
+    peakHours: [7, 8, 9, 10, 11, 12, 13, 14, 15, 19, 20],
     authorized: false,
     adminSession: false,
     phase: 'start',
@@ -28,6 +30,7 @@ export default {
     date: null,
     sdd: [],
     allSdd: null,
+    allFutures: null,
     sessions: [],
     spotResults: null,
     sectionLimits: null,
@@ -255,6 +258,7 @@ export default {
           default:
             throw new Error('incorrect direction!');
         }
+
         const filteredData = allSdd.filter(filterFn);
         if (!filteredData.length) return 0;
 
@@ -294,6 +298,64 @@ export default {
           return vol;
         }
         return acc_vol;
+      };
+    },
+    getCountryResultsFutures({ calendar, peakHours, allFutures }) {
+      return (targetDate, hour, countryCode, direction, limitType) => {
+        if (!allFutures || limitType === 'SECTION_FLOW_LIMIT_EX_mod') return 0;
+        hour = Number.parseInt(hour, 10);
+        let filterFn;
+        switch (direction) {
+          case 'buy':
+            filterFn = ({ buyer_country_code }) => buyer_country_code === countryCode;
+            break;
+          case 'sell':
+            filterFn = ({ seller_country_code }) => seller_country_code === countryCode;
+            break;
+          default:
+            throw new Error('incorrect direction!');
+        }
+
+        const calendarEntry = calendar.find(({ tdate }) => compareAsc(tdate, targetDate) === 0);
+
+        const filteredData = allFutures
+          .filter(filterFn)
+          .filter(({ graph_type }) => graph_type === 'BL' || (calendarEntry.isWorkday && peakHours.includes(hour)));
+        if (!filteredData.length) return 0;
+
+
+        const vol = filteredData
+          .reduce((s, { volume }) => s + volume, 0);
+        return vol;
+      };
+    },
+    getSectionFlowFutures({ calendar, peakHours, sectionFlowMatrix, allFutures }) {
+      return (targetDate, hour, sectionCode, limitType) => {
+        if (!allFutures || limitType === 'SECTION_FLOW_LIMIT_EX_mod') return 0;
+        hour = Number.parseInt(hour, 10);
+        const calendarEntry = calendar.find(({ tdate }) => compareAsc(tdate, targetDate) === 0);
+
+        const filteredData = allFutures
+          .filter(({ buyer_country_code, seller_country_code }) => {
+            const sdCode = `${seller_country_code}-${buyer_country_code}`;
+            return Object.keys(sectionFlowMatrix[sdCode]).includes(sectionCode);
+          })
+          .filter(({ graph_type }) => graph_type === 'BL' || (calendarEntry.isWorkday && peakHours.includes(hour)));
+
+        if (!filteredData.length) return 0;
+
+        const vol = filteredData
+          .map((nugget) => {
+            const { seller_country_code, buyer_country_code } = nugget;
+            const sdCode = `${seller_country_code}-${buyer_country_code}`;
+            return { ...nugget, coeff: sectionFlowMatrix[sdCode][sectionCode] };
+          })
+          .reduce(
+            (sum, { volume, coeff }) =>
+              sum + (volume * coeff),
+            0,
+          );
+        return vol;
       };
     },
     // phaseName(state) {
@@ -394,6 +456,12 @@ export default {
     allSdd(state, { msg }) {
       state.allSdd = msg;
     },
+    allFutures(state, { msg }) {
+      state.allFutures = msg;
+    },
+    calendar(state, { msg }) {
+      state.calendar = msg;
+    },
     sessions(state, { msg }) {
       state.sessions = msg;
     },
@@ -439,6 +507,11 @@ export default {
       // commit('allSdd', { msg: null });
       if (selectedSession) {
         this.$socket.sendObj({ type: 'queryAllSdd', msg: selectedSession._id });
+      }
+    },
+    queryAllFutures({ getters: { selectedSession } }) {
+      if (selectedSession) {
+        this.$socket.sendObj({ type: 'queryAllFutures', msg: selectedSession._id });
       }
     },
     queryResults({ commit, getters: { selectedSession } }) {

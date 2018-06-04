@@ -127,7 +127,7 @@ def report_user_bid(session_id, username):
     brdr_fmt = wb.add_format({'border': 1, 'num_format': '# ##0'})
 
     ws.set_column('B:B', 22)
-    ws.set_column('C:R', 10)
+    ws.set_column('C:R', 10.4)
 
     ws.write(0, 0, f'Ценовая заявка на {"продажу" if rio["dir"] == "sell" else "покупку"} на рынке на сутки вперед', bold_fmt)
     ws.write(1, 0, 'Участник:', bold_fmt)
@@ -173,4 +173,73 @@ def report_user_bid(session_id, username):
         ws.write_row(row, 0, [hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
     
     wb.close()
+    return file_path
+
+sd_getter = itemgetter('_id', 'author', 'section')
+hr_getter = itemgetter('tdate', 'hour', 'volume', 'price', 'accepted_volume')
+prt_getter = itemgetter('_id', 'name')
+
+def report_user_sdd(session_id, username):
+    session = db.sessions.find_one({'_id': session_id})
+    rio = {row['_id']: row for row in db.rio.find()}
+    query = {'sessionId': session_id}
+    if username != 'admin':
+        query[f'{rio[username]["dir"]}er'] = username
+    sdd = db.sdd.find(query)
+
+    file_path = os.path.join(BASE_PATH, f'sdd_{username}_{session_id}.xlsx')
+    wb = xlsxwriter.Workbook(file_path, {'default_date_format': 'dd.mm.yyyy'})
+    ws = wb.add_worksheet()
+
+    bold_fmt = wb.add_format({'bold': True})
+    big_bold_fmt = wb.add_format({'bold': True, 'font_size': 14})
+    cntr_fmt = wb.add_format({'align': 'center', 'valign': 'vcenter', 'text_wrap': True})
+    date_fmt = wb.add_format({'align': 'center', 'num_format': 'dd.mm.yyyy'})
+    brdr_fmt = wb.add_format({'align': 'center', 'valign': 'vcenter', 'text_wrap': False, 'border': 1, 'num_format': '# ##0'})
+    hdr_fmt = wb.add_format({'align': 'center', 'valign': 'vcenter', 'text_wrap': True, 'border': 1, 'bold': True})
+    date_brdr_fmt = wb.add_format({'align': 'center', 'valign': 'vcenter', 'text_wrap': True, 'border': 1, 'num_format': 'dd.mm.yyyy'})
+
+    
+    ws.set_column('A:A', 20)
+    ws.set_column('B:B', 11)
+    ws.set_column('C:C', 20)
+    ws.set_column('D:D', 10)
+    ws.set_column('E:E', 20)
+    ws.set_column('F:H', 10)
+    ws.set_column('I:I', 14)
+    ws.set_column('J:J', 10)
+    ws.set_column('K:K', 14)
+
+    ws.write(0, 0, 'Отчет об исполнении свободных двусторонних договоров', big_bold_fmt)
+    ws.write(1, 0, 'Участник:', bold_fmt)
+    ws.write(1, 1, rio[username]['name'], cntr_fmt)
+    ws.write(2, 0, 'Сессия №:', bold_fmt)
+    ws.write(2, 1, session['_id'], cntr_fmt)
+    ws.write(3, 0, 'Начало периода:', bold_fmt)
+    ws.write(3, 1, session['startDate'], date_fmt)
+    ws.write(4, 0, 'Окончание периода:', bold_fmt)
+    ws.write(4, 1, session['finishDate'], date_fmt)
+
+    ws.merge_range(6, 0, 7, 0, '№ договора', hdr_fmt)
+    ws.merge_range(6, 1, 6, 2, 'Поставщик', hdr_fmt)
+    ws.merge_range(6, 3, 6, 4, 'Покупатель', hdr_fmt)
+    ws.write_row(7, 1, ['Код', 'Наименование', 'Код', 'Наименование'], hdr_fmt)
+    ws.merge_range(6, 5, 7, 5, 'Сечение поставки', hdr_fmt)
+    ws.merge_range(6, 6, 7, 6, 'Дата', hdr_fmt)
+    ws.merge_range(6, 7, 7, 7, 'Час', hdr_fmt)
+    ws.merge_range(6, 8, 7, 8, 'Заявленный объем, МВт·ч', hdr_fmt)
+    ws.merge_range(6, 9, 7, 9, 'Цена, руб/МВт·ч', hdr_fmt)
+    ws.merge_range(6, 10, 7, 10, 'Исполненный объем, МВт·ч', hdr_fmt)
+
+    i = 8
+    for sd in sdd:
+        buyer = rio[sd['buyer']]
+        seller = rio[sd['seller']]
+        for hour in sd['values']:
+            ws.write_row(i, 0, (sd['_id'],) + prt_getter(seller) + prt_getter(buyer) + (sd['section'],) +  hr_getter(hour), brdr_fmt)
+            ws.write(i, 6, hour['tdate'], date_brdr_fmt)
+            i += 1
+
+    
+
     return file_path

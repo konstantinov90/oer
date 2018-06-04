@@ -15,6 +15,9 @@
             :options="hours"
             :placeholder="'час'"
             :allow-empty="false"
+            select-label=""
+            selected-label=""
+            deselect-label=""
             class="rsv__multiselect-wrapper"/>
           <div style="display: inline-block;">
             <div
@@ -97,7 +100,7 @@ export default {
   created() {
     this.queryBid();
     this.queryResults();
-    this.querySectionLimits();
+    this.querySectionLimits({ limitType: 'SECTION_FLOW_LIMIT_DAM_mod' });
     this.queryMgp();
   },
   methods: {

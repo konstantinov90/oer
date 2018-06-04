@@ -75,6 +75,11 @@ export default {
     color: #2c3e50;
   }
 
+  .multiselect__option--highlight {
+    background: rgb(154, 207, 243) !important;
+    color: rgb(34, 34, 180);
+  }
+
 </style>
 
 <style lang="stylus">

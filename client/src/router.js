@@ -44,7 +44,7 @@ const routes = [
           { path: '/', name: 'sessions', component: SessionsView },
           { path: 'sdd/:id', name: 'sdd', component: SddPhaseView },
           { path: 'rsv/:id', name: 'rsv', component: RsvPhaseView },
-          { path: 'futures', name: 'futures', component: FuturesPhaseView },
+          { path: 'futures/:id', name: 'futures', component: FuturesPhaseView },
         ],
       },
       { path: '*', name: 'placeholder', component: Placeholder },

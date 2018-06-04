@@ -2,6 +2,8 @@ import json_patch
 import asyncio
 import json
 import os
+import os.path
+import re
 
 from aiohttp_auth import auth
 import aiohttp.web
@@ -11,12 +13,14 @@ from multidict import MultiDict
 
 from calculation.spot import SpotModelAug
 from calculation.sd import SdModelAug
-from calculation.futures import make_registry, upload_registry
+from calculation import futures
 from db_api.api import db
 import reports
 
 HOST = os.getenv('HOST', '0.0.0.0')
 PORT = int(os.getenv('PORT', 8080))
+
+BASE_PATH = os.path.dirname(__file__)
 
 async def login(request):
     params = await request.json()
@@ -32,19 +36,45 @@ async def login(request):
     
     return aiohttp.web.HTTPForbidden(text='password')
 
+async def upload_file(request):
+    session_id = int(request.rel_url.query['session_id'])
+    reader = await request.multipart()
+
+    field = await reader.next()
+    assert field.name == 'file'
+    filename = field.filename
+
+    if re.match('^SECTION_FLOW_LIMIT.*', field.filename):
+        func = futures.upload_section_limits
+    elif re.match('^DEAL_EX.*', field.filename):
+        func = futures.upload_contracts
+    else:
+        return aiohttp.web.HTTPNotFound()
+
+    filename = os.path.join(BASE_PATH, field.filename)
+
+    size = 0
+    with open(filename, 'wb') as fd:
+        while True:
+            chunk = await field.read_chunk()
+            if not chunk:
+                break
+            size += len(chunk)
+            fd.write(chunk)
+
+    func(session_id, filename)
+    
+    return aiohttp.web.Response(text=filename)
+
 async def bids(request):
     session_id = int(request.rel_url.query['session_id'])
     bids = await db.bids.find({'session_id': session_id}).to_list(None)
     return aiohttp.web.json_response(bids)
 
-async def bid_report(request):
-    session_id, username = int(request.rel_url.query['session_id']), request.rel_url.query['username']
-
-    filename = reports.report_user_bid(session_id, username)
-
+async def _download_file(request, filename, file_type='xlsx'):
     resp = aiohttp.web.StreamResponse(headers=MultiDict({
         'CONTENT-DISPOSITION': f'attachment; filename="{os.path.split(filename)[-1]}"',
-        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        'Content-Type': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' if file_type == 'xlsx' else 'application/xml',
     }))
 
     resp.content_length = os.stat(filename).st_size
@@ -54,6 +84,21 @@ async def bid_report(request):
         await resp.write(fd.read())
 
     return resp
+
+async def bid_report(request):
+    session_id, username = int(request.rel_url.query['session_id']), request.rel_url.query['username']
+
+    return await _download_file(request, reports.report_user_bid(session_id, username))
+
+async def sdd_report(request):
+    session_id, username = int(request.rel_url.query['session_id']), request.rel_url.query['username']
+
+    return await _download_file(request, reports.report_user_sdd(session_id, username))
+
+async def sdd_section_limits(request):
+    sd_session_id = int(request.rel_url.query['sd_session_id'])
+
+    return await _download_file(request, futures.make_registry(sd_session_id), file_type='xml')
 
 
 def handle_socket_payload(payload):
@@ -172,6 +217,7 @@ async def websocket_handler(request):
             elif payload['type'] == 'calculate':
                 session = await db.sessions.find_one({'_id': payload['msg']})
                 if session['type'] == 'free':
+                    await db.sdd.delete_many({'sessionId': session['_id'], 'status': {'$ne': 'registered'}})
                     SdModelAug.sd_runner(session['_id'])
                     await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
                     await ws_clients.broadcast({'type': 'hasNewSdd'})
@@ -186,9 +232,9 @@ async def websocket_handler(request):
                 session = await db.sessions.find_one({'_id': session_id})
                 if limit_type == 'SECTION_FLOW_LIMIT_FC' and session['type'] == 'free':
                     session_id = {'$exists': False}
-                elif limit_type == 'SECTION_FLOW_LIMIT_EX' and session['type'] == 'futures':
+                elif limit_type == 'SECTION_FLOW_LIMIT_EX_mod' and session['type'] == 'futures':
                     session_id = session['sd_session_id']
-                elif limit_type == 'SECTION_FLOW_LIMIT_DAM' and session['type'] == 'spot':
+                elif limit_type == 'SECTION_FLOW_LIMIT_DAM_mod' and session['type'] == 'spot':
                     session_id = session['futures_session_id']
 
                 section_limits = await db.section_limits.find_one({
@@ -351,12 +397,16 @@ async def websocket_handler(request):
                 await ws.send_json({'type': 'common/sessions', 'msg': sessions})
                 await ws_clients.broadcast({'type': 'hasNewResults'})
 
-            elif payload['type'] == 'futuresMakeRegistry':
-                make_registry(payload['msg'])
-            
-            elif payload['type'] == 'futuresUploadRegistry':
-                upload_registry(payload['msg'])
+            elif payload['type'] == 'futuresCloseSession':
+                await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'closed'}})
+                await ws_clients.broadcast({'type': 'hasNewSessions'})
 
+            elif payload['type'] == 'queryAllFutures':
+                futures = await db.futures.find({'session_id': payload['msg']}).to_list(None)
+                calendar = await db.calendar.find().to_list(None)
+                await ws.send_json({'type': 'common/calendar', 'msg': calendar})
+                await ws.send_json({'type': 'common/allFutures', 'msg': futures})
+            
             elif payload['type'] == 'queryMgp':
                 mgp = await db.mgp_prices.find_one({
                     'period_type': 'D',
@@ -492,6 +542,9 @@ def main():
 
     app.router.add_get('/rest/bids/', bids)
     r4 = app.router.add_get('/rest/bid_report/', bid_report)
+    r5 = app.router.add_get('/rest/sdd_report/', sdd_report)
+    r6 = app.router.add_get('/rest/sdd_section_limits/', sdd_section_limits)
+    r7 = app.router.add_post('/rest/upload_file/', upload_file)
     
     if os.environ['NODE_ENV'] == 'production':
         app.router.add_route('GET', '/', index)
@@ -508,6 +561,9 @@ def main():
         cors.add(r2)
         cors.add(r3)
         cors.add(r4)
+        cors.add(r5)
+        cors.add(r6)
+        cors.add(r7)
 
     aiohttp.web.run_app(app, host=HOST, port=PORT)
 

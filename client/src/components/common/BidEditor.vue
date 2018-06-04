@@ -16,9 +16,10 @@
     <div
       style="display: flex; justify-content: space-between; align-items: center;">
       <h3
-        style="display: flex; align-items: center; margin: 0;"
+        style="display: flex; align-items: center; margin: 20px 0;"
         v-html="title"/>
       <a
+        v-if="hasResults"
         href="#"
         @click="getFile">
         <img
@@ -229,10 +230,11 @@ export default {
         method: 'GET',
         responseType: 'blob',
       }).then((response) => {
+        const filename = response.headers['content-disposition'].split('=')[1].replace(/"/g, '');
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement('a');
         link.href = url;
-        link.setAttribute('download', `bid_${this.selectedSession._id}_${this.bid.trader_code}.xlsx`);
+        link.setAttribute('download', filename);
         document.body.appendChild(link);
         link.click();
       });
@@ -299,6 +301,7 @@ export default {
         .reduce((prev, { filled_volume: fv }) => prev + fv, 0);
     },
     splitter(val) {
+      if (val === undefined || val === null) return null;
       return val.toString().replace(/\B(?=(?:\d{3})+(?!\d))/g, ' ');
     },
     getVolume(hour) {

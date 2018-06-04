@@ -1,34 +1,44 @@
 <template>
   <div
     class="sdd-list">
-    <multiselect
-      v-model="value"
-      :multiple="true"
-      :close-on-select="false"
-      :clear-on-select="false"
-      :hide-selected="true"
-      :options="options"
-      :preserve-search="true"
-      class="multiselect-wrapper"
-      placeholder="фильтр"
-      label="description"
-      select-label=""
-      selected-label=""
-      deselect-label=""
-      track-by="description">
-      <template
-        slot="tag"
-        slot-scope="props">
-        <span class="custom__tag">
-          <span>{{ props.option.description }}</span>
-          <span
-            class="custom__remove"
-            @click="props.remove(props.option)">
-            <b>&times;</b>
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <multiselect
+        v-model="value"
+        :multiple="true"
+        :close-on-select="false"
+        :clear-on-select="false"
+        :hide-selected="true"
+        :options="options"
+        :preserve-search="true"
+        class="sdd_list__multiselect-wrapper"
+        placeholder="фильтр"
+        label="description"
+        select-label=""
+        selected-label=""
+        deselect-label=""
+        track-by="description">
+        <template
+          slot="tag"
+          slot-scope="props">
+          <span class="custom__tag">
+            <span>{{ props.option.description }}</span>
+            <span
+              class="custom__remove"
+              @click="props.remove(props.option)">
+              <b>&times;</b>
+            </span>
           </span>
-        </span>
-      </template>
-    </multiselect>
+        </template>
+      </multiselect>
+      <a
+        v-if="selectedSession.status === 'closed'"
+        href="#"
+        @click="getFile">
+        <img
+          :src="xlsxImg"
+          style="height: 32px;">
+      </a>
+    </div>
     <sdd-view
       v-for="sd in sddFiltered"
       :key="sd._id"
@@ -39,10 +49,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import axios from 'axios';
+import { mapGetters, mapActions, mapState } from 'vuex';
 import Multiselect from 'vue-multiselect';
-
 import SddView from './SddView.vue';
+import xlsxImg from '../../../static/xlsx_96x3.png';
 
 export default {
   name: 'SddListView',
@@ -58,6 +69,7 @@ export default {
       { status: 'rejected', description: 'отклоненные' },
     ];
     return {
+      xlsxImg,
       collapsed: [],
       options,
       value: [...options],
@@ -65,9 +77,13 @@ export default {
   },
   computed: {
     ...mapState('common', ['sdd', 'queringSdd']),
+    ...mapGetters('common', ['selectedSession', 'username']),
     sddFiltered() {
       const values = this.value.map(({ status }) => status);
       return this.sdd ? this.sdd.filter(sd => values.includes(sd.status)) : [];
+    },
+    filelink() {
+      return `${IS_PROD ? __webpack_public_path__ : 'http://ats-konstantin1:8080/'}rest/sdd_report/?session_id=${this.selectedSession._id}&username=${this.username || 'admin'}`;
     },
   },
   created() {
@@ -75,6 +91,21 @@ export default {
   },
   methods: {
     ...mapActions('common', ['querySdd']),
+    getFile() {
+      axios({
+        url: this.filelink,
+        method: 'GET',
+        responseType: 'blob',
+      }).then((response) => {
+        const filename = response.headers['content-disposition'].split('=')[1].replace(/"/g, '');
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', filename);
+        document.body.appendChild(link);
+        link.click();
+      });
+    },
     isCollapsed(id) {
       return !this.collapsed.includes(id);
     },
@@ -108,5 +139,9 @@ export default {
 
 .custom__remove:hover {
   cursor: pointer;
+}
+
+.sdd_list__multiselect-wrapper {
+  width: 70%;
 }
 </style>

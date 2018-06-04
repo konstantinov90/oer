@@ -34,7 +34,6 @@
               @click="dayDown"/>
           </div>
           <multiselect
-            v-tooltip.right="'час'"
             v-model="hour"
             :options="hours"
             :placeholder="'час'"
@@ -42,11 +41,7 @@
             select-label=""
             selected-label=""
             deselect-label=""
-            class="sdd__multiselect-wrapper">
-            <template slot="option" slot-scope="props">
-              <div v-tooltip.left="'час'">{{ props.option }}</div>
-            </template>
-          </multiselect>
+            class="sdd__multiselect-wrapper"/>
           <div
             style="display: flex; flex-direction: column;">
             <div
@@ -138,7 +133,7 @@ export default {
       editorVisible: false,
       backgroundHeight: '100%',
       hour: '0',
-      hours: new Array(24).fill().map(() => (i++).toString()),
+      hours: new Array(24).fill().map(() => (i++).toString()), // eslint-disable-line
       selectedDate: null,
     };
   },
@@ -174,11 +169,11 @@ export default {
     },
     dayUp() {
       if (!compareAsc(this.selectedDate, this.selectedSession.startDate)) return;
-      this.selectedDate = addDays(this.selectedDate, -1);
+      this.onSelectDate(addDays(this.selectedDate, -1));
     },
     dayDown() {
       if (!compareAsc(this.selectedDate, this.selectedSession.finishDate)) return;
-      this.selectedDate = addDays(this.selectedDate, 1);
+      this.onSelectDate(addDays(this.selectedDate, 1));
     },
     hourUp() {
       if (this.hour === this.hours[0]) return;
