@@ -532,7 +532,7 @@
             x="56.833649"
             y="79.62204"
             style="font-size:6.3499999px;stroke-width:0.26458332">
-            {{ Math.abs(RusArmFlow) }}
+            {{ round(Math.abs(RusArmFlow), 3) }}
           </tspan>
         </text>
         <text
@@ -549,7 +549,7 @@
             x="45.273834"
             y="35.071335"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458344">
-            {{ Math.abs(RusBlrFlow) }}
+            {{ round(Math.abs(RusBlrFlow), 3) }}
           </tspan>
         </text>
         <text
@@ -827,7 +827,7 @@
             x="196.18021"
             y="75.355949"
             style="font-size:4.23333333px;stroke-width:0.26458332;-inkscape-font-specification:'sans-serif, Italic';font-family:sans-serif;font-weight:normal;font-style:italic;font-stretch:normal;font-variant:normal;text-anchor:start;text-align:start;writing-mode:lr;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;fill:#fb950e;fill-opacity:0.94117647;">
-            {{ KazKgzSectionLimits[1] }}
+            {{ round(KazKgzSectionLimits[1], 3) }}
           </tspan>
         </text>
         <text
@@ -843,7 +843,7 @@
             x="159.48514"
             y="74.209023"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332;">
-            {{ KazKgzSectionLimits[0] }}
+            {{ round(KazKgzSectionLimits[0], 3) }}
           </tspan>
         </text>
         <path
@@ -869,7 +869,7 @@
             x="147.95686"
             y="61.320034"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
-            {{ RusKazSectionLimits[0] }}
+            {{ round(RusKazSectionLimits[0], 3) }}
           </tspan>
         </text>
         <text
@@ -885,7 +885,7 @@
             x="150.60269"
             y="32.669441"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
-            {{ RusKazSectionLimits[1] }}
+            {{ round(RusKazSectionLimits[1], 3) }}
           </tspan>
         </text>
         <path
@@ -912,7 +912,7 @@
             x="53.59161"
             y="31.080162"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
-            {{ RusBlrSectionLimits[1] }}
+            {{ round(RusBlrSectionLimits[1], 3) }}
           </tspan>
         </text>
         <text
@@ -929,7 +929,7 @@
             x="56.623386"
             y="3.1850538"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
-            {{ RusBlrSectionLimits[0] }}
+            {{ round(RusBlrSectionLimits[0], 3) }}
           </tspan>
         </text>
         <path
@@ -955,7 +955,7 @@
             x="46.081543"
             y="68.702217"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#fb950e;fill-opacity:0.94117647;stroke-width:0.26458332">
-            {{ RusArmSectionLimits[0] }}
+            {{ round(RusArmSectionLimits[0], 3) }}
           </tspan>
         </text>
         <text
@@ -971,7 +971,7 @@
             x="74.406746"
             y="86.545563"
             style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke-width:0.26458332">
-            {{ RusArmSectionLimits[1] }}
+            {{ round(RusArmSectionLimits[1], 3) }}
           </tspan>
         </text>
         <path
@@ -996,7 +996,7 @@
             x="176.84636"
             y="74.888268"
             style="font-size:6.3499999px;stroke-width:0.26458332">
-            {{ Math.abs(KazKgzFlow) }}
+            {{ round(Math.abs(KazKgzFlow), 3) }}
           </tspan>
         </text>
         <path
@@ -1022,7 +1022,7 @@
             x="140.98347"
             y="49.252056"
             style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:6.3499999px;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Normal';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;writing-mode:lr-tb;text-anchor:start;stroke-width:0.26458344">
-            {{ Math.abs(RusKazFlow) }}
+            {{ round(Math.abs(RusKazFlow), 3) }}
           </tspan>
         </text>
         <ellipse
@@ -1079,6 +1079,11 @@ export default {
     RusArmSectionLimits: Array,
     RusKazSectionLimits: Array,
     KazKgzSectionLimits: Array,
+  },
+  data() {
+    return {
+      round,
+    };
   },
   computed: {
     RusArmFlow() {
