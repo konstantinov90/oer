@@ -135,7 +135,7 @@ async def websocket_handler(request):
     async for msg in ws:
         if msg.type == aiohttp.WSMsgType.TEXT:
             payload = json.loads(msg.data)
-            print(payload)
+            # print(payload)
             if payload['type'] == 'close':
                 print('close')
                 await ws.close()
@@ -216,6 +216,7 @@ async def websocket_handler(request):
 
             elif payload['type'] == 'calculate':
                 session = await db.sessions.find_one({'_id': payload['msg']})
+                await db.sessions.find_one_and_update({'_id': payload['msg']}, {'$set': {'status': 'calculation'}})
                 if session['type'] == 'free':
                     await db.sdd.delete_many({'sessionId': session['_id'], 'status': {'$ne': 'registered'}})
                     SdModelAug.sd_runner(session['_id'])
@@ -305,6 +306,10 @@ async def websocket_handler(request):
 
             elif payload['type'] == 'sdd':
                 _id = payload['msg'].get('_id')
+                session = await db.sessions.find_one({'_id': payload['msg']['sessionId']})
+                if session['status'] != 'open':
+                    await ws.send_json({'type': 'hasNewSessions'})
+                    continue
                 if _id:
                     await db.sdd.find_one_and_replace({'_id': _id}, payload['msg'], upsert=True)
                 else:
@@ -312,15 +317,15 @@ async def websocket_handler(request):
                     payload['msg']['_id'] = seq['sequence_value']
                     await db.sdd.insert_one(payload['msg'])
                 msg = {'type': 'hasNewSdd'}
-                buyer = (await db.rio.find_one({'_id': payload['msg']['buyer']}))['login']
-                seller = (await db.rio.find_one({'_id': payload['msg']['seller']}))['login']
+                buyer = (await db.rio.find_one({'_id': payload['msg']['buyer']}))['_id']
+                seller = (await db.rio.find_one({'_id': payload['msg']['seller']}))['_id']
 
-                # if ws_clients[buyer]:
-                #     await ws_clients[buyer].send_json(msg)
-                # if ws_clients[seller]:
-                #     await ws_clients[seller].send_json(msg)
-                # await ws_clients.send_to_admin(msg)
-                await ws_clients.broadcast(msg)
+                if ws_clients[buyer]:
+                    await ws_clients[buyer].send_json(msg)
+                if ws_clients[seller]:
+                    await ws_clients[seller].send_json(msg)
+                await ws_clients.send_to_admin(msg)
+                # await ws_clients.broadcast(msg)
 
             elif payload['type'] == 'deleteSdd':
                 await db.sdd.delete_many({'_id': payload['msg']})

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import { format, compareAsc } from 'date-fns';
+import { format, compareAsc, isWithinRange } from 'date-fns';
 
 export default {
   namespaced: true,
@@ -320,6 +320,7 @@ export default {
 
         const filteredData = allFutures
           .filter(filterFn)
+          .filter(({ start_date, finish_date }) => isWithinRange(targetDate, start_date, finish_date))
           .filter(({ graph_type }) => graph_type === 'BL' || (calendarEntry.isWorkday && peakHours.includes(hour)));
         if (!filteredData.length) return 0;
 
@@ -340,6 +341,7 @@ export default {
             const sdCode = `${seller_country_code}-${buyer_country_code}`;
             return Object.keys(sectionFlowMatrix[sdCode]).includes(sectionCode);
           })
+          .filter(({ start_date, finish_date }) => isWithinRange(targetDate, start_date, finish_date))
           .filter(({ graph_type }) => graph_type === 'BL' || (calendarEntry.isWorkday && peakHours.includes(hour)));
 
         if (!filteredData.length) return 0;
