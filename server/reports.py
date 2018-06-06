@@ -302,7 +302,7 @@ def report_admin_bid(session_id, username):
             [spot_result] = [s['nodes'] for s in spot_results['hours'] if s['hour'] == hour]
             sum_sd = sum(h['accepted_volume'] for sd in sdd for h in sd['values'] if h['hour'] == hour and h['tdate'] == bid['target_date'])
             section_results = {sec: sec_pr for sec in sections for sec_pr in bid_hour['prices'] if sec_pr['section_code'] == sec}
-            section_prices = [section_results.get('price', '') for sec in sections]
+            section_prices = [section_results.get(sec, {}).get('price', '') for sec in sections]
             for sec in sections: # section_results.items():
                 sec_pr = section_results.get(sec, {})
                 try:
@@ -322,7 +322,7 @@ def report_admin_bid(session_id, username):
                 sum_res_mgp = sum(sec['filled_volume'] * sec['mgp_price'] for sec in section_results.values() if 'mgp_price' in sec)
             ws.write_row(row, 0, [hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
 
-        row += 1
+            row += 1
     
     wb.close()
     return file_path
