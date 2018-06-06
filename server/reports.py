@@ -261,8 +261,7 @@ def report_admin_bid(session_id, username):
     date_fmt = wb.add_format({'align': 'center', 'num_format': 'dd.mm.yyyy'})
     brdr_fmt = wb.add_format({'border': 1, 'num_format': '# ##0'})
 
-    ws.set_column('B:B', 22)
-    ws.set_column('C:R', 10.4)
+    ws.set_column('B:T', 10.4)
 
     ws.write(0, 0, 'Ценовая заявка на рынке на сутки вперед', bold_fmt)
     ws.write(1, 0, 'Участник:', bold_fmt)
@@ -272,20 +271,22 @@ def report_admin_bid(session_id, username):
     ws.write(3, 0, 'Сессия №:', bold_fmt)
     ws.write(3, 1, session['_id'], cntr_fmt)
 
-    ws.merge_range('A6:A8', 'час', merge_format)
-    ws.merge_range('B6:B8', 'Суммарный объем, заключенных ранее договоров (СДД, срочные контракты)', merge_format)
-    ws.merge_range('C6:C8', 'Объем, МВт·ч', merge_format)
-    ws.merge_range(5, 3, 6, 3 + sec_len - 1, 'Цены, руб/МВт·ч', merge_format)
-    ws.write_row(7, 3, sections, merge_format)
-    ws.merge_range(5, 3 + sec_len, 5, 3 + sec_len * 3 + 2, 'Результаты', merge_format)
+    ws.merge_range('A6:A8', 'участник', merge_format)
+    ws.merge_range('B6:B8', 'заявка', merge_format)
+    ws.merge_range('C6:C8', 'час', merge_format)
+    ws.merge_range('D6:D8', 'Суммарный объем, заключенных ранее договоров (СДД, срочные контракты)', merge_format)
+    ws.merge_range('E6:E8', 'Объем, МВт·ч', merge_format)
+    ws.merge_range(5, 5, 6, 5 + sec_len - 1, 'Цены, руб/МВт·ч', merge_format)
+    ws.write_row(7, 5, sections, merge_format)
+    ws.merge_range(5, 5 + sec_len, 5, 5 + sec_len * 3 + 2, 'Результаты', merge_format)
 
 
     for i, sec in enumerate(sections):
-        ws.merge_range(6, 3 + sec_len + i * 2, 6, 4 + sec_len + i * 2, sec, merge_format)
-        ws.write_row(7, 3 + sec_len + i * 2, ['Объем, МВт·ч', 'Цена, руб/МВт·ч'], merge_format)
-    ws.merge_range(6, 3 + sec_len * 3, 7, 3 + sec_len * 3, 'Объем, МВт·ч', merge_format)
-    ws.merge_range(6, 4 + sec_len * 3, 7, 4 + sec_len * 3, 'Стоимость, руб', merge_format)
-    ws.merge_range(6, 5 + sec_len * 3, 7, 5 + sec_len * 3, 'Стоимость МГП, руб', merge_format)
+        ws.merge_range(6, 5 + sec_len + i * 2, 6, 6 + sec_len + i * 2, sec, merge_format)
+        ws.write_row(7, 5 + sec_len + i * 2, ['Объем, МВт·ч', 'Цена, руб/МВт·ч'], merge_format)
+    ws.merge_range(6, 5 + sec_len * 3, 7, 5 + sec_len * 3, 'Объем, МВт·ч', merge_format)
+    ws.merge_range(6, 6 + sec_len * 3, 7, 6 + sec_len * 3, 'Стоимость, руб', merge_format)
+    ws.merge_range(6, 7 + sec_len * 3, 7, 7 + sec_len * 3, 'Стоимость МГП, руб', merge_format)
 
     spot_results = db.spot_results.find_one({'session_id': session_id})
     mgp_prices = {sec['section_code']: sec['mgp_price'] for sec in db.mgp_prices.find_one({'period_type': 'D', 'graph_type': 'FR', 'date_from': session['startDate']})['sections']}
@@ -315,12 +316,12 @@ def report_admin_bid(session_id, username):
                         sec_pr['mgp_price'] = 0
                         for mgp_sec in MGP_MATRIX[rio['country_code']][sec]['mgps']:
                             sec_pr['mgp_price'] += mgp_prices[mgp_sec]
-            sec_res_p_v = [v for sec in sections for v in (sec_pr.get('filled_volume'), sec_pr.get('node_price'))]
+            sec_res_p_v = [v for sec in sections for v in (section_results.get(sec, {}).get('filled_volume'), section_results.get(sec, {}).get('node_price'))]
             sum_res_v = sum(sec['filled_volume'] for sec in section_results.values())
             sum_res_am = sum(sec['filled_volume'] * sec['node_price'] for sec in section_results.values())
             if rio['dir'] == 'buy':
                 sum_res_mgp = sum(sec['filled_volume'] * sec['mgp_price'] for sec in section_results.values() if 'mgp_price' in sec)
-            ws.write_row(row, 0, [hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
+            ws.write_row(row, 0, [rio['_id'], 'покупка' if rio['dir'] == 'buy' else 'продажа', hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
 
             row += 1
     
