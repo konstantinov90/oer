@@ -88,6 +88,8 @@ async def _download_file(request, filename, file_type='xlsx'):
 async def bid_report(request):
     session_id, username = int(request.rel_url.query['session_id']), request.rel_url.query['username']
 
+    if username == 'admin':
+        return await _download_file(request, reports.report_admin_bid(session_id, username))
     return await _download_file(request, reports.report_user_bid(session_id, username))
 
 async def sdd_report(request):
