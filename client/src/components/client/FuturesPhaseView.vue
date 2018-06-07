@@ -122,25 +122,8 @@ export default {
     };
   },
   computed: {
-    ...mapState('common', ['allFutures', 'rioEntry']),
-    ...mapGetters('common', ['selectedSession', 'getSectionLimits', 'getSectionFlowFutures', 'getCountryResultsFutures', 'username']),
-    futures() {
-      if (!this.allFutures) return [];
-      
-      let filterFn;
-      switch (this.rioEntry.dir) {
-        case 'sell':
-          filterFn = ({ seller_code }) => seller_code === this.username;
-          break;
-        case 'buy':
-          filterFn = ({ buyer_code }) => buyer_code === this.username;
-          break;
-        default:
-          throw new Error('invalid direction!');
-      }
-
-      return this.allFutures.filter(filterFn);
-    },
+    ...mapState('common', ['rioEntry']),
+    ...mapGetters('common', ['futures', 'selectedSession', 'getSectionLimits', 'getSectionFlowFutures', 'getCountryResultsFutures', 'username']),
   },
   created() {
     this.selectedDate = this.selectedSession.startDate;

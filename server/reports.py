@@ -107,12 +107,19 @@ def report_user_bid(session_id, username):
     session = db.sessions.find_one({'_id': session_id})
     futures_session = db.sessions.find_one({'_id': session['futures_session_id']})
     sd_session = db.sessions.find_one({'_id': futures_session['sd_session_id']})
+    calendar_entry = db.calendar.find_one({'tdate': session['startDate']})
 
     bid = db.bids.find_one({'session_id': session_id, 'trader_code': username})
     rio = db.rio.find_one({'_id': username})
     spot_results = db.spot_results.find_one({'session_id': session_id})
     mgp_prices = {sec['section_code']: sec['mgp_price'] for sec in db.mgp_prices.find_one({'period_type': 'D', 'graph_type': 'FR', 'date_from': bid['target_date']})['sections']}
     sdd = list(db.sdd.find({'sessionId': sd_session['_id'], f'{rio["dir"]}er': username}))
+    futures = list(db.futures.find({
+        'session_id': futures_session['_id'],
+        f'{rio["dir"]}er_code': rio['_id'],
+        'start_date': {'$lte': bid['target_date']},
+        'finish_date': {'$gte': bid['target_date']},
+    }))
 
     file_path = os.path.join(BASE_PATH, f'bid_{username}_{session_id}.xlsx')
     wb = xlsxwriter.Workbook(file_path, {'default_date_format': 'dd.mm.yyyy'})
@@ -155,6 +162,7 @@ def report_user_bid(session_id, username):
         [bid_hour] = [h['intervals'][0] for h in bid['hours'] if h['hour'] == hour]
         [spot_result] = [s['nodes'] for s in spot_results['hours'] if s['hour'] == hour]
         sum_sd = sum(h['accepted_volume'] for sd in sdd for h in sd['values'] if h['hour'] == hour and h['tdate'] == bid['target_date'])
+        sum_futures = sum(fut['volume'] for fut in futures if fut['graph_type'] == 'BL' or (fut['graph_type'] == 'PE' and hour in (list(range(7, 16)) + list(range(19, 21))) and calendar_entry['isWorkday']))
         section_results = {sec: sec_pr for sec in sections for sec_pr in bid_hour['prices'] if sec_pr['section_code'] == sec}
         section_prices = [sec['price'] for sec in section_results.values()]
         for sec, sec_pr in section_results.items():
@@ -170,7 +178,7 @@ def report_user_bid(session_id, username):
         sum_res_am = sum(sec['filled_volume'] * sec['node_price'] for sec in section_results.values())
         if rio['dir'] == 'buy':
             sum_res_mgp = sum(sec['filled_volume'] * sec['mgp_price'] for sec in section_results.values() if 'mgp_price' in sec)
-        ws.write_row(row, 0, [hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
+        ws.write_row(row, 0, [hour, sum_sd + sum_futures, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
     
     wb.close()
     return file_path
@@ -248,6 +256,7 @@ def report_admin_bid(session_id, username):
     session = db.sessions.find_one({'_id': session_id})
     futures_session = db.sessions.find_one({'_id': session['futures_session_id']})
     sd_session = db.sessions.find_one({'_id': futures_session['sd_session_id']})
+    calendar_entry = db.calendar.find_one({'tdate': session['startDate']})
 
     file_path = os.path.join(BASE_PATH, f'bid_{username}_{session_id}.xlsx')
     wb = xlsxwriter.Workbook(file_path, {'default_date_format': 'dd.mm.yyyy'})
@@ -297,11 +306,18 @@ def report_admin_bid(session_id, username):
         if not bid:
             continue
         sdd = list(db.sdd.find({'sessionId': sd_session['_id'], f'{rio["dir"]}er': rio['_id']}))
+        futures = list(db.futures.find({
+            'session_id': futures_session['_id'],
+            f'{rio["dir"]}er_code': rio['_id'],
+            'start_date': {'$lte': bid['target_date']},
+            'finish_date': {'$gte': bid['target_date']},
+        }))
 
         for hour in range(24):
             [bid_hour] = [h['intervals'][0] for h in bid['hours'] if h['hour'] == hour]
             [spot_result] = [s['nodes'] for s in spot_results['hours'] if s['hour'] == hour]
             sum_sd = sum(h['accepted_volume'] for sd in sdd for h in sd['values'] if h['hour'] == hour and h['tdate'] == bid['target_date'])
+            sum_futures = sum(fut['volume'] for fut in futures if fut['graph_type'] == 'BL' or (fut['graph_type'] == 'PE' and hour in (list(range(7, 16)) + list(range(19, 21))) and calendar_entry['isWorkday']))
             section_results = {sec: sec_pr for sec in sections for sec_pr in bid_hour['prices'] if sec_pr['section_code'] == sec}
             section_prices = [section_results.get(sec, {}).get('price', '') for sec in sections]
             for sec in sections: # section_results.items():
@@ -321,7 +337,7 @@ def report_admin_bid(session_id, username):
             sum_res_am = sum(sec['filled_volume'] * sec['node_price'] for sec in section_results.values())
             if rio['dir'] == 'buy':
                 sum_res_mgp = sum(sec['filled_volume'] * sec['mgp_price'] for sec in section_results.values() if 'mgp_price' in sec)
-            ws.write_row(row, 0, [rio['_id'], 'покупка' if rio['dir'] == 'buy' else 'продажа', hour, sum_sd, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
+            ws.write_row(row, 0, [rio['_id'], 'покупка' if rio['dir'] == 'buy' else 'продажа', hour, sum_sd + sum_futures, bid_hour['volume']] + section_prices + sec_res_p_v + [sum_res_v, sum_res_am] + ([sum_res_mgp] if rio['dir'] == 'buy' else []), brdr_fmt)
 
             row += 1
     

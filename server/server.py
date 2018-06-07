@@ -258,19 +258,30 @@ async def websocket_handler(request):
                 if session['type'] == 'spot':
                     futures_session = await db.sessions.find_one({'_id': session['futures_session_id']})
                     sd_session = await db.sessions.find_one({'_id': futures_session['sd_session_id']})
-                    if rio_entry['dir'] == 'buy':
-                        query = {'buyer': rio_entry['_id']}
-                    else:
-                        query = {'seller': rio_entry['_id']}
-                    sum_contracts = []
+                    query = {'sessionId': sd_session['_id'], f'{rio_entry["dir"]}er': rio_entry['_id']}
+                    calendar_entry = await db.calendar.find_one({'tdate': session['startDate']})
+                    sum_contracts = {}
                     async for doc in db.sdd.aggregate([
                         {'$match': query},
                         {'$unwind': '$values'},
                         {'$match': {'values.tdate': session['startDate']}},
                         {'$group': {'_id': '$values.hour', 'vol': {'$sum': '$values.accepted_volume'}}}
                     ]):
-                        sum_contracts.append(doc)
-                    await ws.send_json({'type': 'common/contractsSumVolume', 'msg': sum_contracts})
+                        sum_contracts[int(doc['_id'])] = doc
+                    
+                    async for doc in db.futures.find({
+                        'session_id': futures_session['_id'],
+                        f'{rio_entry["dir"]}er_code': rio_entry['_id'],
+                        'start_date': {'$lte': session['startDate']},
+                        'finish_date': {'$gte': session['startDate']},
+                    }):
+                        for hour in range(24):
+                            hr = sum_contracts.setdefault(hour, {'_id': hour, 'vol': 0})
+                            if doc['graph_type'] == 'PE' and (hour not in (list(range(7,16)) + list(range(19,21))) or not calendar_entry['isWorkday']):
+                                continue
+                            hr['vol'] += doc['volume']
+
+                    await ws.send_json({'type': 'common/contractsSumVolume', 'msg': list(sum_contracts.values())})
 
             # elif payload['type'] == 'queryBidAdmin':
             #     username = payload['msg']
@@ -409,7 +420,11 @@ async def websocket_handler(request):
                 await ws_clients.broadcast({'type': 'hasNewSessions'})
 
             elif payload['type'] == 'queryAllFutures':
-                futures = await db.futures.find({'session_id': payload['msg']}).to_list(None)
+                session_id = payload['msg']
+                session = await db.sessions.find_one({'_id': session_id})
+                if session['type'] == 'spot':
+                    session_id = session['futures_session_id']
+                futures = await db.futures.find({'session_id': session_id}).to_list(None)
                 calendar = await db.calendar.find().to_list(None)
                 await ws.send_json({'type': 'common/calendar', 'msg': calendar})
                 await ws.send_json({'type': 'common/allFutures', 'msg': futures})

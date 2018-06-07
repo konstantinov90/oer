@@ -360,6 +360,23 @@ export default {
         return vol;
       };
     },
+    futures({ allFutures, rioEntry }, { username }) {
+      if (!allFutures) return [];
+
+      let filterFn;
+      switch (rioEntry.dir) {
+        case 'sell':
+          filterFn = ({ seller_code }) => seller_code === username;
+          break;
+        case 'buy':
+          filterFn = ({ buyer_code }) => buyer_code === username;
+          break;
+        default:
+          throw new Error('invalid direction!');
+      }
+
+      return allFutures.filter(filterFn);
+    },
     // phaseName(state) {
     //   switch (state.phase) {
     //     case 'start':

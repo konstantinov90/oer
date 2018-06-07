@@ -102,9 +102,10 @@ export default {
     this.queryResults();
     this.querySectionLimits({ limitType: 'SECTION_FLOW_LIMIT_DAM_mod' });
     this.queryMgp();
+    this.queryAllFutures();
   },
   methods: {
-    ...mapActions('common', ['queryMgp', 'queryBid', 'queryResults', 'querySectionLimits']),
+    ...mapActions('common', ['queryMgp', 'queryBid', 'queryResults', 'querySectionLimits', 'queryAllFutures']),
     getSectionFlow(hour, sectionCode) {
       return this.spotResults && this.spotResults.hours[hour].sections
         .find(({ code }) => code === sectionCode).flow;
