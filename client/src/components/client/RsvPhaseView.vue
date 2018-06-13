@@ -46,10 +46,19 @@
           :kaz-cons="getCountryResults(hour, 'KAZ', 'buy')"
           :kgz-gen="getCountryResults(hour, 'KGZ', 'sell')"
           :kgz-cons="getCountryResults(hour, 'KGZ', 'buy')"
-          :rus-arm-section-limits="getSectionLimits(hour, 'RUS-ARM')"
-          :rus-blr-section-limits="getSectionLimits(hour, 'RUS-BLR')"
-          :rus-kaz-section-limits="getSectionLimits(hour, 'RUS-KAZ')"
-          :kaz-kgz-section-limits="getSectionLimits(hour, 'KAZ-KGZ')"/>
+          :rus-arm-section-limits="getSectionLimits(parseInt(hour, 0), 'RUS-ARM')"
+          :rus-blr-section-limits="getSectionLimits(parseInt(hour, 0), 'RUS-BLR')"
+          :rus-kaz-section-limits="getSectionLimits(parseInt(hour, 0), 'RUS-KAZ')"
+          :kaz-kgz-section-limits="getSectionLimits(parseInt(hour, 0), 'KAZ-KGZ')"
+          :node-arm1-price="getNodePrice(parseInt(hour, 0), 'ARM', 'RUS-ARM', 'sell')"
+          :node-blr1-price="getNodePrice(parseInt(hour, 0), 'BLR', 'RUS-BLR', 'sell')"
+          :node-rus1-price="getNodePrice(parseInt(hour, 0), 'RUS', 'RUS-ARM', 'sell')"
+          :node-rus2-price="getNodePrice(parseInt(hour, 0), 'RUS', 'RUS-BLR', 'sell')"
+          :node-rus3-price="getNodePrice(parseInt(hour, 0), 'RUS', 'RUS-KAZ', 'sell')"
+          :node-kaz1-price="getNodePrice(parseInt(hour, 0), 'KAZ', 'RUS-KAZ', 'sell')"
+          :node-kaz2-price="getNodePrice(parseInt(hour, 0), 'KAZ', 'KAZ-KGZ', 'sell')"
+          :node-kgz1-price="getNodePrice(parseInt(hour, 0), 'KGZ', 'KAZ-KGZ', 'sell')"
+          />
       </vm-tab-pane>
       <vm-tab-pane label="заявка РСВ">
         <bid-editor
@@ -88,7 +97,7 @@ export default {
   },
   computed: {
     ...mapState('common', ['bid', 'queringBid', 'spotResults']),
-    ...mapGetters('common', ['selectedSession', 'getCountryResults', 'getSectionLimits']),
+    ...mapGetters('common', ['selectedSession', 'getCountryResults', 'getNodePrice', 'getSectionLimits']),
   },
   watch: {
     selectedSession() {
