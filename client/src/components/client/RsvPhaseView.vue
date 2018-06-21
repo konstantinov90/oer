@@ -57,8 +57,7 @@
           :node-rus3-price="getNodePrice(parseInt(hour, 0), 'RUS', 'RUS-KAZ', 'sell')"
           :node-kaz1-price="getNodePrice(parseInt(hour, 0), 'KAZ', 'RUS-KAZ', 'sell')"
           :node-kaz2-price="getNodePrice(parseInt(hour, 0), 'KAZ', 'KAZ-KGZ', 'sell')"
-          :node-kgz1-price="getNodePrice(parseInt(hour, 0), 'KGZ', 'KAZ-KGZ', 'sell')"
-          />
+          :node-kgz1-price="getNodePrice(parseInt(hour, 0), 'KGZ', 'KAZ-KGZ', 'sell')"/>
       </vm-tab-pane>
       <vm-tab-pane label="заявка РСВ">
         <bid-editor

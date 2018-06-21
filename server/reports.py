@@ -1,3 +1,4 @@
+import copy
 import os.path
 from operator import itemgetter
 import pymongo
@@ -5,7 +6,7 @@ import xlsxwriter
 
 BASE_PATH = os.path.join(os.path.dirname(__file__), 'reports')
 
-db = pymongo.MongoClient().inter_market
+db = pymongo.MongoClient('mongodb://vm-ts-mod-iris:27017').inter_market
 
 MGP_MATRIX = {
     'ARM': {
@@ -342,4 +343,64 @@ def report_admin_bid(session_id, username):
             row += 1
     
     wb.close()
+    return file_path
+
+def section_limits_xlsx(futures_session_id):
+    futures_session = db.sessions.find_one({'_id': futures_session_id})
+    sd_session = db.sessions.find_one({'_id': futures_session['sd_session_id']})
+
+    file_path = os.path.join(BASE_PATH, 'section_limits.xlsx')
+    wb = xlsxwriter.Workbook(file_path, {'default_date_format': 'dd.mm.yyyy'})
+    ws = wb.add_worksheet()
+
+    ws.set_column('A:A', 12)
+    ws.set_column('C:C', 18)
+
+    sec_lims_fc = {row['target_date']: row for row in db.section_limits.find({'limit_type': 'SECTION_FLOW_LIMIT_FC'})}
+    sec_lims_ex = {row['target_date']: row for row in db.section_limits.find({'limit_type': 'SECTION_FLOW_LIMIT_EX', 'session_id': sd_session['_id']})}
+    sec_lims_ex_mod = {row['target_date']: row for row in db.section_limits.find({'limit_type': 'SECTION_FLOW_LIMIT_EX_mod', 'session_id': sd_session['_id']})}
+    sec_lims_dam = {row['target_date']: row for row in db.section_limits.find({'limit_type': 'SECTION_FLOW_LIMIT_DAM', 'session_id': futures_session['_id']})}
+    sec_lims_dam_mod = {row['target_date']: row for row in db.section_limits.find({'limit_type': 'SECTION_FLOW_LIMIT_DAM_mod', 'session_id': futures_session['_id']})}
+
+    for tdate, row in sec_lims_fc.items():
+        if tdate not in sec_lims_ex:
+            sec_lims_ex[tdate] = copy.deepcopy(row)
+            sec_lims_ex[tdate]['limit_type'] = 'SECTION_FLOW_LIMIT_EX'
+        if tdate not in sec_lims_ex_mod:
+            sec_lims_ex_mod[tdate] = copy.deepcopy(row)
+            sec_lims_ex_mod[tdate]['limit_type'] = 'SECTION_FLOW_LIMIT_EX_mod'
+            for hr in sec_lims_ex_mod[tdate]['hours']:
+                for sec in hr['sections']:
+                    sec['pmax_bw'] += sec['extra_limit_ex_bw']
+                    sec['pmax_fw'] += sec['extra_limit_ex_fw']
+
+            for hr in sec_lims_dam[tdate]['hours']:
+                for sec in hr['sections']:
+                    [sec_o] = [s for h in row['hours'] for s in h['sections'] if h['hour'] == hr['hour'] and s['section_code'] == sec['section_code']]
+                    sec['pmax_bw'] += sec_o['extra_limit_ex_bw']
+                    sec['pmax_fw'] += sec_o['extra_limit_ex_fw']
+
+            for hr in sec_lims_dam_mod[tdate]['hours']:
+                for sec in hr['sections']:
+                    [sec_o] = [s for h in row['hours'] for s in h['sections'] if h['hour'] == hr['hour'] and s['section_code'] == sec['section_code']]
+                    sec['pmax_bw'] += sec_o['extra_limit_ex_bw']
+                    sec['pmax_fw'] += sec_o['extra_limit_ex_fw']
+
+    stages = dict(
+        SECTION_FLOW_LIMIT_FC='исходные значения',
+        SECTION_FLOW_LIMIT_EX='после СД',
+        SECTION_FLOW_LIMIT_EX_mod='до срочных',
+        SECTION_FLOW_LIMIT_DAM='после срочных',
+        SECTION_FLOW_LIMIT_DAM_mod='РСВ',
+    )
+
+    ws.write_row(0, 0, ['дата', 'час', 'этап', 'RUS-BLR', 'BLR-RUS', 'RUS-ARM', 'ARM-RUS', 'RUS-KAZ', 'KAZ-RUS', 'KAZ-KGZ', 'KGZ-KAZ'])
+    row = 1
+    for sec_lim_lst in (sec_lims_fc, sec_lims_ex, sec_lims_ex_mod, sec_lims_dam, sec_lims_dam_mod):
+        for sec_lim in sec_lim_lst.values():
+            for sec_hr in sec_lim['hours']:
+                secs = {sec['section_code']: sec for sec in sec_hr['sections']}
+                ws.write_row(row, 0, [sec_lim['target_date'], sec_hr['hour'], stages[sec_lim['limit_type']], secs['RUS-BLR']['pmax_fw'], secs['RUS-BLR']['pmax_bw'], secs['RUS-ARM']['pmax_fw'], secs['RUS-ARM']['pmax_bw'], secs['RUS-KAZ']['pmax_fw'], secs['RUS-KAZ']['pmax_bw'], secs['KAZ-KGZ']['pmax_fw'], secs['KAZ-KGZ']['pmax_bw']])
+                row += 1
+    
     return file_path

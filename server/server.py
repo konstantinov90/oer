@@ -71,6 +71,11 @@ async def bids(request):
     bids = await db.bids.find({'session_id': session_id}).to_list(None)
     return aiohttp.web.json_response(bids)
 
+async def sleep(request):
+    seconds = int(request.rel_url.query['seconds'])
+    await asyncio.sleep(seconds)
+    return aiohttp.web.Response(text=str(seconds))
+
 async def _download_file(request, filename, file_type='xlsx'):
     resp = aiohttp.web.StreamResponse(headers=MultiDict({
         'CONTENT-DISPOSITION': f'attachment; filename="{os.path.split(filename)[-1]}"',
@@ -567,6 +572,7 @@ def main():
     r5 = app.router.add_get('/rest/sdd_report/', sdd_report)
     r6 = app.router.add_get('/rest/sdd_section_limits/', sdd_section_limits)
     r7 = app.router.add_post('/rest/upload_file/', upload_file)
+    r8 = app.router.add_get('/rest/sleep/', sleep)
     
     if os.environ['NODE_ENV'] == 'production':
         app.router.add_route('GET', '/', index)
@@ -586,6 +592,7 @@ def main():
         cors.add(r5)
         cors.add(r6)
         cors.add(r7)
+        cors.add(r8)
 
     aiohttp.web.run_app(app, host=HOST, port=PORT)
 

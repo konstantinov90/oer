@@ -1009,7 +1009,7 @@
             sodipodi:role="line"
             id="tspan4294"
             x="184.57515"
-            y="62.480968">{{ NodeKaz2Price && round(NodeKaz2Price, 2) }}</tspan></text>
+            y="62.480968">{{ NodeKaz2Price ? round(NodeKaz2Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1020,7 +1020,7 @@
             sodipodi:role="line"
             id="tspan4284"
             x="164.58095"
-            y="46.897522">{{ NodeKaz1Price && round(NodeKaz1Price, 2) }}</tspan></text>
+            y="46.897522">{{ NodeKaz1Price ? round(NodeKaz1Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1031,7 +1031,7 @@
             sodipodi:role="line"
             id="tspan4296"
             x="183.96178"
-            y="86.600304">{{ NodeKgz1Price && round(NodeKgz1Price, 2) }}</tspan></text>
+            y="86.600304">{{ NodeKgz1Price ? round(NodeKgz1Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1043,7 +1043,7 @@
             y="97.169708"
             x="37.267994"
             sodipodi:role="line"
-            id="tspan4296-5">{{ NodeArm1Price && round(NodeArm1Price, 2) }}</tspan></text>
+            id="tspan4296-5">{{ NodeArm1Price ? round(NodeArm1Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1055,7 +1055,7 @@
             y="67.178398"
             x="77.256409"
             sodipodi:role="line"
-            id="tspan4296-5-2">{{ NodeRus2Price && round(NodeRus2Price, 2) }}</tspan></text>
+            id="tspan4296-5-2">{{ NodeRus2Price ? round(NodeRus2Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1067,7 +1067,7 @@
             y="37.18708"
             x="66.116776"
             sodipodi:role="line"
-            id="tspan4296-5-2-4">{{ NodeRus1Price && round(NodeRus1Price, 2) }}</tspan></text>
+            id="tspan4296-5-2-4">{{ NodeRus1Price ? round(NodeRus1Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1079,7 +1079,7 @@
             y="47.469822"
             x="134.38272"
             sodipodi:role="line"
-            id="tspan4296-5-2-9">{{ NodeRus3Price && round(NodeRus3Price, 2) }}</tspan></text>
+            id="tspan4296-5-2-9">{{ NodeRus3Price ? round(NodeRus3Price, 2) : '—' }}</tspan></text>
         <text
           xml:space="preserve"
           style="font-style:italic;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:4.23333311px;line-height:1.25;font-family:sans-serif;-inkscape-font-specification:'sans-serif, Italic';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#82959a;fill-opacity:0.94117647;stroke:none;stroke-width:0.26458332"
@@ -1091,7 +1091,7 @@
             y="31.474451"
             x="34.041855"
             sodipodi:role="line"
-            id="tspan4296-5-2-4-4">{{ NodeBlr1Price && round(NodeBlr1Price, 2) }}</tspan></text>
+            id="tspan4296-5-2-4-4">{{ NodeBlr1Price ? round(NodeBlr1Price, 2) : '—' }}</tspan></text>
       </g>
     </svg>
 
